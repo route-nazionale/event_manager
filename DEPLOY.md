@@ -6,7 +6,7 @@ Assestamento
 -------------
 
 - Si va sul server di deploy <nome server>
-- cd /var/www/event_subscribe
+- cd /var/www/event_manager
 - git branch 
 
 ci devono essere 2 rami: 
@@ -19,7 +19,7 @@ Aggiornamento
 
 - sudo -i (diventa root in modo interattivo)
 
-- cd /var/www/event_subscribe
+- cd /var/www/event_manager
 - git checkout master
 - git pull origin master
 - git checkout deploy
@@ -39,7 +39,7 @@ CONFIGURAZIONE APACHE
     ServerAdmin <email contatto apache2>
     ServerName <nome server>
 
-    DocumentRoot /var/www/event_subscribe/
+    DocumentRoot /var/www/event_manager/
     <Directory />
         Options -FollowSymLinks
         AllowOverride None
@@ -47,29 +47,29 @@ CONFIGURAZIONE APACHE
         Deny from all
     </Directory>
 
-    WSGIScriptAlias / /var/www/event_subscribe/event_subscribe/wsgi_local.py
-    Alias /static /var/www/event_subscribe_static
+    WSGIScriptAlias / /var/www/event_manager/event_manager/wsgi_local.py
+    Alias /static /var/www/event_manager_static
 
-    <Directory /var/www/event_subscribe_static/>
+    <Directory /var/www/event_manager_static/>
         Order allow,deny
         Allow from all
     </Directory>
 
-    <Directory /var/www/event_subscribe/>
+    <Directory /var/www/event_manager/>
         Order allow,deny
         Allow from all
-        <Files event_subscribe/wsgi_local.py>
+        <Files event_manager/wsgi_local.py>
             Require all granted
         </Files>
     </Directory>
 
-    ErrorLog ${APACHE_LOG_DIR}/event_subscribe_error.log
+    ErrorLog ${APACHE_LOG_DIR}/event_manager_error.log
 
     # Possible values include: debug, info, notice, warn, error, crit,
     # alert, emerg.
     LogLevel warn
 
-    CustomLog ${APACHE_LOG_DIR}/event_subscribe_access.log combined
+    CustomLog ${APACHE_LOG_DIR}/event_manager_access.log combined
 
 
 </VirtualHost>

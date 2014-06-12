@@ -137,7 +137,7 @@ def logout(request):
     return redirect('/iscrizione-laboratori/')
 
 # subscribe API view
-def event_subscribe(request, happening_id):
+def event_manager(request, happening_id):
 
     if request.method == "POST":
         if not request.session.get('valid'):

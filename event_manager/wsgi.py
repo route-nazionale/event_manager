@@ -1,5 +1,5 @@
 """
-WSGI config for event_subscribe project.
+WSGI config for event_manager project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -8,7 +8,7 @@ https://docs.djangoproject.com/en/dev/howto/deployment/wsgi/
 """
 
 import os
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "event_subscribe.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "event_manager.settings")
 
 from django.core.wsgi import get_wsgi_application
 application = get_wsgi_application()

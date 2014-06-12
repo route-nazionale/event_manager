@@ -11,11 +11,11 @@ RECAPTCHA_PUBLIC_KEY  = ''
 RECAPTCHA_PRIVATE_KEY = ''
 
 # CONTACT EMAIL FOR ERROR SUPPORT
-SUPPORT_EMAIL = 'supporto@befair.it'
+SUPPORT_EMAIL = ''
 
 ALLOWED_HOSTS = []
 
-WSGI_APPLICATION = 'event_subscribe.wsgi.application'
+WSGI_APPLICATION = 'event_manager.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases

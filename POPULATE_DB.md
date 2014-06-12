@@ -29,7 +29,7 @@ Capi scout: scout_chiefs
 
 * Nome convenzionale: capo scout
 * Descrizione: anagrafica capo e se è spalla;
-* Modello: [ScoutChief](https://github.com/route-nazionale/event_subscribe/blob/master/base/models/base.py)
+* Modello: [ScoutChief](https://github.com/route-nazionale/event_manager/blob/master/base/models/base.py)
 
 * Campi:
 
@@ -59,7 +59,7 @@ Definizione eventi: camp_events
 
 * Nome convenzionale: definizione evento
 * Descrizione: informazioni caratterizzanti un evento (Event) senza riferimenti temporali (EventTimeSlot) ed iscritti;
-* Modello: [Event](https://github.com/route-nazionale/event_subscribe/blob/master/base/models/event.py)
+* Modello: [Event](https://github.com/route-nazionale/event_manager/blob/master/base/models/event.py)
 
 * Campi:
 
@@ -85,7 +85,7 @@ Turni: camp_eventtimeslots
 
 * Nome convenzionale: turno
 * Descrizione: turno in cui si può svolgere un happening
-* Modello: [EventTimeSlot](https://github.com/route-nazionale/event_subscribe/blob/master/base/models/event.py)
+* Modello: [EventTimeSlot](https://github.com/route-nazionale/event_manager/blob/master/base/models/event.py)
 
 * Campi:
 
@@ -100,7 +100,7 @@ Happenings: camp_eventhappenings
 
 * Nome convenzionale: happening
 * Descrizione: un evento (Event) collegato ad un turno (EventTimeSlot)
-* Modello: [EventHappening](https://github.com/route-nazionale/event_subscribe/blob/master/base/models/event.py)
+* Modello: [EventHappening](https://github.com/route-nazionale/event_manager/blob/master/base/models/event.py)
 
 * Campi:
 
@@ -114,7 +114,7 @@ Iscrizioni: subscriptions
 
 * Nome convenzionale: iscrizione
 * Descrizione: relazione molti a molti tra camp_eventhappenings e scout_chiefs
-* Modello: [ScoutChiefSubscription](https://github.com/route-nazionale/event_subscribe/blob/master/subscribe/models.py)
+* Modello: [ScoutChiefSubscription](https://github.com/route-nazionale/event_manager/blob/master/subscribe/models.py)
 
 * Campi:
 
@@ -129,7 +129,7 @@ Animatori: camp_eventhappeningpeople
 
 * Nome convenzionale: animatore
 * Descrizione: 
-* Modello: [EventPerson](https://github.com/route-nazionale/event_subscribe/blob/master/base/models/event.py)
+* Modello: [EventPerson](https://github.com/route-nazionale/event_manager/blob/master/base/models/event.py)
 
 **TODO** vedi campi del modello se si vuole implementare, ma per ora tralasciato
 **TODO** si relaziona con il modello Person tabella base_person

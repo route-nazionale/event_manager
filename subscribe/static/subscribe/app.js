@@ -22,35 +22,13 @@ EventSubscribeApp.controller('EventController', [
         $scope.alert = null;
         $scope.reverse = false;
         $scope.selectedEvent = null;
-        $scope.subscribedEvents = [];
-        $scope.slotEvents = {};
-        $scope.tableParamsSlots = {};
 
-        $scope.removeSlotEvent = function(slotId, slotEvent) {
-            if (confirm('Vuoi davvero cancellare la tua iscrizione a ' + slotEvent.name + '?')) {
-                $scope.slotEvents[slotId] = null;
-                $scope.unsubscribe(slotEvent);
-            }
-        };
-        $scope.getSlotEvent = function(slotId) {
-            var e = $scope.slotEvents[slotId];
-            return e;
-        };
         $scope.findEvent = function(id) {
             for (var e in $scope.events) {
                 var event = $scope.events[e];
                 if (event.num === id) {
                     return event;
                 }
-            }
-        };
-        $scope.dropped = function(dragEl, dropEl) {
-            var eid = $(dragEl).data('eventid');
-            var sid = $(dropEl).data('slotid');
-            var event = $scope.findEvent(eid);
-            event.timeslot = sid;
-            if (confirm('Vuoi davvero iscriverti a ' + event.name + '?')) {
-                $scope.subscribe(event);
             }
         };
         $scope.showAlert = function(title, message) {
@@ -62,43 +40,8 @@ EventSubscribeApp.controller('EventController', [
         $scope.selectEvent = function(event) {
             $scope.selectedEvent = event;
         };
-        $scope.subscribedEvent = function(event) {
-            var res = $scope.subscribedEvents.indexOf(event) >= 0;
-            return res;
-        };
         $scope.reload = function() {
-            for (var s in $scope.tableParamsSlots) {
-                $scope.tableParamsSlots[s].reload();
-            }
-        };
-        $scope.subscribe = function(event) {
-            var url = '/event/' + event.happening_id + '/subscribe/';
-            $http.post(url).success(function(res) {
-                if (res.status === 'OK') {
-                    $scope.slotEvents[event.timeslot] = event;
-                    $scope.subscribedEvents.push(event);
-                } else {
-                    $scope.showAlert(res.status, res.message);
-                }
-            });
-        };
-        $scope.unsubscribe = function(event) {
-            var url = '/event/' + event.happening_id + '/unsubscribe/';
-            $http.post(url).success(function(res) {
-                if (res.status === 'OK') {
-                    var id = $scope.subscribedEvents.indexOf(event);
-                    if (id >= 0) {
-                        $scope.subscribedEvents.splice(id, 1);
-                    }
-                } else {
-                    $scope.showAlert(res.status, res.message);
-                }
-            });
-        };
-        $scope.getEventsForTimeslot = function(timeslot) {
-            return $scope.events.filter(function(e) {
-                return e.timeslot === timeslot;
-            });
+            $scope.table.reload();
         };
         $scope.getEventById = function(happening_id) {
             for (var e in $scope.events) {
@@ -108,45 +51,26 @@ EventSubscribeApp.controller('EventController', [
             }
             return null;
         };
-        $scope.getTableParams = function(id) {
-            return $scope.tableParamsSlots[id];
-        };
-        $scope.districtFilters = {};
-        $scope.heartbeatFilters = {};
-        $scope.handicapFilters = {};
-        $scope.chiefonlyFilters = {};
-        $scope.kindFilters = {};
-        $scope.createTableParams = function(timeslot) {
-            var params = new ngTableParams({
-                page: 1, count: 25, 
-                sorting: {name: 'asc'}
-            }, {
-                total: $scope.events.length,
-                getData: function($defer, params) {
-                    var data = $scope.getEventsForTimeslot(params.timeslot);
-                    var filteredData = params.customFilter(data);
-                    var orderedData = params.sorting() ?
-                      $filter('orderBy')(filteredData, params.orderBy()) :
-                      filteredData;
-                    var start = (params.page() - 1) * params.count();
-                    var stop = params.page() * params.count();
-                    var range = orderedData.slice(start, stop);
-                    params.total(range.length);
-                    $defer.resolve(range);
-                }
-            });
-            params.timeslot = timeslot;
-            params.customFilter = function(data){
+        $scope.districtFilter = '';
+        $scope.heartbeatFilter = '';
+        $scope.handicapFilter = '';
+        $scope.chiefonlyFilter = '';
+        $scope.notChiefonlyFilter = '';
+        $scope.kindFilter = '';
+
+        function customFilter(data){
                 var filtered = [];
-                var districtFilter = $scope.districtFilters[timeslot];
-                var heartbeatFilter = $scope.heartbeatFilters[timeslot];
-                var handicapFitler = $scope.handicapFilters[timeslot];
-                var chiefonlyFilter = $scope.chiefonlyFilters[timeslot];
-                var kindFilter = $scope.kindFilters[timeslot];
+                var districtFilter = $scope.districtFilter;
+                var heartbeatFilter = $scope.heartbeatFilter;
+                var handicapFitler = $scope.handicapFilter;
+                var chiefonlyFilter = $scope.chiefonlyFilter;
+                var notChiefonlyFilter = $scope.notChiefonlyFilter;
+                var kindFilter = $scope.kindFilter;
                 if( !districtFilter 
                     && !heartbeatFilter 
                     && !handicapFitler 
-                    && !chiefonlyFilter 
+                    && !chiefonlyFilter
+                    && !notChiefonlyFilter
                     && !kindFilter ){
                     return data;
                 }
@@ -175,6 +99,12 @@ EventSubscribeApp.controller('EventController', [
                             continue;
                         }
                     }
+                    if( notChiefonlyFilter ){
+                        if( data[d].state_chief === 'DISABLED' ){
+                            filtered.push(data[d]);
+                            continue;
+                        }
+                    }
                     if( kindFilter ){
                         if( data[d].kind.match(new RegExp(kindFilter)) ){
                             filtered.push(data[d]);
@@ -183,30 +113,36 @@ EventSubscribeApp.controller('EventController', [
                     }
                 }
                 return filtered;
-            };
-            return params;
+        }
+        
+        $scope.subscribe = function() {
         };
+
+        $scope.edit = false;
+        $scope.table = new ngTableParams({
+                page: 1,
+                count: 5, // 25 
+                sorting: {name: 'asc'}
+            }, {
+                total: $scope.events.length,
+                getData: function($defer, params) {
+                    var data = $scope.events;
+                    var filteredData = customFilter(data);
+                    var orderedData = params.sorting() ?
+                      $filter('orderBy')(filteredData, params.orderBy()) :
+                      filteredData;
+                    var start = (params.page() - 1) * params.count();
+                    var stop = params.page() * params.count();
+                    var range = orderedData.slice(start, stop);
+                    // params.total(range.length);
+                    params.total(data.length);
+                    $defer.resolve(range);
+                }
+            });
 
         $http.get('/events/').success(function(data) {
             $scope.events = data;
-
-            for (var e in $scope.events) {
-                var event = $scope.events[e];
-                if (!(event.timeslot in $scope.slotEvents)) {
-                    $scope.slotEvents[event.timeslot] = null;
-                    $scope.districtFilters[event.timeslot] = '';
-                    $scope.heartbeatFilters[event.timeslot] = '';
-                    $scope.handicapFilters[event.timeslot] = '';
-                    $scope.chiefonlyFilters[event.timeslot] = '';
-                    $scope.tableParamsSlots[event.timeslot] = $scope.createTableParams(event.timeslot);
-                }
-            }
-
-            $http.get('/myevents/').success(function(events) {
-                for (var e in events) {
-                    $scope.slotEvents[events[e].timeslot] = events[e];
-                }
-            });
+            $scope.table.reload();
         });
     }
 ]

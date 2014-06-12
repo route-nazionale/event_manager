@@ -1,5 +1,5 @@
 """
-Django settings for event_subscribe project.
+Django settings for event_manager project.
 
 For more information on this file, see
 https://docs.djangoproject.com/en/dev/topics/settings/
@@ -49,9 +49,9 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-ROOT_URLCONF = 'event_subscribe.urls'
+ROOT_URLCONF = 'event_manager.urls'
 
-WSGI_APPLICATION = 'event_subscribe.wsgi.application'
+WSGI_APPLICATION = 'event_manager.wsgi.application'
 
 
 # Database
@@ -84,4 +84,4 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 # useful for strftime
-locale.setlocale(locale.LC_ALL, 'it_IT.UTF8')
+# locale.setlocale(locale.LC_ALL, 'it_IT.UTF8')

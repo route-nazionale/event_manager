@@ -1,6 +1,6 @@
-event_subscribe
+event_manager
 ==================
-Iscrizione capi agli eventi della Route Nazionale 2014
+Gestione eventi della Route Nazionale 2014
 
 
 Installazione
@@ -17,12 +17,12 @@ Procedura di installazione:
 ```sh
 sudo apt-get install virtualenvwrapper
 mkvirtualenv rn-django17
-git clone git@github.com:route-nazionale/event_subscribe.git
-cd event_subscribe
+git clone git@github.com:route-nazionale/event_manager.git
+cd event_manager
 pip install -r requirements.txt
-cp event_subscribe/settings_dist.py event_subscribe/settings.py
+cp event_manager/settings_dist.py event_manager/settings.py
 ```
-inserite nel file event_subscribe/settings.py le vostre chiavi RECAPTCHA Google
+inserite nel file event_manager/settings.py le vostre chiavi RECAPTCHA Google
 
 https://www.google.com/recaptcha/admin#whyrecaptcha
 
@@ -31,7 +31,7 @@ Procedura di sviluppo/test:
 ```sh
 # per entrare nel virtualenv
 workon rn-django17
-cd event_subscribe
+cd event_manager
 python manage.py runserver
 
 # per uscire dal virtualenv
