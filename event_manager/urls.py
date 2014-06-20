@@ -15,6 +15,7 @@ urlpatterns = patterns('',
     # API views
     url(r'^events/', 'base.views.events', name='events'),
     url(r'^createEvent', 'base.views.createEvent', name='createEvent'),
+    url(r'^storeEvent', 'base.views.storeEvent', name='storeEvent'),
     # url(r'^myevents/', 'subscribe.views.myevents', name='myevents'),
     # url(r'^event/(?P<happening_id>\d+)/subscribe/$', 'subscribe.views.event_manager', name='event'),
     # url(r'^event/(?P<happening_id>\d+)/unsubscribe/$', 'subscribe.views.event_unsubscribe', name='event'),

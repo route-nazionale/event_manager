@@ -181,8 +181,9 @@
             </div>
             <div class="modal-footer">
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
-                    <button class="btn btn-default btn-block" ng-click="editForm()" ng-hide="edit">Modifica</button>
-                    <button class="btn btn-default btn-block" ng-click="cancelEdit()" ng-show="edit">Annulla</button>
+                    <button class="btn btn-default btn-block" ng-click="editForm()" ng-show="!edit && !isNew">Modifica</button>
+                    <button class="btn btn-default btn-block" ng-click="cancelEdit()" ng-show="edit && !isNew">Annulla</button>
+                    <button ng-show="isNew" type="button" class="btn btn-default btn-block" data-dismiss="modal">Annulla</button>
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                     <button ng-hide="edit" type="button" class="btn btn-default btn-block" data-dismiss="modal">Chiudi</button>

@@ -64,6 +64,30 @@ def createEvent(request):
     result = {}
     return HttpJSONResponse(result)
 
+def storeEvent(request):
+    if not request.session.get('valid'):
+        raise PermissionDenied()
+    data = json.loads(request.body)
+    eh = EventHappening.objects.get(pk=data['id'])
+    eh.timeslot = _getEventTimeslot(data.get('timeslot'))
+    eh.event.name = data['name']
+    eh.event.description = data['description']
+    eh.event.kind = data['kind']
+    eh.event.num = data['num']
+    eh.event.district = _getDistrict(data.get('district'))
+    eh.event.topic = _getTopic(data.get('topic'))
+    eh.event.max_boys_seats = data['max_boys_seats']
+    eh.event.max_chiefs_seats = data['max_chiefs_seats']
+    eh.event.min_age = data['min_age']
+    eh.event.max_age = data['max_age']
+    eh.event.state_handicap = data['state_handicap']
+    eh.event.state_chief = data['state_chief']
+    eh.event.state_activation = data['state_activation']
+    eh.event.state_subscription = data['state_subscription']
+    eh.event.save()
+    eh.save()
+    result = {}
+    return HttpJSONResponse(result)
 
 def events(request):
     """

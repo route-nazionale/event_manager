@@ -58,7 +58,8 @@ EventSubscribeApp.controller('EventController', [
             $scope.isNew = true;
         };
         $scope.selectEvent = function(event) {
-            $scope.selectedEvent = event;
+            $scope.selectedEvent = angular.copy(event);
+            $scope.selectedEvent.name = $scope.selectedEvent.name.split(' - ')[1];
             $scope.edit = false;
             $scope.isNew = false;
         };
@@ -152,6 +153,14 @@ EventSubscribeApp.controller('EventController', [
         $scope.save = function() {
             if ($scope.isNew) {
                 $http.post('/createEvent', $scope.selectedEvent).success(function(data) {
+                    // reload
+                    $http.get('/events/').success(function(data) {
+                        $scope.events = data;
+                        $scope.table.reload();
+                    });
+                });
+            } else {
+                $http.post('/storeEvent', $scope.selectedEvent).success(function(data) {
                     // reload
                     $http.get('/events/').success(function(data) {
                         $scope.events = data;
