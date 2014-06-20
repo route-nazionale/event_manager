@@ -117,7 +117,7 @@ class EventHappening(models.Model):
         obj['happening_id'] = self.pk
         # obj['district_id'] = self.event.district.pk
         # override name
-        obj['name'] = unicode(self.event)
+        # obj['name'] = unicode(self.event)
         return obj
         
 #--------------------------------------------------------------------------------

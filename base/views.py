@@ -8,7 +8,7 @@ from django.db.models import Max
 from base.models import *
 from base.views_support import HttpJSONResponse
 
-# Ok. It's horrible
+# Ok, this function is horrible - I know :-(
 def _getEventTimeslot(v):
     for item in EventTimeSlot.objects.all():
         if v == unicode(item):
@@ -34,6 +34,9 @@ def _getNextNum():
         return Event.objects.all().aggregate(Max('num'))['num__max'] + 1
     except:
         return 1
+
+def _isSharedEvent(eh):
+    return EventHappening.objects.filter(event=eh.event.pk).count()
 
 def createEvent(request):
     if not request.session.get('valid'):
@@ -70,10 +73,20 @@ def storeEvent(request):
     data = json.loads(request.body)
     eh = EventHappening.objects.get(pk=data['id'])
     eh.timeslot = _getEventTimeslot(data.get('timeslot'))
-    eh.event.name = data['name']
+    if _isSharedEvent(eh):
+        e = eh.event
+        e.name = data['name']
+        e.num = _getNextNum()
+        e.topic = _getTopic(data.get('topic'))
+        e.district = _getDistrict(data.get('district'))
+        e.name = e.code + " - " + e.name
+        e.pk = None # add another object copy
+        e.save()
+        eh.event = e
+    else:
+        eh.event.name = data['name']
     eh.event.description = data['description']
     eh.event.kind = data['kind']
-    eh.event.num = data['num']
     eh.event.district = _getDistrict(data.get('district'))
     eh.event.topic = _getTopic(data.get('topic'))
     eh.event.max_boys_seats = data['max_boys_seats']
@@ -89,28 +102,21 @@ def storeEvent(request):
     result = {}
     return HttpJSONResponse(result)
 
+
 def events(request):
-    """
-    Return all subscriptable events.
-
-    """
-
-    #NOTE: weird login check... as usual unfortunately
     if not request.session.get('valid'):
-        rv = API_ERROR_response(u'non hai effettuato il login')
-    else:
-        events = []
-        eh_qs = EventHappening.objects.all()
-        for eh in eh_qs:
-            obj = eh.as_dict()
-            events.append(obj)
-        rv = HttpJSONResponse(events)
-
-    return rv
+        raise PermissionDenied()
+    events = []
+    eh_qs = EventHappening.objects.all()
+    for eh in eh_qs:
+        obj = eh.as_dict()
+        if ' - ' not in obj['name']:
+            obj['name'] = obj['code'] + ' - ' + obj['name']
+        events.append(obj)
+    return HttpJSONResponse(events)
 
 
 def units(request):
-
     # Units autocompletion -> no login required
     units = []
     for unit in Unit.objects.all():
@@ -120,7 +126,8 @@ def units(request):
 
 
 def districts(request):
-
+    if not request.session.get('valid'):
+        raise PermissionDenied()
     result = []
     for item in District.objects.all():
         result.append(item.name)
@@ -128,14 +135,17 @@ def districts(request):
 
 
 def timeslots(request):
-
+    if not request.session.get('valid'):
+        raise PermissionDenied()
     result = []
     for item in EventTimeSlot.objects.all():
         result.append(unicode(item))
     return HttpJSONResponse(result)
 
-def topics(request):
 
+def topics(request):
+    if not request.session.get('valid'):
+        raise PermissionDenied()
     result = []
     for item in HeartBeat.objects.all():
         result.append(item.name)

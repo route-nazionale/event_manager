@@ -59,7 +59,11 @@ EventSubscribeApp.controller('EventController', [
         };
         $scope.selectEvent = function(event) {
             $scope.selectedEvent = angular.copy(event);
-            $scope.selectedEvent.name = $scope.selectedEvent.name.split(' - ')[1];
+            var name = $scope.selectedEvent.name.split(' - ')[1];
+            $scope.selectedEvent.name = name.split(' - ')[1];
+            if (!$scope.selectedEvent.name) {
+                $scope.selectedEvent.name = name;
+            }
             $scope.edit = false;
             $scope.isNew = false;
         };
@@ -172,7 +176,7 @@ EventSubscribeApp.controller('EventController', [
         $scope.edit = false;
         $scope.table = new ngTableParams({
                 page: 1,
-                count: 5, // 25 
+                count: 25, 
                 sorting: {name: 'asc'}
             }, {
                 total: $scope.events.length,
