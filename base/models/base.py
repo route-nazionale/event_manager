@@ -63,6 +63,15 @@ class Person(models.Model):
     who is he?
     """
 
+    FIELDS_TO_SERIALIZE = [
+        "id",
+        "name",
+        "code",
+        "city",
+        "kind",
+        "description",
+    ]
+
     KIND_CHIEF = "CHIEF"
     KIND_GUEST = "GUEST"
     KIND_CHOICES = (
@@ -80,12 +89,28 @@ class Person(models.Model):
     )
     description = models.TextField(blank=True)
 
+    def as_dict(self):
+        obj = {}
+        for field in self.FIELDS_TO_SERIALIZE:
+            v = getattr(self, field)
+            if isinstance(v, (models.Field, models.Model)):
+                v = unicode(v)
+            elif isinstance(v, datetime.datetime):
+                v = v.strftime("%s")
+            obj[field] = v
+        return obj
+
 #--------------------------------------------------------------------------------
 
 class District(models.Model):
     """
     District entity
     """
+    
+    FIELDS_TO_SERIALIZE = [
+        "code",
+        "name",
+    ]
 
     code = models.CharField(max_length=8, primary_key=True)
     name = models.CharField(max_length=128, unique=True)
@@ -104,6 +129,17 @@ class District(models.Model):
     n_events.short_description = "num. eventi"
 
     n_objs = n_events
+
+    def as_dict(self):
+        obj = {}
+        for field in self.FIELDS_TO_SERIALIZE:
+            v = getattr(self, field)
+            if isinstance(v, (models.Field, models.Model)):
+                v = unicode(v)
+            elif isinstance(v, datetime.datetime):
+                v = v.strftime("%s")
+            obj[field] = v
+        return obj
 
 #--------------------------------------------------------------------------------
 

@@ -1,8 +1,68 @@
+import json
 from django.shortcuts import render, get_object_or_404
 from django.db import models
+from django.core.context_processors import csrf
+from django.core.exceptions import PermissionDenied
+from django.db.models import Max
 
-from base.models import EventHappening, Unit, Event, ScoutChief
+from base.models import *
 from base.views_support import HttpJSONResponse
+
+# Ok. It's horrible
+def _getEventTimeslot(v):
+    for item in EventTimeSlot.objects.all():
+        if v == unicode(item):
+            return item
+    raise Exception()
+
+def _getDistrict(v):
+    result = District.objects.filter(name=v)
+    if result:
+        return result[0]
+    else:
+        raise Exception()
+
+def _getTopic(v):
+    result = HeartBeat.objects.filter(name=v)
+    if result:
+        return result[0]
+    else:
+        raise Exception()
+
+def _getNextNum():
+    try:
+        return Event.objects.all().aggregate(Max('num'))['num__max'] + 1
+    except:
+        return 1
+
+def createEvent(request):
+    if not request.session.get('valid'):
+        raise PermissionDenied()
+    data = json.loads(request.body)
+    timeslot = _getEventTimeslot(data.get('timeslot'))
+    del data['timeslot']
+    data['district'] = _getDistrict(data.get('district'))
+    data['topic'] = _getTopic(data.get('topic'))
+    data['num'] = _getNextNum()
+    # code = "%s-%s%s%s" % (data['kind'],
+    #         data['district'].code,
+    #         data['topic'].code,
+    #         data['num'])
+    # data['name'] = code + " - " + data['name']
+    seats_n_boys = data['seats_n_boys']
+    data['seats_tot'] = data['max_boys_seats'] + data['max_chiefs_seats']
+    del data['seats_n_boys']
+    seats_n_chiefs = data['seats_n_chiefs']
+    del data['seats_n_chiefs']
+    event = Event.objects.create(**data)
+    eh = EventHappening.objects.create(
+        timeslot=timeslot,
+        event=event,
+        seats_n_boys=seats_n_boys,
+        seats_n_chiefs=seats_n_chiefs
+    )
+    result = {}
+    return HttpJSONResponse(result)
 
 
 def events(request):
@@ -15,24 +75,11 @@ def events(request):
     if not request.session.get('valid'):
         rv = API_ERROR_response(u'non hai effettuato il login')
     else:
-
-        chief = get_object_or_404(ScoutChief, code=request.session['chief_code'])
-
         events = []
-        # Restrict by age
-        eh_qs = EventHappening.objects.filter(event__min_age__lte=chief.age)
-        # Restrict to those enabled or reserved for chiefs
-        eh_qs = eh_qs.filter(event__state_chief__in=(Event.STATE_ENABLED, Event.STATE_RESERVED))
-        # Restrict to those actives
-        eh_qs = eh_qs.filter(event__state_activation=Event.ACTIVATION_ACTIVE)
-        # Restrict to those open for subscription
-        eh_qs = eh_qs.filter(event__state_subscription=Event.SUBSCRIPTION_OPEN)
+        eh_qs = EventHappening.objects.all()
         for eh in eh_qs:
-            # Restrict to those with available seats
-            # I use properties here, cannot filter in QuerySet!
-            if eh.available_seats:
-                obj = eh.as_dict()
-                events.append(obj)
+            obj = eh.as_dict()
+            events.append(obj)
         rv = HttpJSONResponse(events)
 
     return rv
@@ -46,3 +93,26 @@ def units(request):
         units.append(unit.name)
 
     return HttpJSONResponse(units)
+
+
+def districts(request):
+
+    result = []
+    for item in District.objects.all():
+        result.append(item.name)
+    return HttpJSONResponse(result)
+
+
+def timeslots(request):
+
+    result = []
+    for item in EventTimeSlot.objects.all():
+        result.append(unicode(item))
+    return HttpJSONResponse(result)
+
+def topics(request):
+
+    result = []
+    for item in HeartBeat.objects.all():
+        result.append(item.name)
+    return HttpJSONResponse(result)

@@ -15,6 +15,9 @@
     Eventi
 </h4>
 <p>
+    <span data-toggle="modal" data-target="#event-details" ng-click="createNew();" class="btn btn-xs btn-default">Crea nuovo evento</span><br/>
+</p>
+<p>
     Filtri:
     <input type="text" ng-keyup="table.reload()" style="width: 200px;" ng-model="districtFilter" placeholder="Ricerca per sottocampo">
     <input type="text" ng-keyup="table.reload()" style="width: 240px;" ng-model="heartbeatFilter" placeholder="Ricerca per strada di coraggio">
@@ -32,11 +35,11 @@
     <tbody>
         <tr class="event" ng-class="{lab: event.kind === 'LAB', tav: event.kind === 'TAV'}" ng-repeat="event in $data" data-eventid="{{event.num}}" x-lvl-draggable="true">
             <td data-title="'Nome'" sortable="'name'">{{event.name}}</td>
-            <td data-title="'Data'" sortable="'heartbeat'">{{event.timeslot}}</td>
+            <td data-title="'Data'" sortable="'timeslot'">{{event.timeslot}}</td>
             <td data-title="'Iscrizioni capi'" sortable="'seats_n_chiefs'">{{event.seats_n_chiefs}}/{{event.max_chiefs_seats}}</td>
             <td data-title="'Iscrizioni ragazzi'" sortable="'seats_n_boys'">{{event.seats_n_boys}}/{{event.max_boys_seats}}</td>
             <td data-title="'Sottocampo'" sortable="'district'" filter="{ 'district': 'text' }">{{event.district}}</td>
-            <td data-title="'Strada di coraggio'" sortable="'heartbeat'">{{event.heartbeat}}</td>
+            <td data-title="'Strada di coraggio'" sortable="'topic'">{{event.topic}}</td>
             <td data-title="'Dettagli'" style="white-space: nowrap;">
                 <span data-toggle="modal" data-target="#event-details" ng-click="selectEvent(event);
                         " class="btn btn-xs btn-default">Dettagli</span>
@@ -56,7 +59,7 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title">
-                    {{selectedEvent.name}}
+                    {{selectedEvent.name || 'Nuovo evento'}}
                 </h4>
             </div>
 
@@ -65,18 +68,34 @@
                 <div class="well">
                     <p>
                         <label>Tipologia</label>
-                        {{selectedEvent.kind === 'TAV' ? 'TAVOLA ROTONDA' : 'LABORATORIO'}}
-                        <!--
                         <span ng-hide="edit">{{selectedEvent.kind === 'TAV' ? 'TAVOLA ROTONDA' : 'LABORATORIO'}}</span>
                         <select ng-model="selectedEvent.kind" ng-show="edit">
                             <option value="TAV">TAVOLA ROTONDA</option>
                             <option value="LAB">LABORATORIO</option>
                         </select>
-                        -->
+                    </p>
+                    <p>
+                        <label>Stato</label>
+                        <span ng-hide="edit">{{selectedEvent.state_activation === 'CREATING' ? 'In creazione' : selectedEvent.state_activation === 'ACTIVE' ? 'Attivo' : 'Dismesso'}}</span>
+                        <select ng-model="selectedEvent.state_activation" ng-show="edit">
+                            <option value="CREATING">In creazione</option>
+                            <option value="ACTIVE">Attivo</option>
+                            <option value="DISMISSED">Dismesso</option>
+                        </select>
+                    </p>
+                    <p>
+                        <label>Iscrizioni</label>
+                        <span ng-hide="edit">{{selectedEvent.state_subscription === 'OPEN' ? 'Aperte' : 'Chiuse'}}</span>
+                        <select ng-model="selectedEvent.state_subscription" ng-show="edit">
+                            <option value="OPEN">Aperte</option>
+                            <option value="CLOSED">Chiuse</option>
+                        </select>
                     </p>
                     <p>
                         <label>Turno</label>
-                        {{selectedEvent.timeslot}}
+                        <span ng-hide="edit">{{selectedEvent.timeslot}}</span>
+                        <select ng-model="selectedEvent.timeslot" ng-show="edit" ng-options="item for item in timeslots">
+                        </select>
                     </p>
                     <p>
                         <label>Nome</label>
@@ -85,12 +104,15 @@
                     </p>
                     <p>
                         <label>Strada di coraggio</label>
-                        <span ng-hide="edit">{{selectedEvent.heartbeat}}</span>
-                        <input ng-show="edit" ng-model="selectedEvent.heartbeat" />
+                        <span ng-hide="edit">{{selectedEvent.topic}}</span>
+                        <select ng-model="selectedEvent.topic" ng-show="edit" ng-options="item for item in topics">
+                        </select>
                     </p>
                     <p>
                         <label>Sottocampo</label>
-                        {{selectedEvent.district}}
+                        <span ng-hide="edit">{{selectedEvent.district}}</span>
+                        <select ng-model="selectedEvent.district" ng-show="edit" ng-options="item for item in districts">
+                        </select>
                     </p>
                     <p>
                         <label>Descrizione</label>
@@ -113,8 +135,14 @@
                         <label>Totale iscritti</label>
                         {{selectedEvent.seats_n_boys + selectedEvent.seats_n_chiefs}}/
                         {{selectedEvent.max_boys_seats + selectedEvent.max_chiefs_seats}}
-                        (disponibili 
-                        {{selectedEvent.max_boys_seats + selectedEvent.max_chiefs_seats - selectedEvent.seats_n_boys - selectedEvent.seats_n_chiefs }})
+                    </p>
+                    <p ng-show="edit">
+                        <label>Vincoli</label>
+                        <select ng-model="selectedEvent.state_chief" ng-show="edit">
+                            <option value="RESERVED">Aperto solo ai capi</option>
+                            <option value="ENABLED">Aperto a tutti</option>
+                            <option value="DISABLED">Aperto solo ai ragazzi</option>
+                        </select>
                     </p>
                     <p>
                         <label>Aperto ai capi</label>
@@ -130,8 +158,12 @@
                     </p>
                     <p>
                         <label>Accessibilit&agrave; per diversamente abili</label>
-                        <span class="label label-danger" ng-show="selectedEvent.state_handicap === 'DISABLED'">No</span>
-                        <span class="label label-success" ng-show="selectedEvent.state_handicap === 'ENABLED'">S&igrave;</span>
+                        <span class="label label-danger" ng-show="!edit && selectedEvent.state_handicap === 'DISABLED'">No</span>
+                        <span class="label label-success" ng-show="!edit && selectedEvent.state_handicap === 'ENABLED'">S&igrave;</span>
+                        <select ng-model="selectedEvent.state_handicap" ng-show="edit">
+                            <option value="ENABLED">S&igrave;</option>
+                            <option value="DISABLED">No</option>
+                        </select>
                     </p>
                     <p>
                     <label>Et&agrave; minima</label>
@@ -142,17 +174,19 @@
                         <span ng-hide="edit">{{selectedEvent.max_age}}</span>
                         <input ng-show="edit" type="number" ng-model="selectedEvent.max_age" min="{{selectedEvent.min_age}}" max="99" />
                     </p>
-                    <p>
+                    <p ng-hide="edit">
                         <label>Codice dell'evento</label>{{selectedEvent.code}}
                     </p>
                 </div>
             </div>
             <div class="modal-footer">
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
-                    <button class="btn btn-default btn-block" ng-click="edit = ! edit">Edit</button>
+                    <button class="btn btn-default btn-block" ng-click="editForm()" ng-hide="edit">Modifica</button>
+                    <button class="btn btn-default btn-block" ng-click="cancelEdit()" ng-show="edit">Annulla</button>
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
-                    <button type="button" class="btn btn-default btn-block" data-dismiss="modal">Chiudi</button>
+                    <button ng-hide="edit" type="button" class="btn btn-default btn-block" data-dismiss="modal">Chiudi</button>
+                    <button ng-show="edit" type="button" class="btn btn-default btn-block" data-dismiss="modal" ng-click="save();">Salva</button>
                 </div>
             </div>
         </div>

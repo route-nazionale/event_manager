@@ -63,10 +63,14 @@ class EventHappening(models.Model):
         "seats_tot",
         "state_handicap",
         "description",
+        "topic",
         "code",            # this is a proprety
         "n_seats",         # this is a proprety
         "available_seats", # this is a proprety
-        "dt_start", "dt_stop",
+        "dt_start",
+        "dt_stop",
+        "state_activation",
+        "state_subscription"
     ]
 
     timeslot = models.ForeignKey(EventTimeSlot)
@@ -111,6 +115,7 @@ class EventHappening(models.Model):
                 v = v.strftime("%s")
             obj[field] = v
         obj['happening_id'] = self.pk
+        # obj['district_id'] = self.event.district.pk
         # override name
         obj['name'] = unicode(self.event)
         return obj

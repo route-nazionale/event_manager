@@ -37,8 +37,30 @@ EventSubscribeApp.controller('EventController', [
         $scope.closeAlert = function() {
             $scope.alert = null;
         };
+        $scope.createNew = function() {
+            $scope.selectedEvent = {
+                seats_n_boys: 0,
+                seats_n_chiefs: 0,
+                state_chief: 'ENABLED',
+                state_handicap: 'ENABLED',
+                min_age: 1,
+                max_age: 99,
+                max_boys_seats: 30,
+                max_chiefs_seats: 5,
+                state_activation: 'CREATING',
+                state_subscription: 'OPEN',
+                topic: $scope.topics[0],
+                district: $scope.districts[0],
+                timeslot: $scope.timeslots[0],
+                kind: 'LAB'
+            };
+            $scope.edit = true;
+            $scope.isNew = true;
+        };
         $scope.selectEvent = function(event) {
             $scope.selectedEvent = event;
+            $scope.edit = false;
+            $scope.isNew = false;
         };
         $scope.reload = function() {
             $scope.table.reload();
@@ -118,6 +140,26 @@ EventSubscribeApp.controller('EventController', [
         $scope.subscribe = function() {
         };
 
+        $scope.editForm = function() {
+            $scope.edit = true;
+            $scope.selectedEvent = angular.copy($scope.selectedEvent);
+            $scope.old = angular.copy($scope.selectedEvent);
+        };
+        $scope.cancelEdit = function() {
+            $scope.edit = false;
+            $scope.selectedEvent = $scope.old;
+        };
+        $scope.save = function() {
+            if ($scope.isNew) {
+                $http.post('/createEvent', $scope.selectedEvent).success(function(data) {
+                    // reload
+                    $http.get('/events/').success(function(data) {
+                        $scope.events = data;
+                        $scope.table.reload();
+                    });
+                });
+            }
+        };
         $scope.edit = false;
         $scope.table = new ngTableParams({
                 page: 1,
@@ -144,6 +186,20 @@ EventSubscribeApp.controller('EventController', [
             $scope.events = data;
             $scope.table.reload();
         });
+
+        $http.get('/districts/').success(function(data) {
+            $scope.districts = data;
+        });
+        
+        $http.get('/timeslots/').success(function(data) {
+            $scope.timeslots = data;
+        });
+        
+        $http.get('/topics/').success(function(data) {
+            $scope.topics = data;
+        });
+
+
     }
 ]
   );
