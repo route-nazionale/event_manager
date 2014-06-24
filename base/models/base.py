@@ -27,6 +27,14 @@ class Unit(models.Model):
 
 class ScoutChief(models.Model):
 
+    FIELDS_TO_SERIALIZE = [
+        "code",
+        "scout_unit",
+        "name",
+        "surname",
+        # "birthday",
+        "is_spalla",
+    ]
     code = models.CharField(max_length=128, unique=True,
         verbose_name="codice censimento"
     )
@@ -51,6 +59,18 @@ class ScoutChief(models.Model):
     @property
     def age(self):
         return datetime.date.today().year - self.birthday.year
+    
+    def as_dict(self):
+        obj = {}
+        for field in self.FIELDS_TO_SERIALIZE:
+            v = getattr(self, field)
+            if isinstance(v, (models.Field, models.Model)):
+                v = unicode(v)
+            elif isinstance(v, datetime.datetime):
+                v = v.strftime("%s")
+            obj[field] = v
+        return obj
+
 
 #--------------------------------------------------------------------------------
 

@@ -23,7 +23,9 @@ urlpatterns = patterns('',
     url(r'^districts/', 'base.views.districts', name='districts'),
     url(r'^timeslots/', 'base.views.timeslots', name='timeslots'),
     url(r'^topics/', 'base.views.topics', name='topics'),
-    # url(r'^validate-chief/', 'subscribe.views.validate', name='validate'),
+    url(r'^chiefs/', 'base.views.chiefs', name='chiefs'),
+    url(r'^persons/', 'base.views.persons', name='persons'),
+    url(r'^validate-chief/', 'subscribe.views.validate', name='validate'),
 
     url(r'^admin/', include(admin.site.urls)),
 )

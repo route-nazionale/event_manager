@@ -150,3 +150,29 @@ def topics(request):
     for item in HeartBeat.objects.all():
         result.append(item.name)
     return HttpJSONResponse(result)
+
+
+def chiefs(request):
+    if not request.session.get('valid'):
+        raise PermissionDenied()
+    if request.GET.get('is_spalla'):
+        sc = ScoutChief.objects.filter(is_spalla=True)
+    else:
+        sc = ScoutChief.objects.all()
+    result = []
+    for item in sc:
+        result.append(item.as_dict())
+    return HttpJSONResponse(result)
+
+def persons(request):
+    if not request.session.get('valid'):
+        raise PermissionDenied()
+    # if request.GET.get('is_spalla'):
+        # sc = ScoutChief.objects.filter(is_spalla=True)
+    # else:
+        # sc = ScoutChief.objects.all()
+    sc = Person.objects.all()
+    result = []
+    for item in sc:
+        result.append(item.as_dict())
+    return HttpJSONResponse(result)
