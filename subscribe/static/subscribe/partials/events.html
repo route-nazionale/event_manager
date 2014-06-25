@@ -191,7 +191,7 @@
               <div class="list-group" id="list1" x-lvl-drop-target="true" x-on-drop="drop(dragEl, dropEl, removeChief)">
                 <a href="javascript:;" class="list-group-item active">Disponibili</a>
                 <span ng-repeat="user in listA">
-                  <a href="javascript:;" data-id="{{user.code}}" x-lvl-draggable="true" class="list-group-item">{{user.name}} {{user.surname}}<br/>{{user.scout_unit}} {{user.code}}
+                    <a href="javascript:;" data-id="{{user.code}}" x-lvl-draggable="true" class="list-group-item">{{user.name}} {{user.surname}}<br/><i>{{user.scout_unit}}</i>
                     <input id="{{user.code}}" ng-click="selectedA.push(user.code)" name="selectedA[]" value="{{user.code}}" ng-checked="selectedA.indexOf(user.code) > -1" type="checkbox" class="pull-right">
                   </a>
                 </span>
@@ -209,7 +209,7 @@
                   <input title="Toggle all" ng-click="toggleB()" ng-model="toggle" value="{{toggle}}" type="checkbox" class="pull-right">
                 </a>
                 <span ng-repeat="user in listB">
-                  <a href="javascript:;" data-id="{{user.code}}" class="list-group-item" x-lvl-draggable="true">{{user.name}} {{user.surname}}<br/>{{user.scout_unit}}
+                    <a href="javascript:;" data-id="{{user.code}}" class="list-group-item" x-lvl-draggable="true">{{user.name}} {{user.surname}}<br/><i>{{user.scout_unit}}</i>
                     <input id="{{user.code}}" ng-click="selectedB.push(user.code)" name="selectedB[]" value="{{user.code}}" ng-checked="selectedB.indexOf(user.code) > -1" type="checkbox" class="pull-right">
                   </a>
                 </span>

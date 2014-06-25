@@ -8,15 +8,14 @@ urlpatterns = patterns('',
 
     # user interface views
     url(r'^$', 'subscribe.views.index', name='index'),
-    url(r'^iscrizione-laboratori/', 'subscribe.views.subscribe', name='subscribe'),
-    url(r'^scelta-laboratori/', 'subscribe.views.choose', name='choose'),
+    url(r'^login-gestione-eventi/', 'subscribe.views.subscribe', name='subscribe'),
+    url(r'^gestione-eventi/', 'subscribe.views.gestioneEventi', name='gestioneEventi'),
     url(r'^logout/', 'subscribe.views.logout', name='logout'),
 
     # API views
     url(r'^events/', 'base.views.events', name='events'),
     url(r'^createEvent', 'base.views.createEvent', name='createEvent'),
     url(r'^storeEvent', 'base.views.storeEvent', name='storeEvent'),
-    # url(r'^myevents/', 'subscribe.views.myevents', name='myevents'),
     url(r'^event/(?P<happening_id>\d+)/subscribe/(?P<chief_code>[a-zA-Z0-9_\-]+)$', 'subscribe.views.event_subscribe', name='event'),
     url(r'^event/(?P<happening_id>\d+)/unsubscribe/(?P<chief_code>[a-zA-Z0-9_\-]+)$', 'subscribe.views.event_unsubscribe', name='event'),
     url(r'^units/', 'base.views.units', name='units'),

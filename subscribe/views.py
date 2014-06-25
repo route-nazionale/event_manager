@@ -17,14 +17,14 @@ import json
 
 # simple redirect to landing page
 def index(request):
-    return redirect('/iscrizione-laboratori/')
+    return redirect('/login-gestione-eventi/')
 
 # landing page: chief validate through AGESCI code, unit name and birthday
 def subscribe(request):
 
     # if user is logged, redirect to event choose view
     if request.session.get('valid') == True:
-        return redirect('/scelta-laboratori/')
+        return redirect('/gestione-eventi/')
 
     c = {}
     c.update(csrf(request))
@@ -37,30 +37,28 @@ def subscribe(request):
 def validate(request):
     if request.method == 'POST':
 
-        # get POST data
-        scout_unit = request.POST.get('scout-unit')
-        code = request.POST.get('code')
-        gg = request.POST.get('gg')
-        mm = request.POST.get('mm')
-        aaaa = request.POST.get('aaaa')
-        recaptcha_challenge_field = request.POST.get('recaptcha_challenge_field')
-        recaptcha_response_field = request.POST.get('recaptcha_response_field')
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        
+        # TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO
+        # TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO
+        # TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO
+        # TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODOi
 
-        #STEP 1. SANITIZE ALL INPUT DATA!
-        if not gg or not mm or not aaaa:
-            return API_ERROR_response(u"Devi inserire la data di nascita")
+        if not (username == 'admin' and password == 'admin'):
+            return API_ERROR_response(u"Nome o password non validi")
 
-        try:
-            birthday = date(int(aaaa), int(mm), int(gg))
-        except ValueError:
-            return API_ERROR_response(u"Devi inserire una data di nascita valida (es: 24/09/1991)")
-        if not scout_unit:
-            return API_ERROR_response(u"Devi inserire il gruppo scout")
+        # TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO
+        # TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO
+        # TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO
+        # TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO
 
         # check captcha
+        recaptcha_challenge_field = request.POST.get('recaptcha_challenge_field')
         if not recaptcha_challenge_field:
             return API_ERROR_response(u"RECAPTCHA non inizializzato correttamente. Prego contattare %s" % settings.SUPPORT_EMAIL)
 
+        recaptcha_response_field = request.POST.get('recaptcha_response_field')
         if not recaptcha_response_field:
             return API_ERROR_response(u"Devi inserire il codice che leggi nell'immagine")
 
@@ -77,64 +75,24 @@ def validate(request):
         if not response.is_valid:
             return API_ERROR_response(u"Il codice che hai ricopiato non è corretto")
 
-        # STEP 2. Query db for extended info
-
-        # check if unit is valid
-        if not Unit.objects.filter(name=scout_unit):
-            return API_ERROR_response(u"Il gruppo scout che hai inserito non esiste")
-
-        # check AGESCI code
-        if not code:
-            return API_ERROR_response(u"Devi inserire il codice socio")
-        # check if ScoutChief code is valid
-        try:
-          chief = ScoutChief.objects.get(code=code)
-        except ScoutChief.DoesNotExist:
-            return API_ERROR_response(u"Il codice socio che hai inserito non esiste")
-        # check if ScoutChief is in the correct Unit
-        if chief.scout_unit.name != scout_unit:
-            return API_ERROR_response(u"Il codice che hai fornito risulta censito in un altro gruppo")
-
-        # check birthday
-        if chief.birthday != birthday:
-            return API_ERROR_response(u"La data di nascita inserita non corrisponde con quella del codice socio")
-
-        # check if chief is_spalla
-        if chief.is_spalla:
-            return API_ERROR_response(u"Risulti essere un capo spalla, verrai iscritto dalla Pattuglia Eventi. Per info %s" % settings.SUPPORT_EMAIL)
-
-        # chief is valid
+        # login is valid
         request.session['valid'] = True
-        request.session['chief_code'] = code
         return API_response()
 
     # method is GET
     else:
         raise PermissionDenied
 
-# validated chief view and subscribe to events
-def choose(request):
-
+def gestioneEventi(request):
     if not request.session.get('valid'):
-        return redirect('/iscrizione-laboratori/')
-    else:
-        chief = get_object_or_404(ScoutChief, code=request.session['chief_code'])
-        c = {}
-        c.update(csrf(request))
-        c['chief'] = {}
-        c['chief']['code'] = chief.code
-        c['chief']['name'] = chief.name
-        c['chief']['surname'] = chief.surname
-        c['chief']['group'] = chief.scout_unit.name
-        return render_to_response('choose.html', c)
+        return redirect('/login-gestione-eventi/')
+    return render_to_response('choose.html', {})
 
 # logout view
 def logout(request):
     if 'valid' in request.session:
         request.session['valid'] = False
-        request.session['chief_code'] = None
-
-    return redirect('/iscrizione-laboratori/')
+    return redirect('/login-gestione-eventi/')
 
 # subscribe API view
 def event_subscribe(request, happening_id, chief_code):
@@ -184,39 +142,4 @@ def freeChiefs(request, happening_id):
     for item in ScoutChief.objects.exclude(pk__in=scs):
         result.append(item.code)
     return HttpJSONResponse(result)
-
-
-#--------------------------------------------------------------------------------
-
-def myevents(request):
-
-    chief_code = request.session['chief_code']
-    scout_chief = get_object_or_404(ScoutChief, code=chief_code)
-    if scout_chief.is_spalla:
-        rv = API_ERROR_response(
-            u"Sei un capo spalla, come sei arrivato fin qui? Prego contattare %s" % settings.SUPPORT_EMAIL
-        )
-    else:
-
-        my_subscriptions = ScoutChiefSubscription.objects.filter(scout_chief=scout_chief)
-        # Save the "is_locked" value for each EventHappening
-        EH_LOCKINGSTATE_MAP = {}
-        map(lambda x: EH_LOCKINGSTATE_MAP.update(
-            { x.event_happening.pk : x.is_locked }
-        ), my_subscriptions)
-
-        eh_qs = EventHappening.objects.filter(
-            scoutchiefsubscription=my_subscriptions
-        )
-        # Serialize event happenings bound to chief
-        eh_list_of_dicts = map(lambda x: x.as_dict(), eh_qs)
-
-        # Add the lockingstate key to dict
-        for el in eh_list_of_dicts:
-            el['is_locked'] = EH_LOCKINGSTATE_MAP[el['happening_id']]
-
-        rv = HttpJSONResponse(eh_list_of_dicts)
-
-    return rv
-    
 
