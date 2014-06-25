@@ -155,10 +155,8 @@ def topics(request):
 def chiefs(request):
     if not request.session.get('valid'):
         raise PermissionDenied()
-    if request.GET.get('is_spalla'):
-        sc = ScoutChief.objects.filter(is_spalla=True)
-    else:
-        sc = ScoutChief.objects.all()
+    sc = ScoutChief.objects.filter(is_spalla=True)
+    # sc = ScoutChief.objects.all()
     result = []
     for item in sc:
         result.append(item.as_dict())
@@ -167,10 +165,6 @@ def chiefs(request):
 def persons(request):
     if not request.session.get('valid'):
         raise PermissionDenied()
-    # if request.GET.get('is_spalla'):
-        # sc = ScoutChief.objects.filter(is_spalla=True)
-    # else:
-        # sc = ScoutChief.objects.all()
     sc = Person.objects.all()
     result = []
     for item in sc:

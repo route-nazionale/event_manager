@@ -99,8 +99,8 @@ def event_subscribe(request, happening_id, chief_code):
     if not request.session.get('valid'):
         return API_ERROR_response(u'Non hai effettuato il login')
     chief = get_object_or_404(ScoutChief, code=chief_code)
-    # if not chief.is_spalla:
-        # return API_ERROR_response(u'Selezionare un capo spalla')
+    if not chief.is_spalla:
+        return API_ERROR_response(u'Selezionare un capo spalla')
     eh = get_object_or_404(EventHappening, pk=happening_id)
     subscription = ScoutChiefSubscription(scout_chief=chief, event_happening=eh)
     try:
@@ -113,8 +113,8 @@ def event_unsubscribe(request, happening_id, chief_code):
     if not request.session.get('valid'):
         return API_ERROR_response(u'Non hai effettuato il login')
     chief = get_object_or_404(ScoutChief, code=chief_code)
-    # if not chief.is_spalla:
-        # return API_ERROR_response(u'Selezionare un capo spalla')
+    if not chief.is_spalla:
+        return API_ERROR_response(u'Selezionare un capo spalla')
     eh = get_object_or_404(EventHappening, pk=happening_id)
     subscription = get_object_or_404(ScoutChiefSubscription, scout_chief=chief, event_happening=eh)
     try:
@@ -140,6 +140,7 @@ def freeChiefs(request, happening_id):
     ehs = EventHappening.objects.filter(timeslot=eh.timeslot)
     scs = [x.scout_chief.pk for x in ScoutChiefSubscription.objects.filter(event_happening=ehs)]
     for item in ScoutChief.objects.exclude(pk__in=scs):
-        result.append(item.code)
+        if item.is_spalla == 1:
+            result.append(item.code)
     return HttpJSONResponse(result)
 
