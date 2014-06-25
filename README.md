@@ -40,14 +40,6 @@ deactivate
 
 Il repository contiene un DB sqlite che ha dentro alcuni dati di test.
 
-Per visualizzare e modificare i dati, utilizzate la comoda interfaccia di admin di django.
+Per provare l'applicazione potete collegarvi a http://localhost:8000/
+utilizando le credenziali nome utente 'admin' e password 'admin'
 
-http://localhost:8000/admin
-
-Potete accedere con nome utente 'admin' e password 'admin'
-
-Per provare l'applicazione potete autenticarvi come capi con queste credenziali:
-
-Codice utente: 0001-RIC
-Gruppo Scout: Fabriano 2
-Data di Nascita: 14/09/1991
