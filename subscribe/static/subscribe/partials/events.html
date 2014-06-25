@@ -188,29 +188,29 @@
 
     <div class="row">
             <div class="col-sm-5">
-              <div class="list-group" id="list1" x-lvl-drop-target="true" x-on-drop="drop(dragEl, dropEl, bToA)">
+              <div class="list-group" id="list1" x-lvl-drop-target="true" x-on-drop="drop(dragEl, dropEl, removeChief)">
                 <a href="javascript:;" class="list-group-item active">Disponibili</a>
                 <span ng-repeat="user in listA">
-                  <a href="javascript:;" data-id="{{user.id}}" x-lvl-draggable="true" class="list-group-item">{{user.firstName}}
-                    <input id="{{user.id}}" ng-click="selectedA.push(user.id)" name="selectedA[]" value="{{user.id}}" ng-checked="selectedA.indexOf(user.id) > -1" type="checkbox" class="pull-right">
+                  <a href="javascript:;" data-id="{{user.code}}" x-lvl-draggable="true" class="list-group-item">{{user.name}} {{user.surname}}<br/>{{user.scout_unit}} {{user.code}}
+                    <input id="{{user.code}}" ng-click="selectedA.push(user.code)" name="selectedA[]" value="{{user.code}}" ng-checked="selectedA.indexOf(user.code) > -1" type="checkbox" class="pull-right">
                   </a>
                 </span>
               </div>
             </div><!--/col-4-->
             <div class="col-md-2 v-center text-center">
               <div class="btn-group">
-                <button title="Aggiungi" class="btn btn-default" ng-click="aToB()" id="btnB"><i class="glyphicon glyphicon-chevron-right"></i></button>
-                <button title="Rimuovi" class="btn btn-default" ng-click="bToA()" id="btnA"><i class="glyphicon glyphicon-chevron-left"></i></button>
+                <button title="Aggiungi" class="btn btn-default" ng-click="addChief()" id="btnB"><i class="glyphicon glyphicon-chevron-right"></i></button>
+                <button title="Rimuovi" class="btn btn-default" ng-click="removeChief()" id="btnA"><i class="glyphicon glyphicon-chevron-left"></i></button>
               </div>
             </div><!--/col-2-->
             <div class="col-sm-5">
-              <div class="list-group" id="list2" x-lvl-drop-target="true" x-on-drop="drop(dragEl, dropEl, aToB)">
+              <div class="list-group" id="list2" x-lvl-drop-target="true" x-on-drop="drop(dragEl, dropEl, addChief)">
                 <a href="javascript:;" class="list-group-item active">Selezionati
                   <input title="Toggle all" ng-click="toggleB()" ng-model="toggle" value="{{toggle}}" type="checkbox" class="pull-right">
                 </a>
                 <span ng-repeat="user in listB">
-                  <a href="javascript:;" data-id="{{user.id}}" class="list-group-item" x-lvl-draggable="true">{{user.firstName}}
-                    <input id="{{user.id}}" ng-click="selectedB.push(user.id)" name="selectedB[]" value="{{user.id}}" ng-checked="selectedB.indexOf(user.id) > -1" type="checkbox" class="pull-right">
+                  <a href="javascript:;" data-id="{{user.code}}" class="list-group-item" x-lvl-draggable="true">{{user.name}} {{user.surname}}<br/>{{user.scout_unit}}
+                    <input id="{{user.code}}" ng-click="selectedB.push(user.code)" name="selectedB[]" value="{{user.code}}" ng-checked="selectedB.indexOf(user.code) > -1" type="checkbox" class="pull-right">
                   </a>
                 </span>
               </div>

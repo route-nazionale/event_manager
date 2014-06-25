@@ -38,11 +38,11 @@ class ScoutChiefSubscription(models.Model):
         n_subscriptions = subscriptions.count()
 
         if n_subscriptions >= self.MAX_SUBSCRIPTIONS:
-            raise ValidationError(u'Non è possibile iscriversi a più di 3 eventi')
+            raise ValidationError(u'Non &egrave; possibile iscriversi a pi&ugrave; di 3 eventi')
 
         #check no eventi sovrapposti
         if subscriptions.filter(event_happening__timeslot=self.event_happening.timeslot).count():
-            raise ValidationError(u'Sei già iscritto ad un evento di questo turno')
+            raise ValidationError(u'Capo gi&agrave; iscritto ad un evento di questo turno')
         
         #check che ci siano posti liberi
         if not self.event_happening.available_seats:

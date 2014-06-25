@@ -15,26 +15,6 @@ EventSubscribeApp.config([
     }]);
 
 
-
-var userData = [
-  {id:1,firstName:'Mary',lastName:'Goodman',role:'manager',approved:true,points:34},
-  {id:2,firstName:'Mark',lastName:'Wilson',role:'developer',approved:true,points:4},
-  {id:3,firstName:'Alex',lastName:'Davies',role:'admin',approved:true,points:56},
-  {id:4,firstName:'Bob',lastName:'Banks',role:'manager',approved:false,points:14},
-  {id:5,firstName:'David',lastName:'Stevens',role:'developer',approved:false,points:100},
-  {id:6,firstName:'Jason',lastName:'Durham',role:'developer',approved:false,points:0},
-  {id:7,firstName:'Jeff',lastName:'Marks',role:'manager',approved:true,points:8},
-  {id:8,firstName:'Betty',lastName:'Abercrombie',role:'manager',approved:true,points:18},
-  {id:9,firstName:'Krista',lastName:'Michaelson',role:'developer',approved:true,points:10},
-  {id:11,firstName:'Devin',lastName:'Sumner',role:'manager',approved:false,points:3},
-  {id:12,firstName:'Navid',lastName:'Palit',role:'manager',approved:true,points:57},
-  {id:13,firstName:'Bhat',lastName:'Phuart',role:'developer',approved:false,points:314},
-  {id:14,firstName:'Nuper',lastName:'Galzona',role:'admin',approved:true,points:94}
-];
-
-
-
-
 EventSubscribeApp.controller('EventController', [
     '$scope', '$http', '$filter', 'ngTableParams',
     function($scope, $http, $filter, ngTableParams) {
@@ -79,6 +59,9 @@ EventSubscribeApp.controller('EventController', [
             $scope.edit = true;
             $scope.isNew = true;
             $scope.editCapiSpalla = false;
+            $scope.listA = [];
+            $scope.listB = [];
+            $scope.items = []; 
         };
         $scope.selectEvent = function(event) {
             $scope.selectedEvent = angular.copy(event);
@@ -90,6 +73,19 @@ EventSubscribeApp.controller('EventController', [
             $scope.edit = false;
             $scope.isNew = false;
             $scope.editCapiSpalla = false;
+
+            $http.get('/chiefs/').success(function(data) {
+                $scope.items = data;
+                $scope.listA = angular.copy(data);
+                $scope.listB = [];
+                $http.get('/subscribedChiefs/' + $scope.selectedEvent.id).success(function(data) {
+                    $scope.listB = _.filter($scope.items, function(x) { return data.indexOf(x.code) != -1; });
+                    $http.get('/freeChiefs/' + $scope.selectedEvent.id).success(function(data) {
+                        $scope.listA = _.filter($scope.items, function(x) { return data.indexOf(x.code) != -1; });
+                    });
+                });
+            });
+
         };
         $scope.reload = function() {
             $scope.table.reload();
@@ -166,9 +162,6 @@ EventSubscribeApp.controller('EventController', [
                 return filtered;
         }
         
-        $scope.subscribe = function() {
-        };
-
         $scope.editForm = function() {
             $scope.edit = true;
             $scope.selectedEvent = angular.copy($scope.selectedEvent);
@@ -243,95 +236,88 @@ EventSubscribeApp.controller('EventController', [
             $scope.topics = data;
         });
 
-// -------------
+        // ----------------------------------------------------------------------------------------------
+        // selezione capi
 
-        // init
         $scope.selectedA = [];
         $scope.selectedB = [];
-        
-        $scope.listA = userData.slice(0,5);
-        $scope.listB = userData.slice(6,10);
-        $scope.items = userData;
-        
         $scope.checkedA = false;
         $scope.checkedB = false;
-        
+
+        $scope.listA = []; // not subscribed chiefs
+        $scope.listB = []; // subscribed chiefs
+        $scope.items = []; // chiefs list
+
         function arrayObjectIndexOf(myArray, searchTerm, property) {
             for(var i = 0, len = myArray.length; i < len; i++) {
                 if (myArray[i][property] === searchTerm) return i;
             }
             return -1;
         }
-        
-        $scope.aToB = function() {
-            for (i in $scope.selectedA) {
-            var moveId = arrayObjectIndexOf($scope.items, $scope.selectedA[i], "id"); 
-            $scope.listB.push($scope.items[moveId]);
-            var delId = arrayObjectIndexOf($scope.listA, $scope.selectedA[i], "id"); 
-            $scope.listA.splice(delId,1);
+
+        $scope.addChief = function() {
+            var cb = function(data) {};
+            for (var i in $scope.selectedA) {
+                $http.get('/event/' + $scope.selectedEvent.id + '/subscribe/' + $scope.selectedA[i]).success(cb);
+                var moveId = arrayObjectIndexOf($scope.items, $scope.selectedA[i], "code"); 
+                $scope.listB.push($scope.items[moveId]);
+                var delId = arrayObjectIndexOf($scope.listA, $scope.selectedA[i], "code"); 
+                $scope.listA.splice(delId,1);
             }
             reset();
         };
-        
-        $scope.bToA = function() {
-            for (i in $scope.selectedB) {
-            var moveId = arrayObjectIndexOf($scope.items, $scope.selectedB[i], "id"); 
-            $scope.listA.push($scope.items[moveId]);
-            var delId = arrayObjectIndexOf($scope.listB, $scope.selectedB[i], "id"); 
-            $scope.listB.splice(delId,1);
+
+        $scope.removeChief = function() {
+            var cb = function(data) {};
+            for (var i in $scope.selectedB) {
+                $http.get('/event/' + $scope.selectedEvent.id + '/unsubscribe/' + $scope.selectedB[i]).success(cb);
+                var moveId = arrayObjectIndexOf($scope.items, $scope.selectedB[i], "code"); 
+                $scope.listA.push($scope.items[moveId]);
+                var delId = arrayObjectIndexOf($scope.listB, $scope.selectedB[i], "code"); 
+                $scope.listB.splice(delId,1);
             }
             reset();
         };
-        
+
         function reset(){
             $scope.selectedA=[];
             $scope.selectedB=[];
             $scope.toggle=0;
         }
-        
+
         $scope.toggleA = function() {
-            
             if ($scope.selectedA.length>0) {
-            $scope.selectedA=[];
+                $scope.selectedA=[];
+            } else {
+                for (var i in $scope.listA) {
+                    $scope.selectedA.push($scope.listA[i].code);
+                }
             }
-            else {
-            for (i in $scope.listA) {
-                $scope.selectedA.push($scope.listA[i].id);
-            }
-            }
-        }
-        
+        };
+
         $scope.toggleB = function() {
-            
             if ($scope.selectedB.length>0) {
-            $scope.selectedB=[];
+                $scope.selectedB=[];
+            } else {
+                for (var i in $scope.listB) {
+                    $scope.selectedB.push($scope.listB[i].code);
+                }
             }
-            else {
-            for (i in $scope.listB) {
-                $scope.selectedB.push($scope.listB[i].id);
-            }
-            }
-        }
-        
+        };
+
         $scope.drop = function(dragEl, dropEl, direction) {
-            
             var drag = angular.element(dragEl);
             var drop = angular.element(dropEl);
             var id = drag.attr("data-id");
             var el = document.getElementById(id);
-            
-            if(!angular.element(el).attr("checked")){
-            angular.element(el).triggerHandler('click');
+
+            if (!angular.element(el).attr("checked")){
+                angular.element(el).triggerHandler('click');
             }
-            
+
             direction();
             $scope.$digest();
         };
-  
-
-
-
 
     }
-]
-  );
+]);

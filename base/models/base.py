@@ -28,6 +28,7 @@ class Unit(models.Model):
 class ScoutChief(models.Model):
 
     FIELDS_TO_SERIALIZE = [
+        "id",
         "code",
         "scout_unit",
         "name",

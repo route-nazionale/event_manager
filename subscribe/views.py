@@ -137,54 +137,54 @@ def logout(request):
     return redirect('/iscrizione-laboratori/')
 
 # subscribe API view
-def event_manager(request, happening_id):
+def event_subscribe(request, happening_id, chief_code):
+    if not request.session.get('valid'):
+        return API_ERROR_response(u'Non hai effettuato il login')
+    chief = get_object_or_404(ScoutChief, code=chief_code)
+    # if not chief.is_spalla:
+        # return API_ERROR_response(u'Selezionare un capo spalla')
+    eh = get_object_or_404(EventHappening, pk=happening_id)
+    subscription = ScoutChiefSubscription(scout_chief=chief, event_happening=eh)
+    try:
+        subscription.save()
+        return API_response()
+    except ValidationError as e:
+        return API_ERROR_response(unicode(e))
 
-    if request.method == "POST":
-        if not request.session.get('valid'):
-            rv = API_ERROR_response(u'non hai effettuato il login')
-        else:
-            chief = ScoutChief.objects.get(code=request.session['chief_code'])
-            if chief.is_spalla:
-                rv = API_ERROR_response(
-                    u"Sei un capo spalla, come sei arrivato fin qui? Prego contattare %s" % settings.SUPPORT_EMAIL
-                )
-            else:
-                eh = get_object_or_404(EventHappening, pk=happening_id)
-                subscription = ScoutChiefSubscription(scout_chief=chief, event_happening=eh)
-                try:
-                    subscription.save()
-                except ValidationError as e:
-                    rv = API_ERROR_response(unicode(e))
-                rv = API_response()
-    else:
-        raise PermissionDenied
+def event_unsubscribe(request, happening_id, chief_code):
+    if not request.session.get('valid'):
+        return API_ERROR_response(u'Non hai effettuato il login')
+    chief = get_object_or_404(ScoutChief, code=chief_code)
+    # if not chief.is_spalla:
+        # return API_ERROR_response(u'Selezionare un capo spalla')
+    eh = get_object_or_404(EventHappening, pk=happening_id)
+    subscription = get_object_or_404(ScoutChiefSubscription, scout_chief=chief, event_happening=eh)
+    try:
+        subscription.delete()
+        return API_response()
+    except ValidationError as e:
+        return API_ERROR_response(unicode(e))
 
-    return rv
+def subscribedChiefs(request, happening_id):
+    if not request.session.get('valid'):
+        return API_ERROR_response(u'Non hai effettuato il login')
+    eh = get_object_or_404(EventHappening, pk=happening_id)
+    result = []
+    for item in ScoutChiefSubscription.objects.filter(event_happening=eh):
+        result.append(item.scout_chief.code)
+    return HttpJSONResponse(result)
 
-def event_unsubscribe(request, happening_id):
+def freeChiefs(request, happening_id):
+    if not request.session.get('valid'):
+        return API_ERROR_response(u'Non hai effettuato il login')
+    result = []
+    eh = get_object_or_404(EventHappening, pk=happening_id)
+    ehs = EventHappening.objects.filter(timeslot=eh.timeslot)
+    scs = [x.scout_chief.pk for x in ScoutChiefSubscription.objects.filter(event_happening=ehs)]
+    for item in ScoutChief.objects.exclude(pk__in=scs):
+        result.append(item.code)
+    return HttpJSONResponse(result)
 
-    if request.method == "POST":
-        if not request.session.get('valid'):
-            rv = API_ERROR_response(u'non hai effettuato il login')
-        else:
-            chief = ScoutChief.objects.get(code=request.session['chief_code'])
-            if chief.is_spalla:
-                rv = API_ERROR_response(
-                    u"Sei un capo spalla, come sei arrivato fin qui? Prego contattare %s" % settings.SUPPORT_EMAIL
-                )
-            else:
-                eh = get_object_or_404(EventHappening, pk=happening_id)
-                subscription = get_object_or_404(ScoutChiefSubscription, scout_chief=chief, event_happening=eh)
-                try:
-                    subscription.delete()
-                except ValidationError as e:
-                    rv = API_ERROR_response(unicode(e))
-                else:
-                    rv = API_response()
-    else:
-        raise PermissionDenied
-
-    return rv
 
 #--------------------------------------------------------------------------------
 
