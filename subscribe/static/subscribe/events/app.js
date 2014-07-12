@@ -6,7 +6,7 @@ EventSubscribeApp.config([
     function($routeProvider) {
         $routeProvider.
           when('/home', {
-              templateUrl: '/static/subscribe/partials/events.html',
+              templateUrl: '/static/subscribe/events/partials/events.html',
               controller: 'EventController'
           }).
           otherwise({

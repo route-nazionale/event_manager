@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="it" ng-app="EventSubscribeApp">
+<html lang="it" ng-app="RoverSubscribeApp">
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -15,52 +15,12 @@
         <![endif]-->
 
         <!-- Bootstrap css-->
-        <link rel="stylesheet" href="/static/subscribe/bootstrap.min.css">
-        <link rel="stylesheet" href="/static/subscribe/dataTables.bootstrap.css">
-        <link rel="stylesheet" href="/static/subscribe/ng-table.min.css">
-        <link rel="stylesheet" href="/static/subscribe/table.css">
-
+        <link rel="stylesheet" href="/static/subscribe/common/bootstrap.min.css">
+        <link rel="stylesheet" href="/static/subscribe/common/dataTables.bootstrap.css">
+        <link rel="stylesheet" href="/static/subscribe/common/ng-table.min.css">
+        <link rel="stylesheet" href="/static/subscribe/common/table.css">
 
         <style  type="text/css">
-            ._lvl-over {
-                /* applied to a drop target when a draggable object is over it */
-                border: 2px dashed black !important;
-            }
-
-            ._lvl-target {
-                /* 
-                applied to all drop targets when a drag operation begins 
-                removed when the drag operation ends
-                used to indicate drop targets on a page 
-                */
-                background-color: #ddd;
-                opacity: .5;
-            }
-
-            .event.lab {
-                background-color: #FFEB99;
-            }
-
-            .event.tav {
-                background-color: #c8f4d1;
-                /*background-color: #E0C2FF;*/
-            }
-
-            .label.event.tav,
-            .label.event.lab {
-                color: #212121;
-                padding: 6px;
-            }
-
-            [draggable] {
-                /* not applied by the directive, but useful to indicate a draggable element */
-                -moz-user-select: none;
-                -khtml-user-select: none;
-                -webkit-user-select: none;
-                user-select: none;
-                cursor: move;
-                /*border:1px solid black;*/
-            }
             html, body { height: 100%;}
             .fillable {
                 display: -moz-box;
@@ -92,7 +52,7 @@
                 flex-direction: row;
             }
             
-            #event-details label {
+            #rover-details label {
                 min-width: 150px;
             }
         </style>
@@ -102,7 +62,18 @@
             <a href="/gestione-eventi">Gestione eventi</a> | Gestione Ragazzi
             <a class="btn btn-info pull-right" href="/logout">Esci</a>
         </div>
-        <div>
+        <div class="container fillable" style="height: calc(100% - 152px);" ng-view></div>
+        <!-- jQuery -->
+        <script type="text/javascript" src="/static/subscribe/common/jquery-1.11.0.min.js"></script>
+        <!-- Bootstrap js -->
+        <script type="text/javascript" src="/static/subscribe/common/bootstrap.min.js"></script>
+        <!-- AngularJS -->
+        <script type="text/javascript" src="/static/subscribe/common/angular-1.3.0-beta.10/angular.min.js"></script>
+        <script type="text/javascript" src="/static/subscribe/common/angular-1.3.0-beta.10/angular-route.min.js"></script>
+        <script type="text/javascript" src="/static/subscribe/common/ng-table.min.js"></script>
+        <!-- App -->
+        <script type="text/javascript" src="/static/subscribe/boys/app.js"></script>
+<!--        <div>
             <h4>Filtra</h4>
             Censimento: <input type="text">
             Cognome: <input type="text">
@@ -137,6 +108,6 @@
                     </tr>
                 {% endfor %}
             </tbody>
-        </table>
+        </table>-->
     </body>
 </html>

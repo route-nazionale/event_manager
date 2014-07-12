@@ -15,10 +15,10 @@
         <![endif]-->
 
         <!-- Bootstrap css-->
-        <link rel="stylesheet" href="/static/subscribe/bootstrap.min.css">
-        <link rel="stylesheet" href="/static/subscribe/dataTables.bootstrap.css">
-        <link rel="stylesheet" href="/static/subscribe/ng-table.min.css">
-        <link rel="stylesheet" href="/static/subscribe/table.css">
+        <link rel="stylesheet" href="/static/subscribe/common/bootstrap.min.css">
+        <link rel="stylesheet" href="/static/subscribe/common/dataTables.bootstrap.css">
+        <link rel="stylesheet" href="/static/subscribe/common/ng-table.min.css">
+        <link rel="stylesheet" href="/static/subscribe/common/table.css">
 
 
         <style  type="text/css">
@@ -104,17 +104,17 @@
             <a class="btn btn-info pull-right" href="/logout">Esci</a>
         </div>
         <div class="container fillable" style="height: calc(100% - 152px);" ng-view></div>
-        <script type="text/javascript" src="/static/subscribe/jquery-1.11.0.min.js"></script>
-        <script type="text/javascript" src="/static/subscribe/jquery.cookie.js"></script>
-        <script type="text/javascript" src="/static/subscribe/underscore-min.js"></script>
+        <script type="text/javascript" src="/static/subscribe/common/jquery-1.11.0.min.js"></script>
+        <script type="text/javascript" src="/static/subscribe/common/jquery.cookie.js"></script>
+        <script type="text/javascript" src="/static/subscribe/common/underscore-min.js"></script>
         <!-- Bootstrap js -->
-        <script type="text/javascript" src="/static/subscribe/bootstrap.min.js"></script>
-        <script type="text/javascript" src="/static/subscribe/angular-1.3.0-beta.10/angular.min.js"></script>
-        <script type="text/javascript" src="/static/subscribe/angular-1.3.0-beta.10/angular-route.min.js"></script>
-        <script type="text/javascript" src="/static/subscribe/lvl-uuid.js"></script>
-        <script type="text/javascript" src="/static/subscribe/lvl-drag-drop.js"></script>
-        <script type="text/javascript" src="/static/subscribe/ng-table.min.js"></script>
-        <script type="text/javascript" src="/static/subscribe/app.js"></script>
+        <script type="text/javascript" src="/static/subscribe/common/bootstrap.min.js"></script>
+        <script type="text/javascript" src="/static/subscribe/common/angular-1.3.0-beta.10/angular.min.js"></script>
+        <script type="text/javascript" src="/static/subscribe/common/angular-1.3.0-beta.10/angular-route.min.js"></script>
+        <script type="text/javascript" src="/static/subscribe/common/lvl-uuid.js"></script>
+        <script type="text/javascript" src="/static/subscribe/common/lvl-drag-drop.js"></script>
+        <script type="text/javascript" src="/static/subscribe/common/ng-table.min.js"></script>
+        <script type="text/javascript" src="/static/subscribe/events/app.js"></script>
         <script type="text/javascript">
                 var CSRF_TOKEN = '{{ csrftoken }}' || $.cookie('csrftoken');
                 var CHIEF = {

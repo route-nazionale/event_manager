@@ -1,0 +1,92 @@
+<div class="alert alert-danger" ng-show="alert">
+    <button class="close" ng-click="closeAlert()" aria-hidden="true" data-dismiss="alert" type="button">×</button>
+    <strong>{{alert.title}}</strong><br>
+    {{alert.message}}
+</div>
+<h4>
+    Rovers
+</h4>
+<p>
+    Ricerca:
+    <input type="text" ng-keyup="table.reload()" ng-model="searchFilter" placeholder="Ricerca rover">
+    <label><input type="checkbox" ng-change="table.reload()" ng-model="notFullBoys">Ragazzi con turno vuoto</label>
+</p>
+<table id="events" ng-table="table" class="table table-bordered" cellspacing="0" width="100%">
+    <tbody>
+        <tr class="rover" ng-repeat="rover in $data">
+            <td data-title="''">
+                <span class="btn btn-xs btn-default" title="Modifica"
+                      data-toggle="modal" data-target="#rover-details"
+                      ng-click="selectRover(rover)">
+                    <span class="glyphicon glyphicon-edit"></span>
+                </span>
+            </td>
+            <td data-title="'Cognome'" sortable="'cognome'">{{rover.cognome}}</td>
+            <td data-title="'Nome'" sortable="'nome'">{{rover.nome}}</td>
+            <td data-title="'Età'" sortable="'eta'">{{rover.eta}}</td>
+<!--            <td data-title="'SdC 1'" sortable="'stradadicoraggio1'">{{rover.stradadicoraggio1}}</td>
+            <td data-title="'SdC 2'" sortable="'stradadicoraggio2'">{{rover.stradadicoraggio2}}</td>
+            <td data-title="'SdC 3'" sortable="'stradadicoraggio3'">{{rover.stradadicoraggio3}}</td>
+            <td data-title="'SdC 4'" sortable="'stradadicoraggio4'">{{rover.stradadicoraggio4}}</td>
+            <td data-title="'SdC 5'" sortable="'stradadicoraggio5'">{{rover.stradadicoraggio5}}</td>-->
+            <td data-title="'Turno 1'" sortable="'turno1'">{{events[rover.turno1].topic}}</td>
+            <td data-title="'Turno 2'" sortable="'turno2'">{{events[rover.turno2].topic}}</td>
+            <td data-title="'Turno 3'" sortable="'turno3'">{{events[rover.turno3].topic}}</td>
+        </tr>
+    </tbody>
+</table>
+
+<div class="modal fade" id="rover-details" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">
+                    {{currentRover.cognome}} {{currentRover.nome}}
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div class="panel panel-body">
+                    <div class="panel-heading">
+                        <h4>Evento Turno 1:</h4>
+                    </div>
+                    <div class="panel-body">
+                        <select class="form-control" ng-model="currentRover.turno1">
+                            <option value="">Nessun evento</option>
+                            <option ng-repeat="event in events" value="{{event.code}}">{{event.name}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="panel panel-body">
+                    <div class="panel-heading">
+                        <h4>Evento Turno 2:</h4>
+                    </div>
+                    <div class="panel-body">
+                        <select class="form-control" ng-model="currentRover.turno2">
+                            <option value="">Nessun evento</option>
+                            <option ng-repeat="event in events" value="{{event.code}}">{{event.name}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="panel panel-body">
+                    <div class="panel-heading">
+                        <h4>Evento Turno 3:</h4>
+                    </div>
+                    <div class="panel-body">
+                        <select class="form-control" ng-model="currentRover.turno3">
+                            <option value="">Nessun evento</option>
+                            <option ng-repeat="event in events" value="{{event.code}}">{{event.name}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="col-lg-offset-4 col-md-offset-4 col-sm-offset-4 col-xs-offset-4 col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Chiudi</button>
+                    <button type="button" class="btn btn-default" ng-click="saveRover();">Salva</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
