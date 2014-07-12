@@ -52,7 +52,6 @@ RoverSubscribeApp.controller('SubscribtionController', [
             $scope.loadRovers();
         };
         $scope.customFilter = function(data) {
-            console.log('sodd',$scope.soddisfacimentoFilter);
             if ($scope.searchFilter) {
                 data = $filter('filter')(data, $scope.searchFilter);
             }
@@ -109,7 +108,7 @@ RoverSubscribeApp.controller('SubscribtionController', [
                     .success(function(resp) {
                         var msg = 'Validazione: "' + resp + '"\nProcedere?';
                         if (confirm(msg)) {
-                            $http.get('/modifyBoy', rover)
+                            $http.post('/modifyBoy', rover)
                                     .success(function(resp) {
                                         alert('Salvataggio completato con successo');
                                     })
