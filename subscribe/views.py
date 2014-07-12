@@ -6,7 +6,7 @@ from django.core.context_processors import csrf
 from django.conf import settings
 from django.shortcuts import get_object_or_404
 
-from base.models import ScoutChief, Unit, EventHappening
+from base.models import ScoutChief, Unit, EventHappening, Rover
 from base.views_support import API_response, API_ERROR_response, HttpJSONResponse
 from subscribe.models import ScoutChiefSubscription
 
@@ -87,6 +87,15 @@ def gestioneEventi(request):
     if not request.session.get('valid'):
         return redirect('/login-gestione-eventi/')
     return render_to_response('choose.html', {})
+
+def gestioneRagazzi(request):
+    if not request.session.get('valid'):
+        return redirect('/login-gestione-eventi/')
+    bs = Rover.objects.all()
+    res = []
+    for b in bs:
+        res.append(b.as_dict())
+    return render_to_response('ragazzi.html', {'boys': res})
 
 # logout view
 def logout(request):

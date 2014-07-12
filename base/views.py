@@ -6,6 +6,7 @@ from django.core.exceptions import PermissionDenied
 from django.db.models import Max
 
 from base.models import *
+from base.models.base import *
 from base.views_support import HttpJSONResponse
 
 # Ok, this function is horrible - I know :-(
@@ -157,6 +158,15 @@ def chiefs(request):
         raise PermissionDenied()
     sc = ScoutChief.objects.filter(is_spalla=True)
     # sc = ScoutChief.objects.all()
+    result = []
+    for item in sc:
+        result.append(item.as_dict())
+    return HttpJSONResponse(result)
+
+def boys(request):
+    if not request.session.get('valid'):
+        raise PermissionDenied()
+    sc = Rover.objects.all()
     result = []
     for item in sc:
         result.append(item.as_dict())

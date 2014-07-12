@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from base.models import (
-    ScoutChief, District, Unit, Event, 
+    ScoutChief, District, Unit, Event, Rover,
     HeartBeat, EventHappening, EventTimeSlot
 )
 
@@ -55,3 +55,4 @@ admin.site.register(Event, EventAdmin)
 admin.site.register(EventHappening, EventHappeningAdmin)
 admin.site.register(HeartBeat, HeartBeatAdmin)
 admin.site.register(EventTimeSlot, EventTimeSlotAdmin)
+admin.site.register(Rover)

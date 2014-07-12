@@ -99,30 +99,44 @@
     </head>
     <body>
         <div class="well">
-            Gestione eventi |
-            <a href="/gestione-ragazzi">Gestione ragazzi</a>
+            <a href="/gestione-eventi">Gestione eventi</a> | Gestione Ragazzi
             <a class="btn btn-info pull-right" href="/logout">Esci</a>
         </div>
-        <div class="container fillable" style="height: calc(100% - 152px);" ng-view></div>
-        <script type="text/javascript" src="/static/subscribe/jquery-1.11.0.min.js"></script>
-        <script type="text/javascript" src="/static/subscribe/jquery.cookie.js"></script>
-        <script type="text/javascript" src="/static/subscribe/underscore-min.js"></script>
-        <!-- Bootstrap js -->
-        <script type="text/javascript" src="/static/subscribe/bootstrap.min.js"></script>
-        <script type="text/javascript" src="/static/subscribe/angular-1.3.0-beta.10/angular.min.js"></script>
-        <script type="text/javascript" src="/static/subscribe/angular-1.3.0-beta.10/angular-route.min.js"></script>
-        <script type="text/javascript" src="/static/subscribe/lvl-uuid.js"></script>
-        <script type="text/javascript" src="/static/subscribe/lvl-drag-drop.js"></script>
-        <script type="text/javascript" src="/static/subscribe/ng-table.min.js"></script>
-        <script type="text/javascript" src="/static/subscribe/app.js"></script>
-        <script type="text/javascript">
-                var CSRF_TOKEN = '{{ csrftoken }}' || $.cookie('csrftoken');
-                var CHIEF = {
-                    name: '{{chief.name}}',
-                    surname: '{{chief.surname}}',
-                    code: '{{chief.code}}',
-                    group: '{{ chief.group}}'
-                };
-        </script>
+        <div>
+            <h4>Filtra</h4>
+            Censimento: <input type="text">
+            Cognome: <input type="text">
+            Strada di Coraggio: <input type="text">
+            Priorità : <input type="text">
+            <input type="submit">
+        </div>
+        <br>
+        <table class="table">
+            <tbody>
+                <tr>
+                    <th></th>
+                    <th>Nome</th>
+                    <th>Cognome</th>
+                    <th>St 1</th>
+                    <th>St 2</th>
+                    <th>St 3</th>
+                    <th>St 4</th>
+                    <th>St 5</th>
+                    <th></th>
+                </tr>
+                {% for b in boys %}
+                    <tr>
+                        <td><a href="/gestione-ragazzi/edit/{{b.id}}">Modifica</a></td>
+                        <td>{{b.nome}}</td>
+                        <td>{{b.cognome}}</td>
+                        <td>{{b.stradadicoraggio1}}</td>
+                        <td>{{b.stradadicoraggio2}}</td>
+                        <td>{{b.stradadicoraggio3}}</td>
+                        <td>{{b.stradadicoraggio4}}</td>
+                        <td>{{b.stradadicoraggio5}}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </body>
 </html>
