@@ -11,7 +11,7 @@
     <input type="text" ng-keyup="table.reload()" ng-model="searchFilter" placeholder="Ricerca rover">
     <label><input type="checkbox" ng-change="table.reload()" ng-model="notFullBoys">Ragazzi con turno vuoto</label>
 </p>
-<table id="events" ng-table="table" class="table table-bordered" cellspacing="0" width="100%">
+<table id="events" ng-table="table" class="table table-bordered table-striped" cellspacing="0" width="100%">
     <tbody>
         <tr class="rover" ng-repeat="rover in $data">
             <td data-title="''">
@@ -24,11 +24,14 @@
             <td data-title="'Cognome'" sortable="'cognome'">{{rover.cognome}}</td>
             <td data-title="'Nome'" sortable="'nome'">{{rover.nome}}</td>
             <td data-title="'Età'" sortable="'eta'">{{rover.eta}}</td>
-<!--            <td data-title="'SdC 1'" sortable="'stradadicoraggio1'">{{rover.stradadicoraggio1}}</td>
-            <td data-title="'SdC 2'" sortable="'stradadicoraggio2'">{{rover.stradadicoraggio2}}</td>
-            <td data-title="'SdC 3'" sortable="'stradadicoraggio3'">{{rover.stradadicoraggio3}}</td>
-            <td data-title="'SdC 4'" sortable="'stradadicoraggio4'">{{rover.stradadicoraggio4}}</td>
-            <td data-title="'SdC 5'" sortable="'stradadicoraggio5'">{{rover.stradadicoraggio5}}</td>-->
+            <td data-title="'Strade di Coraggio'" sortable="'stradadicoraggio1'" style="text-align: center;">
+                <span class="label label-info" ng-if="rover.stradadicoraggio1">1</span>
+                <span class="label label-info" ng-if="rover.stradadicoraggio2">2</span>
+                <span class="label label-info" ng-if="rover.stradadicoraggio3">3</span>
+                <span class="label label-info" ng-if="rover.stradadicoraggio4">4</span>
+                <span class="label label-info" ng-if="rover.stradadicoraggio5">5</span>
+                <span class="label label-info" ng-hide="rover.stradadicoraggio1 || rover.stradadicoraggio2 || rover.stradadicoraggio3 || rover.stradadicoraggio4 || rover.stradadicoraggio5">Nessuna</span>
+            </td>
             <td data-title="'Turno 1'" sortable="'turno1'">{{events[rover.turno1].topic}}</td>
             <td data-title="'Turno 2'" sortable="'turno2'">{{events[rover.turno2].topic}}</td>
             <td data-title="'Turno 3'" sortable="'turno3'">{{events[rover.turno3].topic}}</td>
