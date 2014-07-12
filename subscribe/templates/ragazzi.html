@@ -15,6 +15,7 @@
         <![endif]-->
 
         <!-- Bootstrap css-->
+        <link rel="stylesheet" href="/static/subscribe/common/jquery-ui-1.11.0.min.css">
         <link rel="stylesheet" href="/static/subscribe/common/bootstrap.min.css">
         <link rel="stylesheet" href="/static/subscribe/common/dataTables.bootstrap.css">
         <link rel="stylesheet" href="/static/subscribe/common/ng-table.min.css">
@@ -22,6 +23,10 @@
 
         <style  type="text/css">
             html, body { height: 100%;}
+            .ui-autocomplete {
+                position: fixed;
+                z-index: 99999;
+            }
             .fillable {
                 display: -moz-box;
                 display: -webkit-flexbox;
@@ -51,7 +56,7 @@
                 -ms-flex-direction: row;
                 flex-direction: row;
             }
-            
+
             #rover-details label {
                 min-width: 150px;
             }
@@ -65,6 +70,7 @@
         <div class="container fillable" style="height: calc(100% - 152px);" ng-view></div>
         <!-- jQuery -->
         <script type="text/javascript" src="/static/subscribe/common/jquery-1.11.0.min.js"></script>
+        <script type="text/javascript" src="/static/subscribe/common/jquery-ui-1.11.0.min.js"></script>
         <!-- Bootstrap js -->
         <script type="text/javascript" src="/static/subscribe/common/bootstrap.min.js"></script>
         <!-- AngularJS -->
@@ -73,41 +79,41 @@
         <script type="text/javascript" src="/static/subscribe/common/ng-table.min.js"></script>
         <!-- App -->
         <script type="text/javascript" src="/static/subscribe/boys/app.js"></script>
-<!--        <div>
-            <h4>Filtra</h4>
-            Censimento: <input type="text">
-            Cognome: <input type="text">
-            Strada di Coraggio: <input type="text">
-            Priorità : <input type="text">
-            <input type="submit">
-        </div>
-        <br>
-        <table class="table">
-            <tbody>
-                <tr>
-                    <th></th>
-                    <th>Nome</th>
-                    <th>Cognome</th>
-                    <th>St 1</th>
-                    <th>St 2</th>
-                    <th>St 3</th>
-                    <th>St 4</th>
-                    <th>St 5</th>
-                    <th></th>
-                </tr>
-                {% for b in boys %}
-                    <tr>
-                        <td><a href="/gestione-ragazzi/edit/{{b.id}}">Modifica</a></td>
-                        <td>{{b.nome}}</td>
-                        <td>{{b.cognome}}</td>
-                        <td>{{b.stradadicoraggio1}}</td>
-                        <td>{{b.stradadicoraggio2}}</td>
-                        <td>{{b.stradadicoraggio3}}</td>
-                        <td>{{b.stradadicoraggio4}}</td>
-                        <td>{{b.stradadicoraggio5}}</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>-->
+        <!--        <div>
+                    <h4>Filtra</h4>
+                    Censimento: <input type="text">
+                    Cognome: <input type="text">
+                    Strada di Coraggio: <input type="text">
+                    Priorità : <input type="text">
+                    <input type="submit">
+                </div>
+                <br>
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <th></th>
+                            <th>Nome</th>
+                            <th>Cognome</th>
+                            <th>St 1</th>
+                            <th>St 2</th>
+                            <th>St 3</th>
+                            <th>St 4</th>
+                            <th>St 5</th>
+                            <th></th>
+                        </tr>
+                        {% for b in boys %}
+                            <tr>
+                                <td><a href="/gestione-ragazzi/edit/{{b.id}}">Modifica</a></td>
+                                <td>{{b.nome}}</td>
+                                <td>{{b.cognome}}</td>
+                                <td>{{b.stradadicoraggio1}}</td>
+                                <td>{{b.stradadicoraggio2}}</td>
+                                <td>{{b.stradadicoraggio3}}</td>
+                                <td>{{b.stradadicoraggio4}}</td>
+                                <td>{{b.stradadicoraggio5}}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>-->
     </body>
 </html>
