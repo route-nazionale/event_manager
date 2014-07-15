@@ -35,6 +35,9 @@ class ScoutChief(models.Model):
         "surname",
         # "birthday",
         "is_spalla",
+        "region",
+        "quartier",
+        "language",
     ]
     code = models.CharField(max_length=128, unique=True,
         verbose_name="codice censimento"
@@ -47,6 +50,16 @@ class ScoutChief(models.Model):
     is_spalla = models.BooleanField(default=False, verbose_name=u"è un capo spalla",
         help_text=u"questo capo verrà iscritto dalla 'pattuglia eventi' con criteri supersonici"
     )
+
+    region = models.CharField(max_length=50,verbose_name="regione")
+    quartier = models.CharField(max_length=50, verbose_name="Sottocampo")
+
+    ## A flag to communicate if a chief is busy in turns
+    ## todo: set this when assigning thi chief to a lab
+    turn1_filled = models.BooleanField(default=False)
+    turn2_filled = models.BooleanField(default=False)
+    turn3_filled = models.BooleanField(default=False)
+
 
     class Meta:
 
