@@ -55,4 +55,4 @@ docs/_build/
 
 # Settings
 event_manager/settings.*
-
+static/
