@@ -5,6 +5,7 @@ from django.core.exceptions import PermissionDenied, ValidationError
 from django.core.context_processors import csrf
 from django.conf import settings
 from django.shortcuts import get_object_or_404
+from django.contrib.auth import authenticate
 
 from base.models import ScoutChief, Unit, EventHappening
 from base.views_support import API_response, API_ERROR_response, HttpJSONResponse
@@ -37,21 +38,12 @@ def subscribe(request):
 def validate(request):
     if request.method == 'POST':
 
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        
-        # TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO
-        # TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO
-        # TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO
-        # TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODOi
+        user = request.POST.get('username')
+        passw = request.POST.get('password')    
 
-        if not (username == 'admin' and password == 'admin'):
+        u = authenticate(username=user, password=passw)
+        if u is None:
             return API_ERROR_response(u"Nome o password non validi")
-
-        # TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO
-        # TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO
-        # TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO
-        # TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO
 
         # check captcha
         recaptcha_challenge_field = request.POST.get('recaptcha_challenge_field')
