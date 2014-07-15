@@ -64,6 +64,7 @@ class EventHappening(models.Model):
         "state_handicap",
         "description",
         "topic",
+        "print_code",
         "code",            # this is a proprety
         "n_seats",         # this is a proprety
         "available_seats", # this is a proprety
@@ -195,6 +196,9 @@ class Event(models.Model):
         return "%s-%s%s%s" % (
             self.kind, self.district.code, self.topic.code, self.num
         )
+
+    # Code manually set to be printed and easily read
+    print_code = models.CharField(max_length=50, null=True)
 
     #--- constraints ---#
     seats_tot = models.IntegerField(blank=True)

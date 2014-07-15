@@ -34,6 +34,8 @@
 <table id="events" ng-table="table" class="table table-bordered" cellspacing="0" width="100%">
     <tbody>
         <tr class="event" ng-class="{lab: event.kind === 'LAB', tav: event.kind === 'TAV'}" ng-repeat="event in $data" data-eventid="{{event.num}}" x-lvl-draggable="true">
+            <td data-title="'Cod. Unico'" sortable="'uniq_code'">{{event.code}}</td>
+            <td data-title="'Cod. Stampa'" sortable="'print_code'">{{event.print_code}}</td>
             <td data-title="'Nome'" sortable="'name'">{{event.name}}</td>
             <td data-title="'Data'" sortable="'timeslot'">{{event.timeslot}}</td>
             <td data-title="'Iscrizioni capi'" sortable="'seats_n_chiefs'">{{event.seats_n_chiefs}}/{{event.max_chiefs_seats}}</td>
@@ -66,6 +68,11 @@
 
             <div class="modal-body">
                 <div class="well" ng-hide="editCapiSpalla">
+                     <p>
+                        <label>Codice Stampa</label>
+                        <span ng-hide="edit">{{selectedEvent.print_code}}</span>
+                        <input ng-show="edit" ng-model="selectedEvent.print_code" />
+                    </p>
                     <p>
                         <label>Tipologia</label>
                         <span ng-hide="edit">{{selectedEvent.kind === 'TAV' ? 'TAVOLA ROTONDA' : 'LABORATORIO'}}</span>
