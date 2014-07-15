@@ -1,5 +1,7 @@
 from default_settings import *
 
+BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'o*4+4o2wia&n8_i02q9rxhhyjzzb_ueqcn=y!(ws2-z7pgydoi'
 

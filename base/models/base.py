@@ -123,70 +123,6 @@ class Person(models.Model):
 
 #--------------------------------------------------------------------------------
 
-class Rover(models.Model):
-
-    FIELDS_TO_SERIALIZE = [
-        "id",
-        "nome",
-        "cognome",
-        "eta",
-        "stradadicoraggio1",
-        "stradadicoraggio2",
-        "stradadicoraggio3",
-        "stradadicoraggio4",
-        "stradadicoraggio5",
-        "turno1",
-        "priorita1",
-        "turno2",
-        "priorita2",
-        "turno3",
-        "priorita3",
-        "soddisfacimento"
-    ]
-
-    codicecensimento = models.IntegerField()
-
-    nome = models.CharField(max_length=50)
-
-    cognome = models.CharField(max_length=50)
-
-    # idgruppo
-    # idunita
-
-    eta = models.IntegerField()
-    handicap = models.BooleanField()
-    stradadicoraggio1 = models.BooleanField()
-    stradadicoraggio2 = models.BooleanField()
-    stradadicoraggio3 = models.BooleanField()
-    stradadicoraggio4 = models.BooleanField()
-    stradadicoraggio5 = models.BooleanField() 
-
-    codicecensimento = models.CharField(max_length=50)
-    turno1 = models.CharField(max_length=50)
-    priorita1 = models.IntegerField()
-    turno2 = models.CharField(max_length=50)
-    priorita2 = models.IntegerField()
-    turno3 = models.CharField(max_length=50)
-    priorita3 = models.IntegerField()
-    soddisfacimento = models.IntegerField()
-
-    class Meta:
-        db_table = "ragazzi_assegnati"
-
-    def as_dict(self):
-        obj = {}
-        for field in self.FIELDS_TO_SERIALIZE:
-            v = getattr(self, field)
-            if isinstance(v, (models.Field, models.Model)):
-                v = unicode(v)
-            elif isinstance(v, datetime.datetime):
-                v = v.strftime("%s")
-            obj[field] = v
-        return obj
-
-
-#--------------------------------------------------------------------------------
-
 class District(models.Model):
     """
     District entity
@@ -225,6 +161,7 @@ class District(models.Model):
                 v = v.strftime("%s")
             obj[field] = v
         return obj
+        
 
 #--------------------------------------------------------------------------------
 

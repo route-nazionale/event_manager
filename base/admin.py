@@ -1,9 +1,11 @@
 from django.contrib import admin
 
 from base.models import (
-    ScoutChief, District, Unit, Event, Rover,
+    ScoutChief, District, Unit, Event,
     HeartBeat, EventHappening, EventTimeSlot
 )
+
+from base.models.rover import *
 
 class ScoutChiefAdmin(admin.ModelAdmin):
 

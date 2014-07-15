@@ -7,6 +7,7 @@ from django.db.models import Max
 
 from base.models import *
 from base.models.base import *
+from base.models.event import *
 from base.views_support import HttpJSONResponse
 
 # Ok, this function is horrible - I know :-(
@@ -97,12 +98,36 @@ def storeEvent(request):
     eh.event.state_handicap = data['state_handicap']
     eh.event.state_chief = data['state_chief']
     eh.event.state_activation = data['state_activation']
+
+    assigned_boys = 0
+
+    # aggiorna lo stato dell'assegnamento per chi ha questo
+    # evento al turno 1
+    rs_turno1 = Rover.objects.filter(seq1=eh.event.num)
+    for rs in rs_turno1:
+        rs.valido1 = data['state_activation'] == Event.ACTIVATION_ACTIVE
+        assigned_boys+=1
+
+    # aggiorna lo stato dell'assegnamento per chi ha questo
+    # evento al turno 2
+    rs_turno2 = Rover.objects.filter(seq2=eh.event.num)
+    for rs in rs_turno2:
+        rs.valido2 = data['state_activation'] == Event.ACTIVATION_ACTIVE
+        assigned_boys+=1
+
+    # aggiorna lo stato dell'assegnamento per chi ha questo
+    # evento al turno 3
+    rs_turno3 = Rover.objects.filter(seq3=eh.event.num)
+    for rs in rs_turno3:
+        rs.valido3 = data['state_activation'] == Event.ACTIVATION_ACTIVE
+        assigned_boys+=1
+
     eh.event.state_subscription = data['state_subscription']
     eh.event.save()
     eh.save()
-    result = {}
+    result = { 'msg' : 'Sono stati coinvolti nella modifica ' + str(assigned_boys) + ' ragazzi.'}
+    print("==> " + result['msg'])
     return HttpJSONResponse(result)
-
 
 def events(request):
     if not request.session.get('valid'):
@@ -171,6 +196,31 @@ def boys(request):
     for item in sc:
         result.append(item.as_dict())
     return HttpJSONResponse(result)
+
+def boys_paginate(request, frm):
+    if not request.session.get('valid'):
+        raise PermissionDenied()
+    f = int(frm)
+    sc = Rover.objects.all()[f:500]
+    result = []
+    for item in sc:
+        result.append(item.as_dict())
+    return HttpJSONResponse(result)
+
+def boy_assign(request, codice_censimento):
+    if not request.session.get('valid'):
+        raise PermissionDenied()
+    data = json.loads(request.body)
+    boy = Rover.objects.get(codice_censimento=data['codice_censimento'])
+    response_body = {}
+    check_constraints
+
+def boy_evaluate(request, codice_censimento):
+    if not request.session.get('valid'):
+        raise PermissionDenied()
+    data = json.loads(request.body)
+    boy = Rover.objects.get(codice_censimento=data['codice_censimento'])
+    boy.turno
 
 def persons(request):
     if not request.session.get('valid'):
