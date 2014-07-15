@@ -6,7 +6,7 @@ from django.core.context_processors import csrf
 from django.conf import settings
 from django.shortcuts import get_object_or_404
 
-from base.models import ScoutChief, Unit, EventHappening, Rover
+from base.models import ScoutChief, Unit, EventHappening
 from base.views_support import API_response, API_ERROR_response, HttpJSONResponse
 from subscribe.models import ScoutChiefSubscription
 
