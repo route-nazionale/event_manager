@@ -100,6 +100,7 @@ EventSubscribeApp.controller('EventController', [
         };
         $scope.districtFilter = '';
         $scope.heartbeatFilter = '';
+        $scope.printcodeFilter = '';
         $scope.handicapFilter = '';
         $scope.chiefonlyFilter = '';
         $scope.notChiefonlyFilter = '';
@@ -109,6 +110,7 @@ EventSubscribeApp.controller('EventController', [
                 var filtered = [];
                 var districtFilter = $scope.districtFilter;
                 var heartbeatFilter = $scope.heartbeatFilter;
+                var printcodeFilter = $scope.printcodeFilter;
                 var handicapFitler = $scope.handicapFilter;
                 var chiefonlyFilter = $scope.chiefonlyFilter;
                 var notChiefonlyFilter = $scope.notChiefonlyFilter;
@@ -122,42 +124,45 @@ EventSubscribeApp.controller('EventController', [
                     return data;
                 }
                 for( var d in data ){
+                    allFilters = true;
+                    if( printcodeFilter ){
+                        if (! data[d].printcode.match(new RegExp(printcodeFilter))){
+                            continue
+                        }
+                    }
+
                     if( districtFilter ){
-                        if( data[d].district.match(new RegExp(districtFilter)) ){
-                            filtered.push(data[d]);
+                        if(!data[d].district.match(new RegExp(districtFilter))){
                             continue;
                         }
                     }
                     if( heartbeatFilter ){
-                        if( data[d].heartbeat && data[d].heartbeat.match(new RegExp(heartbeatFilter)) ){
-                            filtered.push(data[d]);
+                        if(!data[d].heartbeat && data[d].heartbeat.match(new RegExp(heartbeatFilter)) ){
                             continue;
                         }
                     }
                     if( handicapFitler ){
-                        if( data[d].state_handicap === 'ENABLED' ){
-                            filtered.push(data[d]);
+                        if(! data[d].state_handicap === 'ENABLED' ){
                             continue;
                         }
                     }
                     if( chiefonlyFilter ){
-                        if( data[d].state_chief === 'RESERVED' ){
-                            filtered.push(data[d]);
+                        if( ! data[d].state_chief === 'RESERVED' ){
                             continue;
                         }
                     }
                     if( notChiefonlyFilter ){
-                        if( data[d].state_chief === 'DISABLED' ){
-                            filtered.push(data[d]);
+                        if( ! data[d].state_chief === 'DISABLED' ){
                             continue;
                         }
                     }
-                    if( kindFilter ){
-                        if( data[d].kind.match(new RegExp(kindFilter)) ){
-                            filtered.push(data[d]);
+                    if(kindFilter ){
+                        if( ! data[d].kind.match(new RegExp(kindFilter)) ){
                             continue;
                         }
                     }
+                    
+                    filtered.push(data[d]);
                 }
                 return filtered;
         }

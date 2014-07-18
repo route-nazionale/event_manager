@@ -19,8 +19,10 @@
 </p>
 <p>
     Filtri:
+    <input type="text" ng-keyup="table.reload()" style="width: 200px;" ng-model="printcodeFilter" placeholder="Ricerca per codice-stampa">
     <input type="text" ng-keyup="table.reload()" style="width: 200px;" ng-model="districtFilter" placeholder="Ricerca per sottocampo">
     <input type="text" ng-keyup="table.reload()" style="width: 240px;" ng-model="heartbeatFilter" placeholder="Ricerca per strada di coraggio">
+    <br>
     Tipologia:
     <select ng-change="table.reload()" ng-model="kindFilter">
         <option value="">TUTTI</option>
