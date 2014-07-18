@@ -24,7 +24,12 @@ urlpatterns = patterns('',
     url(r'^timeslots/', 'base.views.timeslots', name='timeslots'),
     url(r'^topics/', 'base.views.topics', name='topics'),
     url(r'^chiefs/', 'base.views.chiefs', name='chiefs'),
-    url(r'^boys/', 'base.views.boys', name='chiefs'),
+    
+    url(r'^boys/', 'base.views.boys', name='boys'),
+    url(r'^boys/page/(?P<frm>\d+)$', 'base.views.boys_paginate', name='boys_paginate'),
+    # url(r'^boy/assign/(?P<codice_censimento>\d+)$', 'base.views.boy_assign', name='boy_assign'),
+    # url(r'^boy/evaluate/(?P<codice_censimento>\d+)$', 'base.views.boy_evaluate', name='boy_evaluate'),
+    
     url(r'^subscribedChiefs/(?P<happening_id>\d+)$', 'subscribe.views.subscribedChiefs', name='subscribedChiefs'),
     url(r'^freeChiefs/(?P<happening_id>\d+)$', 'subscribe.views.freeChiefs', name='freeChiefs'),
     url(r'^persons/', 'base.views.persons', name='persons'),
