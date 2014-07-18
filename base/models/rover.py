@@ -1,6 +1,8 @@
 from django.db import models
 from event import Event
 
+import datetime
+
 class Rover(models.Model):
 
     FIELDS_TO_SERIALIZE = [
