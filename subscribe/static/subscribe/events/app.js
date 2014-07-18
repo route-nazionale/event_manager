@@ -126,7 +126,7 @@ EventSubscribeApp.controller('EventController', [
                 for( var d in data ){
                     allFilters = true;
                     if( printcodeFilter ){
-                        if (! data[d].printcode.match(new RegExp(printcodeFilter))){
+                        if (! data[d].print_code.match(new RegExp(printcodeFilter))){
                             continue
                         }
                     }
