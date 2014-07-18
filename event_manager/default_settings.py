@@ -103,3 +103,12 @@ SUIT_CONFIG = {
     #),
     
 }
+
+import pika
+
+RABBITMQ_CREDENTIAL_PASSWORD = pika.PlainCredentials('your_name', 'yourpassword')
+
+RABBITMQ = {
+    'host' : '',
+    'credentials' : RABBITMQ_CREDENTIAL_PASSWORD,
+}
