@@ -5,6 +5,18 @@ from event import Event
 
 import datetime
 
+#--------------------------------------------------------------------------------
+# Extending a bit the User model
+# compatible with bureau_manager
+from django.contrib.auth.models import User
+
+def user_is_readonly(self):
+    return bool(self.groups.filter(name='readonly').count())
+
+User.add_to_class('is_readonly', user_is_readonly)
+
+#---------------------------------------------------------------------------------
+
 class Vclans(models.Model):
 
     idvclan = models.CharField(max_length=255, blank=True)
@@ -98,7 +110,7 @@ class Rover(models.Model):
         db_table = "ragazzi_assegnati"
 
     def __unicode__(self):
-        return u"%s %s (%s)" % (self.nome, self.cognome, self.vclan)
+        return u"%s %s - %s" % (self.nome, self.cognome, self.vclan)
 
     def clean(self):
 
