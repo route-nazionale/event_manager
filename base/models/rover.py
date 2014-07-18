@@ -42,22 +42,45 @@ class Rover(models.Model):
 
     codicecensimento = models.CharField(max_length=50)
     
-    turno1 = models.CharField(max_length=50)
-    priorita1 = models.IntegerField()
-    valido1 = models.BooleanField(default=True)
+    turno1 = models.ForeignKey(Event, 
+        to_field='code', related_name="turno1_rover_set", 
+        null=True, blank=True, db_column="turno1"
+    )
+    priorita1 = models.IntegerField(blank=True, default=0)
+    valido1 = models.BooleanField(default=True, blank=True)
     
-    turno2 = models.CharField(max_length=50)
-    priorita2 = models.IntegerField()
-    valido2 = models.BooleanField(default=True)
+    turno2 = models.ForeignKey(Event, 
+        to_field='code', related_name="turno2_rover_set", 
+        null=True, blank=True, db_column="turno2"
+    )
+    priorita2 = models.IntegerField(blank=True, default=0)
+    valido2 = models.BooleanField(default=True, blank=True)
 
-    turno3 = models.CharField(max_length=50)
-    priorita3 = models.IntegerField()
-    valido3 = models.BooleanField(default=True)
+    turno3 = models.ForeignKey(Event, 
+        to_field='code', related_name="turno3_rover_set", 
+        null=True, blank=True, db_column="turno3"
+    )
+    priorita3 = models.IntegerField(blank=True, default=0)
+    valido3 = models.BooleanField(default=True, blank=True)
     
-    soddisfacimento = models.IntegerField()
+    soddisfacimento = models.IntegerField(blank=True)
 
+    def clean(self):
+
+        super(Rover, self).clean()
+        
+        if self.priorita1 is None: self.priorita1 = 0
+        if self.priorita2 is None: self.priorita2 = 0
+        if self.priorita3 is None: self.priorita3 = 0
+        
     class Meta:
         db_table = "ragazzi_assegnati"
+
+    def __unicode__(self):
+        return u"%s %s (%s)" % (self.nome, self.cognome, self.vclan)
+    @property
+    def vclan(self):
+        return "CLAN"
 
     def as_dict(self):
         obj = {}
@@ -156,3 +179,6 @@ class Rover(models.Model):
             return "Tutti i vincoli sono soddisfatti"
         return ",\n".join(msgs) + "."
 
+    def save(self, *args, **kw):
+        self.clean()
+        super(Rover, self).save(*args, **kw)

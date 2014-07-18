@@ -65,9 +65,9 @@ class EventHappening(models.Model):
         "description",
         "topic",
         "print_code",
-        "code",            # this is a proprety
-        "n_seats",         # this is a proprety
-        "available_seats", # this is a proprety
+        "code",            # this is a property
+        "n_seats",         # this is a property
+        "available_seats", # this is a property
         "dt_start",
         "dt_stop",
         "state_activation",
@@ -191,11 +191,12 @@ class Event(models.Model):
 
     num = models.IntegerField(verbose_name="codice numerico")
 
-    @property
-    def code(self):
-        return "%s-%s%s%s" % (
-            self.kind, self.district.code, self.topic.code, self.num
-        )
+    code = models.CharField(max_length=32, unique=True)
+    #@property
+    #def code(self):
+   #    return "%s-%s%s%s" % (
+   #        self.kind, self.district.code, self.topic.code, self.num
+  #     )
 
     # Code manually set to be printed and easily read
     print_code = models.CharField(max_length=50, null=True)
