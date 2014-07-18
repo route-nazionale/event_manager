@@ -93,3 +93,13 @@ STATIC_URL = '/static/'
 
 # useful for strftime
 # locale.setlocale(locale.LC_ALL, 'it_IT.UTF8')
+
+SUIT_CONFIG = {
+    'ADMIN_NAME' : 'RN2014 - Eventi',
+    'LIST_PER_PAGE' : 100,
+    'SEARCH_URL' : '',
+    #'MENU' : (
+    #    {'app': 'ragazzi', 'label': 'Gestione', },
+    #),
+    
+}
