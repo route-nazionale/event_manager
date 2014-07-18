@@ -5,8 +5,6 @@ from base.models import (
     HeartBeat, EventHappening, EventTimeSlot
 )
 
-from base.models.rover import *
-
 class ScoutChiefAdmin(admin.ModelAdmin):
 
     list_display = (

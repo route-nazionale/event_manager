@@ -1,6 +1,5 @@
-# from base.models import Event
 from django.db import models
-from base.models import Event
+from event import Event
 
 class Rover(models.Model):
 
@@ -33,17 +32,17 @@ class Rover(models.Model):
     # idunita
 
     eta = models.IntegerField()
-    handicap = models.BooleanField()
+    handicap = models.BooleanField(default=False)
     
-    stradadicoraggio1 = models.BooleanField()
-    stradadicoraggio2 = models.BooleanField()
-    stradadicoraggio3 = models.BooleanField()
-    stradadicoraggio4 = models.BooleanField()
-    stradadicoraggio5 = models.BooleanField() 
+    stradadicoraggio1 = models.BooleanField(default=False)
+    stradadicoraggio2 = models.BooleanField(default=False)
+    stradadicoraggio3 = models.BooleanField(default=False)
+    stradadicoraggio4 = models.BooleanField(default=False)
+    stradadicoraggio5 = models.BooleanField(default=False) 
 
     codicecensimento = models.CharField(max_length=50)
     
-    turno1 = models.CharField()
+    turno1 = models.CharField(max_length=50)
     priorita1 = models.IntegerField()
     valido1 = models.BooleanField(default=True)
     
@@ -120,6 +119,7 @@ class Rover(models.Model):
             sat += 2
         if self.turno1 != None and self.turno3 != None and  get_lab(self.seq1).road != get_lab(self.seq3).road:
             sat += 2
+        return sat
 
     def check_constraints(lab_num, turn_num):
         """
