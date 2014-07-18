@@ -1,0 +1,80 @@
+{% extends "admin/change_form.html" %}
+{% load i18n %}
+
+{% block submit_buttons_bottom %}
+    {% if not user.is_readonly %}
+        {{ block.super }}
+        {% if change %}
+            <button name="_compute_soddisfacimento" href="do-compute-soddisfacimento/" class="btn btn-high btn-success bureau-buttons" type="submit">CALCOLA SODDISFACIMENTO</button>
+
+        <script type="text/javascript">
+            $('.bureau-buttons').click(function (e) {
+                var el = $(e.target);
+                $.post(el.attr('href'), {})
+                    .done(function(data) {
+                        if (data != "OK") {
+                            alert("Non hai i permessi necessari per eseguire l'operazione");
+                        } else {
+                            alert('Operazione "' + el.text() + '" eseguita con successo!');
+                            $(el).remove();
+                        }
+                    })
+                    .fail(function(data) {
+                        alert("Non hai i permessi necessari per eseguire l'operazione");
+                    });
+            
+                e.stopPropagation();
+                return false;
+            });
+        </script>
+        {% endif %}
+    {% endif %}
+{% endblock %}
+
+{% block object-tools %}
+{% comment %}
+  {% if not is_popup and change or request.GET.vclan_id %}
+    <h4 class="italic-title">{% trans 'tools'|capfirst %}</h4>
+    <ul class="box menu-box">
+    {% block object-tools-items %}
+
+    {% if change and original.vclan %}
+        <li><a href="{% url 'admin:edda_vclans_change' original.vclan.pk %}" class="actionlink" ><i
+            class="icon-time icon-alpha75"></i>VAI AL SUO CLAN</a>
+        </li>
+    {% elif request.GET.vclan_id %}
+        <li><a href="{% url 'admin:edda_vclans_change' request.GET.vclan_id %}" class="actionlink" ><i
+            class="icon-time icon-alpha75"></i>VAI AL SUO CLAN</a>
+        </li>
+    {% endif %}
+    {% comment %}
+    <li><a href="do-set-retired-quartiere/" class="actionlink" dove="QUARTIERE"><i
+        class="icon-time icon-alpha75"></i>REGISTRA CHE QUESTA PERSONA NON VIENE</a>
+    </li>
+    <script type="text/javascript">
+        $('.actionlink').click(function (e) {
+            var el = e.target;
+            $.post(el.href, { 
+                success : function(response) {
+                    alert('Operazione "' + el.innerHTML + '" eseguita con successo!');
+                }
+            });
+        
+            e.stopPropagation();
+            return false;
+        });
+    </script>
+    {% endcommento %}
+    {% endblock %}
+   {% endif %}
+{% endcomment %}
+{% endblock %}
+
+{% block sidebar_content %}
+{% if request.GET.vclan_id %}
+<script type="text/javascript">
+    $('#id_vclan').val({{ request.GET.vclan_id }});
+    $('#id_scout').prop('checked', true);
+</script>
+{% endif %}
+{% endblock %}
