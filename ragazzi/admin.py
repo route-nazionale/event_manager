@@ -7,7 +7,7 @@ class RoverAdmin(admin.ModelAdmin):
 
     list_display = (
         '__unicode__', 
-        'turno1',
+        'vclan', 'turno1',
         'priorita1',
         'valido1',
         'turno2',
@@ -22,5 +22,9 @@ class RoverAdmin(admin.ModelAdmin):
     list_editable = (
         'turno1', 'turno2', 'turno3'
     )
+
+    list_filter = ('vclan', 'soddisfacimento')
+
+    search_fields = ('nome', 'cognome')
 
 admin.site.register(Rover, RoverAdmin)

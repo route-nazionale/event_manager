@@ -1,7 +1,36 @@
+#-*- coding: utf-8 -*-
+
 from django.db import models
 from event import Event
 
 import datetime
+
+class Vclans(models.Model):
+
+    idvclan = models.CharField(max_length=255, blank=True)
+    idgruppo = models.CharField(verbose_name="ID gruppo", max_length=255, blank=True)
+    idunitagruppo = models.CharField(verbose_name="ID unità gruppo", max_length=255, blank=True)
+    # ordinale = models.CharField(max_length=255, blank=True)
+    nome = models.CharField(max_length=255, blank=True)
+    regione = models.CharField(max_length=255, blank=True)
+    updated_at = models.DateTimeField(blank=True, null=True, auto_now=True)
+    created_at = models.DateTimeField(blank=True, null=True, auto_now_add=True)
+
+    arrivato_al_campo = models.NullBooleanField(default=None)
+    dt_verifica_di_arrivo = models.DateTimeField(blank=True, null=True, default=None)
+
+    #route = models.ForeignKey('Routes', db_column='route_id', null=True)
+    #is_ospitante = models.NullBooleanField(default=None)
+    
+    class Meta:
+        #managed = False
+        db_table = 'vclans'
+        verbose_name = 'clan'
+        verbose_name_plural = 'clan'
+
+    def __unicode__(self):
+        return u"%s (%s)" % (self.nome, self.idunitagruppo)
+
 
 class Rover(models.Model):
 
@@ -27,11 +56,9 @@ class Rover(models.Model):
     codicecensimento = models.IntegerField()
 
     nome = models.CharField(max_length=50)
-
     cognome = models.CharField(max_length=50)
 
-    # idgruppo
-    # idunita
+    vclan = models.ForeignKey(Vclans, verbose_name="clan", null=True, blank=True)
 
     eta = models.IntegerField()
     handicap = models.BooleanField(default=False)
@@ -67,6 +94,12 @@ class Rover(models.Model):
     
     soddisfacimento = models.IntegerField(blank=True)
 
+    class Meta:
+        db_table = "ragazzi_assegnati"
+
+    def __unicode__(self):
+        return u"%s %s (%s)" % (self.nome, self.cognome, self.vclan)
+
     def clean(self):
 
         super(Rover, self).clean()
@@ -75,15 +108,6 @@ class Rover(models.Model):
         if self.priorita2 is None: self.priorita2 = 0
         if self.priorita3 is None: self.priorita3 = 0
         
-    class Meta:
-        db_table = "ragazzi_assegnati"
-
-    def __unicode__(self):
-        return u"%s %s (%s)" % (self.nome, self.cognome, self.vclan)
-    @property
-    def vclan(self):
-        return "CLAN"
-
     def as_dict(self):
         obj = {}
         for field in self.FIELDS_TO_SERIALIZE:
