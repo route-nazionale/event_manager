@@ -76,8 +76,8 @@ def validate(request):
         raise PermissionDenied
 
 def gestioneEventi(request):
-    if not request.session.get('valid'):
-        return redirect('/login-gestione-eventi/')
+    #FERO if not request.session.get('valid'):
+    #FERO    return redirect('/login-gestione-eventi/')
     return render_to_response('choose.html', {})
 
 def gestioneRagazzi(request):
