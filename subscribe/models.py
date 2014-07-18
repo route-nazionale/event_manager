@@ -73,48 +73,48 @@ class ScoutChiefSubscription(models.Model):
         return rv
 
 
-+
-+#---------------------------------------------------------------------------------
-+# RABBITMQ part
-+
-+from base.models import Event
-+
-+MODEL_RABBITMQ_MAP = {
-+       EventHappening : 'event_happening',
-+       Event : 'event'
-+}
-+
-+def get_rabbitmq_routing_key(sender, instance, created):
-+
-+    basename = MODEL_RABBITMQ_MAP.get(sender)
-+    if basename:
-+        action = ['update','insert'][int(created)]
-+        return u"%s.%s" % (basename, action)
-+    else:
-+        return None
-+
-+import pika
-+from django.core import serializers
-+from django.db.models.signals import post_save, pre_save
-+from django.dispatch import receiver
-+@receiver(post_save)
-+def my_log_queue(sender, instance, created, **kwargs):
-+
-+    data = serializers.serialize("json", [instance])
-+
-+    # Publish changes to RabbitMQ server
-+    routing_key = get_rabbitmq_routing_key(sender, instance, created)
-+
-+    if routing_key:
-+        #RABBITMQ_SETTINGS
-+
-+        RABBITMQ_connection = pika.BlockingConnection(
-+            pika.ConnectionParameters(**settings.RABBITMQ)
-+        )
-+        RABBITMQ_channel = RABBITMQ_connection.channel()
-+
-+        RABBITMQ_channel.basic_publish(
-+            exchange='application', routing_key=routing_key, body=data
-+        )
-+        RABBITMQ_connection.close()
-+
+
+#---------------------------------------------------------------------------------
+# RABBITMQ part
+
+from base.models import Event
+
+MODEL_RABBITMQ_MAP = {
+       EventHappening : 'event_happening',
+       Event : 'event'
+}
+
+def get_rabbitmq_routing_key(sender, instance, created):
+
+    basename = MODEL_RABBITMQ_MAP.get(sender)
+    if basename:
+        action = ['update','insert'][int(created)]
+        return u"%s.%s" % (basename, action)
+    else:
+        return None
+
+import pika
+from django.core import serializers
+from django.db.models.signals import post_save, pre_save
+from django.dispatch import receiver
+@receiver(post_save)
+def my_log_queue(sender, instance, created, **kwargs):
+
+    data = serializers.serialize("json", [instance])
+
+    # Publish changes to RabbitMQ server
+    routing_key = get_rabbitmq_routing_key(sender, instance, created)
+
+    if routing_key:
+        #RABBITMQ_SETTINGS
+
+        RABBITMQ_connection = pika.BlockingConnection(
+            pika.ConnectionParameters(**settings.RABBITMQ)
+        )
+        RABBITMQ_channel = RABBITMQ_connection.channel()
+
+        RABBITMQ_channel.basic_publish(
+            exchange='application', routing_key=routing_key, body=data
+        )
+        RABBITMQ_connection.close()
+
