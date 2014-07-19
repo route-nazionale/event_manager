@@ -79,8 +79,8 @@ def storeEvent(request):
     e.name = data['name']
     e.description = data['description']          
     e.kind = data['kind']                                                               
-    e.district = get_object_or_404(District,data.get('district'))
-    e.topic = get_object_or_404(HeartBeat, data.get('topic'))
+    e.district = get_object_or_404(District, name=data.get('district'))
+    e.topic = get_object_or_404(HeartBeat, name=data.get('topic'))
     e.max_boys_seats = data['max_boys_seats']          
     e.max_chiefs_seats = data['max_chiefs_seats']
     e.min_age = data['min_age']                                                         
@@ -113,7 +113,7 @@ def events(request):
     if not request.session.get('valid'):
         raise PermissionDenied()
     events = []
-    eh_qs = EventHappening.objects.all()
+    eh_qs = EventHappening.objects.select_related().all()
     for eh in eh_qs:
         obj = eh.as_dict()
         if ' - ' not in obj['name']:
