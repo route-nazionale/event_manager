@@ -24,18 +24,18 @@ def _getDistrict(v):
     else:
         raise Exception()
 
+def _getNextNum():
+    try:
+        return Event.objects.all().aggregate(Max('num'))['num__max'] + 1
+    except:
+        return 1
+
 def _getTopic(v):
     result = HeartBeat.objects.filter(name=v)
     if result:
         return result[0]
     else:
         raise Exception()
-
-def _getNextNum():
-    try:
-        return Event.objects.all().aggregate(Max('num'))['num__max'] + 1
-    except:
-        return 1
 
 def _isSharedEvent(eh):
     return EventHappening.objects.filter(event=eh.event.pk).count()
@@ -55,6 +55,7 @@ def createEvent(request):
     #         data['num'])
     # data['name'] = code + " - " + data['name']
     seats_n_boys = data['seats_n_boys']
+    code = data['code']
     data['seats_tot'] = data['max_boys_seats'] + data['max_chiefs_seats']
     del data['seats_n_boys']
     seats_n_chiefs = data['seats_n_chiefs']
@@ -73,60 +74,39 @@ def storeEvent(request):
     if not request.session.get('valid'):
         raise PermissionDenied()
     data = json.loads(request.body)
-    eh = EventHappening.objects.get(pk=data['id'])
-    eh.timeslot = _getEventTimeslot(data.get('timeslot'))
-    if _isSharedEvent(eh):
-        e = eh.event
-        e.name = data['name']
-        e.num = _getNextNum()
-        e.topic = _getTopic(data.get('topic'))
-        e.district = _getDistrict(data.get('district'))
-        e.name = e.code + " - " + e.name
-        e.pk = None # add another object copy
-        e.save()
-        eh.event = e
-    else:
-        eh.event.name = data['name']
-    eh.event.description = data['description']
-    eh.event.kind = data['kind']
-    eh.event.district = _getDistrict(data.get('district'))
-    eh.event.topic = _getTopic(data.get('topic'))
-    eh.event.max_boys_seats = data['max_boys_seats']
-    eh.event.max_chiefs_seats = data['max_chiefs_seats']
-    eh.event.min_age = data['min_age']
-    eh.event.max_age = data['max_age']
-    eh.event.state_handicap = data['state_handicap']
-    eh.event.state_chief = data['state_chief']
-    eh.event.state_activation = data['state_activation']
 
-    assigned_boys = 0
+    e = Event.objects.get(code=data['code'])
+    e.name = data['name']
+    e.description = data['description']          
+    e.kind = data['kind']                                                               
+    e.district = get_object_or_404(District,data.get('district'))
+    e.topic = get_object_or_404(HeartBeat, data.get('topic'))
+    e.max_boys_seats = data['max_boys_seats']          
+    e.max_chiefs_seats = data['max_chiefs_seats']
+    e.min_age = data['min_age']                                                         
+    e.max_age = data['max_age']                                     
+    e.state_handicap = data['state_handicap']                           
+    e.state_chief = data['state_chief']
+    e.state_activation = data['state_activation']     
+ 
+    e.state_subscription = data['state_subscription']
+    e.save()
 
-    # aggiorna lo stato dell'assegnamento per chi ha questo
-    # evento al turno 1
-    rs_turno1 = Rover.objects.filter(seq1=eh.event.num)
-    for rs in rs_turno1:
-        rs.valido1 = data['state_activation'] == Event.ACTIVATION_ACTIVE
-        assigned_boys+=1
+    boys_qs = e.turno1_rover_set.all()
+    boys_qs.update(valido1=data['state_activation'] == Event.ACTIVATION_ACTIVE)
 
-    # aggiorna lo stato dell'assegnamento per chi ha questo
-    # evento al turno 2
-    rs_turno2 = Rover.objects.filter(seq2=eh.event.num)
-    for rs in rs_turno2:
-        rs.valido2 = data['state_activation'] == Event.ACTIVATION_ACTIVE
-        assigned_boys+=1
+    assigned_boys = boys_qs.count()
 
-    # aggiorna lo stato dell'assegnamento per chi ha questo
-    # evento al turno 3
-    rs_turno3 = Rover.objects.filter(seq3=eh.event.num)
-    for rs in rs_turno3:
-        rs.valido3 = data['state_activation'] == Event.ACTIVATION_ACTIVE
-        assigned_boys+=1
+    boys_qs = e.turno2_rover_set.all()
+    boys_qs.update(valido2=data['state_activation'] == Event.ACTIVATION_ACTIVE)
+    assigned_boys += boys_qs.count()
+    
+    boys_qs = e.turno3_rover_set.all()
+    boys_qs.update(valido3=data['state_activation'] == Event.ACTIVATION_ACTIVE)
+    
+    assigned_boys +=  boys_qs.count()
 
-    eh.event.state_subscription = data['state_subscription']
-    eh.event.save()
-    eh.save()
-    result = { 'msg' : 'Sono stati coinvolti nella modifica ' + str(assigned_boys) + ' ragazzi.'}
-    print("==> " + result['msg'])
+    result = { 'msg' : 'Sono stati coinvolti nella modifica %s ragazzi.' % assigned_boys}
     return HttpJSONResponse(result)
 
 def events(request):

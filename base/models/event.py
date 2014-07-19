@@ -194,9 +194,9 @@ class Event(models.Model):
     code = models.CharField(max_length=32, unique=True)
     #@property
     #def code(self):
-   #    return "%s-%s%s%s" % (
-   #        self.kind, self.district.code, self.topic.code, self.num
-  #     )
+    #    return "%s-%s%s%s" % (
+    #        self.kind, self.district.code, self.topic.code, self.num
+    #     )
 
     # Code manually set to be printed and easily read
     print_code = models.CharField(max_length=50, null=True)
