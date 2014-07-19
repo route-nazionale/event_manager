@@ -98,6 +98,8 @@ SUIT_CONFIG = {
     'ADMIN_NAME' : 'RN2014 - Eventi',
     'LIST_PER_PAGE' : 100,
     'SEARCH_URL' : '',
+    'CONFIRM_UNSAVED_CHANGES' : False,
+
     #'MENU' : (
     #    {'app': 'ragazzi', 'label': 'Gestione', },
     #),

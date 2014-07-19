@@ -37,12 +37,21 @@
                 });
                 $.post(el.attr('href'), JSON.stringify(rover_events_data))
                     .done(function(data) {
-                        if (parseInt(data, 10))
-                            $('.field-soddisfacimento .controls > .readonly').text(data);
-                            alert("Il grado di soddisfacimento del ragazzo è " + data + "!")
-                        else {
-                            alert("Se leggi bene questo dato capirai dove sono gli errori" + JSON.stringify(data)));
+                        $('.field-soddisfacimento .controls > .readonly').text(data.satisfaction);
+                        var msg_str = ""
+                        if (data.turno1 !== undefined) { 
+                            msg_str += "* PROBLEMI TURNO1: " + JSON.stringify(data.turno1) + "\n";
                         }
+                        if (data.turno2 !== undefined) { 
+                            msg_str += "* PROBLEMI TURNO2: " + JSON.stringify(data.turno2) + "\n";
+                        }
+                        if (data.turno3 !== undefined) { 
+                            msg_str += "* PROBLEMI TURNO3: " + JSON.stringify(data.turno3) + "\n";
+                        }
+                        if (data.__all__ !== undefined) { 
+                            msg_str += "* PROBLEMI TRA I TURNI: " + JSON.stringify(data.__all__) + "\n";
+                        }
+                        alert(msg_str + "\n* Il grado di soddisfacimento del ragazzo è " + data.satisfaction + ". Brava!")
                     })
                     .fail(function(data) {
                         alert("E' avvenuto l'errore "+JSON.stringify(data)+" contatta lo staff IT");

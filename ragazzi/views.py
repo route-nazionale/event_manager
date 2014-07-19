@@ -36,16 +36,9 @@ def boy_evaluate(request, pk):
 
     msgs_constraints = rover.check_constraints()
 
-    # weird behaviour and different format in responses,
-    # let's see if we support it
-    if not msgs_constraints:
-        # vincoli verificati -> calcolo soddisfacimento
-        rv = rover.calculate_satisfaction()
+    msgs_constraints['satisfaction'] = rover.calculate_satisfaction()
 
-    else:
-        rv = msgs_constraints
-
-    return HttpJSONResponse(rv)
+    return HttpJSONResponse(msgs_constraints)
     
     
 

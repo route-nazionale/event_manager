@@ -136,9 +136,19 @@ class Rover(models.Model):
         if self.priorita2 is None: self.priorita2 = 0
         if self.priorita3 is None: self.priorita3 = 0
 
-        if self.turno1 is None: self.valido1 = False
-        if self.turno2 is None: self.valido2 = False
-        if self.turno3 is None: self.valido3 = False
+        if self.turno1 is None: 
+            self.valido1 = False
+        elif self.turno1.state_activation == Event.ACTIVATION_ACTIVE:
+            self.valido1 = True
+        if self.turno2 is None: 
+            self.valido2 = False
+        elif self.turno2.state_activation == Event.ACTIVATION_ACTIVE:
+            self.valido2 = True
+
+        if self.turno3 is None: 
+            self.valido3 = False
+        elif self.turno3.state_activation == Event.ACTIVATION_ACTIVE:
+            self.valido3 = True
         
         self.soddisfacimento = self.calculate_satisfaction()
 

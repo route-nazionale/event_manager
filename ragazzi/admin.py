@@ -19,22 +19,16 @@ class RoverAdmin(admin.ModelAdmin):
 
     form = RoverForm
 
-    # Non occorre mostrare alcuna azione
-    actions_on_top = False
-    actions_on_bottom = False
-
     list_display = (
         '__unicode__', 
-        'vclan', 'turno1',
-        'priorita1',
+        'vclan',
+        'soddisfacimento',
+        'turno1',
         'valido1',
         'turno2',
-        'priorita2',
         'valido2',
         'turno3',
-        'priorita3',
         'valido3',
-        'soddisfacimento'
     )
 
     #KO: meglio non dare questa funzionalita'. Non riusciremmo a fare il calcolo del soddisfacimento
@@ -72,5 +66,17 @@ class RoverAdmin(admin.ModelAdmin):
 
     def has_add_permission(self, request):
         return False
+
+    # Non occorre mostrare alcuna azione
+    actions_on_top = False
+    actions_on_bottom = False
+
+    def get_actions(self, request):
+        return []
+
+    # v. implementazione kobe per colonne "arrivato al campo o al quartiere
+    # def turno1_carino(self, obj):
+    #    return u"<btn class=
+    # turno1_carino.short_description = 'turno1'
 
 admin.site.register(Rover, RoverAdmin)
