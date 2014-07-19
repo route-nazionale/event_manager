@@ -81,7 +81,7 @@ from base.models import Event
 
 MODEL_RABBITMQ_MAP = {
        EventHappening : 'event_happening',
-       Event : 'event'
+       Event : 'campevents'
 }
 
 def get_rabbitmq_routing_key(sender, instance, created):
