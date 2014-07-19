@@ -174,17 +174,17 @@ class Rover(models.Model):
 
     def calculate_satisfaction(self):
         sat = 0
-        if self.turno1 != None and self.is_road_suitable(self.turno1__id):
+        if self.turno1 != None and  self.turno1.state_activation == 'ACTIVE' and self.is_road_suitable(self.turno1__topic_id):
             sat += 5
-        if self.turno2 != None and self.is_road_suitable(get_lab(self.seq2).road):
+        if self.turno2 != None and self.turno2.state_activation == 'ACTIVE' and self.is_road_suitable(self.turno2__topic_id):
             sat += 5
-        if self.turno3 != None and self.is_road_suitable(get_lab(self.seq3).road):
+        if self.turno3 != None and self.turno3.state_activation == 'ACTIVE' and self.is_road_suitable(self.turno3__topic_id):
             sat += 5
-        if self.turno1 != None and self.turno2 != None and  get_lab(self.seq1).road != get_lab(self.seq2).road:
+        if self.turno1 != None and self.turno2 != None and  self.turno1__topic_id != self.turno2__topic_id:
             sat += 2
-        if self.turno2 != None and self.turno3 != None and  get_lab(self.seq2).road != get_lab(self.seq3).road:
+        if self.turno2 != None and self.turno3 != None and  self.turno2__topic_id != self.turno3__topic_id:
             sat += 2
-        if self.turno1 != None and self.turno3 != None and  get_lab(self.seq1).road != get_lab(self.seq3).road:
+        if self.turno1 != None and self.turno3 != None and  self.turno3__topic_id != self.turno3__topic_id:
             sat += 2
         return sat
 
