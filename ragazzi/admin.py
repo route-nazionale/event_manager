@@ -19,6 +19,10 @@ class RoverAdmin(admin.ModelAdmin):
 
     form = RoverForm
 
+    # Non occorre mostrare alcuna azione
+    actions_on_top = False
+    actions_on_bottom = False
+
     list_display = (
         '__unicode__', 
         'vclan', 'turno1',
@@ -65,5 +69,8 @@ class RoverAdmin(admin.ModelAdmin):
         'stradadicoraggio1', 'stradadicoraggio2', 'stradadicoraggio3', 'stradadicoraggio4', 'stradadicoraggio5',
         'priorita1', 'priorita2', 'priorita3'
     )
+
+    def has_add_permission(self, request):
+        return False
 
 admin.site.register(Rover, RoverAdmin)
