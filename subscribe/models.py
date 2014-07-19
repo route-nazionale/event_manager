@@ -2,6 +2,7 @@
 
 from django.db import models, transaction
 from django.core.exceptions import ValidationError
+from django.conf import settings
 
 from base.models import ScoutChief, EventHappening
 
