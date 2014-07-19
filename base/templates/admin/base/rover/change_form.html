@@ -1,22 +1,41 @@
 {% extends "admin/change_form.html" %}
 {% load i18n %}
 
+
+{% block extrahead %}
+    {{ block.super }}
+    <style type="text/css">
+        .help-inline {
+            font-weight : small;
+            color : red;
+        };
+    </style>
+{% endblock %}
+
 {% block submit_buttons_bottom %}
     {% if not user.is_readonly %}
         {{ block.super }}
         {% if change %}
-            <button name="_compute_soddisfacimento" href="do-compute-soddisfacimento/" class="btn btn-high btn-success bureau-buttons" type="submit">CALCOLA SODDISFACIMENTO</button>
+            <button id="_compute_soddisfacimento" name="_compute_soddisfacimento" href="do-compute-soddisfacimento/" class="btn btn-high btn-success bureau-buttons" type="submit">CALCOLA SODDISFACIMENTO</button>
 
         <script type="text/javascript">
-            $('.bureau-buttons').click(function (e) {
+            $('#_compute_soddisfacimento').click(function (e) {
                 var el = $(e.target);
-                $.post(el.attr('href'), {})
+                var rover_events_data = {};
+                $('form#rover_form :input').each(function (i) {
+                    var val = $(this).val();
+                    if (val == "on") 
+                        val = true;
+                    if (val == "off")
+                        val = false;
+                    rover_events_data[$(this).prop('name')] = val;
+                });
+                $.post(el.attr('href'), rover_events_data)
                     .done(function(data) {
                         if (data != "OK") {
                             alert("Non hai i permessi necessari per eseguire l'operazione");
                         } else {
                             alert('Operazione "' + el.text() + '" eseguita con successo!');
-                            $(el).remove();
                         }
                     })
                     .fail(function(data) {

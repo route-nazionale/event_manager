@@ -28,12 +28,12 @@ urlpatterns = patterns('',
     url(r'^boys/', 'base.views.boys', name='boys'),
     url(r'^boys/page/(?P<frm>\d+)$', 'base.views.boys_paginate', name='boys_paginate'),
     # url(r'^boy/assign/(?P<codice_censimento>\d+)$', 'base.views.boy_assign', name='boy_assign'),
-    # url(r'^boy/evaluate/(?P<codice_censimento>\d+)$', 'base.views.boy_evaluate', name='boy_evaluate'),
     
     url(r'^subscribedChiefs/(?P<happening_id>\d+)$', 'subscribe.views.subscribedChiefs', name='subscribedChiefs'),
     url(r'^freeChiefs/(?P<happening_id>\d+)$', 'subscribe.views.freeChiefs', name='freeChiefs'),
     url(r'^persons/', 'base.views.persons', name='persons'),
     url(r'^validate-chief/', 'subscribe.views.validate', name='validate'),
 
+    url(r'^admin/base/rover/(?P<pk>\d+)/do-compute-soddisfacimento/$', 'ragazzi.views.boy_evaluate', name='boy_evaluate'),
     url(r'^admin/', include(admin.site.urls)),
 )

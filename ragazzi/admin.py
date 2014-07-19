@@ -60,6 +60,9 @@ class RoverAdmin(admin.ModelAdmin):
         'codicecensimento',
         'eta', 'soddisfacimento',
         'handicap', 
+        'valido3', 'valido2', 'valido1',
+        'stradadicoraggio1', 'stradadicoraggio2', 'stradadicoraggio3', 'stradadicoraggio4', 'stradadicoraggio5',
+        'priorita1', 'priorita2', 'priorita3'
     )
 
 admin.site.register(Rover, RoverAdmin)

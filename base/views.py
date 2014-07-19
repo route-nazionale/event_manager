@@ -215,13 +215,6 @@ def boy_assign(request, codice_censimento):
     response_body = {}
     check_constraints
 
-def boy_evaluate(request, codice_censimento):
-    if not request.session.get('valid'):
-        raise PermissionDenied()
-    data = json.loads(request.body)
-    boy = Rover.objects.get(codice_censimento=data['codice_censimento'])
-    boy.turno
-
 def persons(request):
     if not request.session.get('valid'):
         raise PermissionDenied()
