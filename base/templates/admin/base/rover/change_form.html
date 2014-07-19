@@ -30,16 +30,12 @@
                         val = false;
                     rover_events_data[$(this).prop('name')] = val;
                 });
-                $.post(el.attr('href'), rover_events_data)
+                $.post(el.attr('href'), JSON.stringify(rover_events_data))
                     .done(function(data) {
-                        if (data != "OK") {
-                            alert("Non hai i permessi necessari per eseguire l'operazione");
-                        } else {
-                            alert('Operazione "' + el.text() + '" eseguita con successo!');
-                        }
+                        alert(JSON.stringify(data));
                     })
                     .fail(function(data) {
-                        alert("Non hai i permessi necessari per eseguire l'operazione");
+                        alert("E' avvenuto l'errore "+JSON.stringify(data)+" contatta lo staff IT");
                     });
             
                 e.stopPropagation();

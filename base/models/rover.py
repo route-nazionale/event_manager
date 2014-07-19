@@ -188,40 +188,95 @@ class Rover(models.Model):
             sat += 2
         return sat
 
-    def check_constraints(lab_num, turn_num):
+    #def check_constraints(lab_num, turn_num):
+    #    """
+    #    Controlla che i vincoli siano soddisfatti per un assegnamento.
+    #    Ritorna una stringa che descrive verbalmente il risultato.
+    #    """
+
+    #    msgs = []
+
+    #    e = Event.objects.get(num=lab_num)
+
+    #    if self.handicap and not e.state_handicap == Event.STATE_ENABLED:
+    #        msgs.append("Assegnamento ragazzo disabile a laboratorio non per disabili")
+
+    #    if self.eta < e.min_age:
+    #        msgs.append("Assegnamento ragazzo disabile a laboratorio non per disabili")
+
+    #    if e.max_boys_seats == 0:
+    #        msgs.append("Assegnamento ragazzo a laboratorio per soli capi")
+
+    #    if e.max_boys_seats <= e.seats_n_boys:
+    #        msgs.append("Assegnamento ragazzo oltre il numero massimo")
+    #    
+    #    if turn_num == 1:
+    #        if e.topic__id == self.turno2.topic__id:
+    #            msgs.append("Turno 1 e turno 2 hanno la stessa strada di coraggio.")
+    #        if e.topic__id == self.turno3.topic__id:
+    #            msgs.append("Turno 1 e turno 3 hanno la stessa strada di coraggio.")
+    #    elif turn_num == 2:
+    #        if e.topic__id == self.turno3.topic__id:
+    #            msgs.append("Turno 2 e turno 3 hanno la stessa strada di coraggio.")
+
+    #    if len(msgs) == 0:
+    #        return "Tutti i vincoli sono soddisfatti"
+    #    return ",\n".join(msgs) + "."
+
+    def check_constraints(self):
         """
         Controlla che i vincoli siano soddisfatti per un assegnamento.
         Ritorna una stringa che descrive verbalmente il risultato.
         """
 
-        msgs = []
+        msgs = {}
+        events_selected = []
 
-        e = Event.objects.get(num=lab_num)
+        # Step 1: controlla i vincoli all'interno di un singolo turno
+        for turn_name in ('turno1', 'turno2', 'turno3'):
 
-        if self.handicap and not e.state_handicap == Event.STATE_ENABLED:
-            msgs.append("Assegnamento ragazzo disabile a laboratorio non per disabili")
+            e = getattr(self, turn_name)
+            if e:
 
-        if self.eta < e.min_age:
-            msgs.append("Assegnamento ragazzo disabile a laboratorio non per disabili")
+                events_selected.append((turn_name, e))
 
-        if e.max_boys_seats == 0:
-            msgs.append("Assegnamento ragazzo a laboratorio per soli capi")
+                msg_turn = []
 
-        if e.max_boys_seats <= e.seats_n_boys:
-            msgs.append("Assegnamento ragazzo oltre il numero massimo")
-        
-        if turn_num == 1:
-            if e.topic__id == self.turno2.topic__id:
-                msgs.append("Turno 1 e turno 2 hanno la stessa strada di coraggio.")
-            if e.topic__id == self.turno3.topic__id:
-                msgs.append("Turno 1 e turno 3 hanno la stessa strada di coraggio.")
-        elif turn_num == 2:
-            if e.topic__id == self.turno3.topic__id:
-                msgs.append("Turno 2 e turno 3 hanno la stessa strada di coraggio.")
+                if self.handicap and not e.state_handicap == Event.STATE_ENABLED:
+                    msg_turn.append("Assegnamento ragazzo disabile a laboratorio non per disabili")
 
-        if len(msgs) == 0:
-            return "Tutti i vincoli sono soddisfatti"
-        return ",\n".join(msgs) + "."
+                if self.eta < e.min_age:
+                    msg_turn.append("Assegnamento ragazzo disabile a laboratorio non per disabili")
+
+                if e.max_boys_seats == 0:
+                    msg_turn.append("Assegnamento ragazzo a laboratorio per soli capi")
+
+                if e.max_boys_seats <= getattr(e, '%s_rover_set' % turn_name).count():
+                    msg_turn.append("Assegnamento ragazzo oltre il numero massimo")
+            
+                if msg_turn: #no news good news!
+                    msgs[turn_name] = msg_turn #non serve ["Tutti i vincoli sono soddisfatti"]
+
+        # Step 2: controlla i vincoli interturno
+        msgs['__all__'] = []
+
+        # strade di coraggio
+
+        i = 0
+        while i < len(events_selected):
+
+            turn_to_compare, e_to_compare = events_selected[i]
+            for turn, e in events_selected[i+1:]:
+
+                if e_to_compare.topic == e.topic:
+                   msgs['__all__'].append("%s e %s hanno la stessa strada di coraggio." % (turn_to_compare, turn))
+            
+            i += 1
+
+        return msgs
+
+            
+
 
     def save(self, *args, **kw):
         self.clean()

@@ -4,6 +4,9 @@ from django.core.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
+from base.views_support import HttpJSONResponse
+
+from base.models import Rover, Event
 
 import json
 
@@ -15,5 +18,23 @@ def boy_evaluate(request, pk):
         raise PermissionDenied()
 
     data = json.loads(request.body)
-    boy = get_object_or_404(Rover, pk=pk)
+    rover = get_object_or_404(Rover, pk=pk)
+
+    # Step 1: simulation of new labs assignment
+
+    for turn_name in 'turno1', 'turno2', 'turno3':
+
+        if data.get(turn_name):
+            event = Event.objects.get(code=data[turn_name])
+        else:
+            event = None
+
+        setattr(rover, turn_name, event)
+
+    # Step 2: check constraints
+
+    msgs_constraints = rover.check_constraints()
+    return HttpJSONResponse(msgs_constraints)
+    
+    
 
