@@ -6,7 +6,7 @@ import datetime
 
 class Unit(models.Model):
 
-    name = models.CharField(max_length=128, primary_key=True)
+    nome = models.CharField(max_length=128, primary_key=True)
 
     class Meta:
 
@@ -15,7 +15,7 @@ class Unit(models.Model):
         verbose_name_plural = "gruppi scout"
 
     def __unicode__(self):
-        return self.name
+        return self.nome
 
     def n_chiefs(self):
         return self.scoutchief_set.count()
@@ -37,7 +37,7 @@ class ScoutChief(models.Model):
         "is_spalla",
         "region",
         "quartier",
-        "language",
+        # "language",
     ]
     code = models.CharField(max_length=128, unique=True,
         verbose_name="codice censimento"
@@ -56,9 +56,9 @@ class ScoutChief(models.Model):
 
     ## A flag to communicate if a chief is busy in turns
     ## todo: set this when assigning thi chief to a lab
-    turn1_filled = models.BooleanField(default=False)
-    turn2_filled = models.BooleanField(default=False)
-    turn3_filled = models.BooleanField(default=False)
+    # turn1_filled = models.BooleanField(default=False)
+    # turn2_filled = models.BooleanField(default=False)
+    # turn3_filled = models.BooleanField(default=False)
 
 
     class Meta:
