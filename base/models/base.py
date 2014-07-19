@@ -181,7 +181,7 @@ class District(models.Model):
 class HeartBeat(models.Model):
 
     name = models.CharField(max_length=128, unique=True)
-    code = models.IntegerField(blank=True)
+    code = models.IntegerField(blank=True, unique=True)
 
     def __unicode__(self):
         return self.name

@@ -98,6 +98,7 @@ import pika
 from django.core import serializers
 from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
+
 @receiver(post_save)
 def my_log_queue(sender, instance, created, **kwargs):
 

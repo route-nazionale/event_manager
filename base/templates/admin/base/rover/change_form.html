@@ -9,6 +9,11 @@
             font-weight : small;
             color : red;
         };
+        .field-soddisfacimento {
+            color : black;
+            font-style : bold;
+            font-weight : large;
+        }
     </style>
 {% endblock %}
 
@@ -32,7 +37,12 @@
                 });
                 $.post(el.attr('href'), JSON.stringify(rover_events_data))
                     .done(function(data) {
-                        alert(JSON.stringify(data));
+                        if (parseInt(data, 10))
+                            $('.field-soddisfacimento .controls > .readonly').text(data);
+                            alert("Il grado di soddisfacimento del ragazzo è " + data + "!")
+                        else {
+                            alert("Se leggi bene questo dato capirai dove sono gli errori" + JSON.stringify(data)));
+                        }
                     })
                     .fail(function(data) {
                         alert("E' avvenuto l'errore "+JSON.stringify(data)+" contatta lo staff IT");

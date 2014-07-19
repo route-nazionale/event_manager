@@ -183,7 +183,7 @@ class Event(models.Model):
     #--- code parts (i.e: LAB-A30123 or TAV-B20001 ---#
     kind = models.CharField(max_length=32, choices=EVENT_KIND_CHOICES, default=EVENT_LAB)
     district = models.ForeignKey(District)
-    topic = models.ForeignKey(HeartBeat, verbose_name="strada di coraggio")
+    topic = models.ForeignKey(HeartBeat, verbose_name="strada di coraggio", to_field="code")
     @property
     def heartbeat(self):
         #DEPRECATED "topic"

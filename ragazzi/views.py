@@ -29,12 +29,23 @@ def boy_evaluate(request, pk):
         else:
             event = None
 
+        # Setta turno1 turno2 turno3
         setattr(rover, turn_name, event)
 
     # Step 2: check constraints
 
     msgs_constraints = rover.check_constraints()
-    return HttpJSONResponse(msgs_constraints)
+
+    # weird behaviour and different format in responses,
+    # let's see if we support it
+    if not msgs_constraints:
+        # vincoli verificati -> calcolo soddisfacimento
+        rv = rover.calculate_satisfaction()
+
+    else:
+        rv = msgs_constraints
+
+    return HttpJSONResponse(rv)
     
     
 

@@ -75,11 +75,21 @@ class Rover(models.Model):
     eta = models.IntegerField()
     handicap = models.BooleanField(default=False)
     
-    stradadicoraggio1 = models.BooleanField(default=False)
-    stradadicoraggio2 = models.BooleanField(default=False)
-    stradadicoraggio3 = models.BooleanField(default=False)
-    stradadicoraggio4 = models.BooleanField(default=False)
-    stradadicoraggio5 = models.BooleanField(default=False) 
+    stradadicoraggio1 = models.BooleanField(
+        default=False, verbose_name="Il coraggio di amare (1)"
+    )
+    stradadicoraggio2 = models.BooleanField(default=False,
+        verbose_name = "Il coraggio di farsi ultimi (2)"
+    )
+    stradadicoraggio3 = models.BooleanField(default=False,
+        verbose_name = "Il coraggio di essere chiesa (3)"
+    )
+    stradadicoraggio4 = models.BooleanField(default=False,
+        verbose_name = "Il coraggio di essere cittadini (4)"
+    )
+    stradadicoraggio5 = models.BooleanField(default=False,
+        verbose_name = "Il coraggio di liberare il futuro (5)"
+    ) 
 
     codicecensimento = models.CharField(max_length=50)
     
@@ -160,32 +170,40 @@ class Rover(models.Model):
     def get_lab(self, num):
         l = Event.objects.get(num=num)
 
-    def is_road_suitable(self,road_num):
-        if road_num == 1:
-            return self.stradadicoraggio1
-        elif road_num == 2:
-            return self.stradadicoraggio2
-        elif road_num == 3:
-            return self.stradadicoraggio3
-        elif road_num == 4:
-            return self.stradadicoraggio4
-        else:
-            return self.stradadicoraggio5
+    def is_road_suitable(self, road_num):
+        """
+        Restituisce True o False a seconda che la strada di coraggio
+        sia selezionata
+        """
+
+        return getattr(self, 'stradadicoraggio%d' % road_num)
 
     def calculate_satisfaction(self):
         sat = 0
-        if self.turno1 != None and  self.turno1.state_activation == 'ACTIVE' and self.is_road_suitable(self.turno1__topic_id):
-            sat += 5
-        if self.turno2 != None and self.turno2.state_activation == 'ACTIVE' and self.is_road_suitable(self.turno2__topic_id):
-            sat += 5
-        if self.turno3 != None and self.turno3.state_activation == 'ACTIVE' and self.is_road_suitable(self.turno3__topic_id):
-            sat += 5
-        if self.turno1 != None and self.turno2 != None and  self.turno1__topic_id != self.turno2__topic_id:
-            sat += 2
-        if self.turno2 != None and self.turno3 != None and  self.turno2__topic_id != self.turno3__topic_id:
-            sat += 2
-        if self.turno1 != None and self.turno3 != None and  self.turno3__topic_id != self.turno3__topic_id:
-            sat += 2
+
+        events_selected = [
+            x for x in self.turno1, self.turno2, self.turno3 
+                if x is not None and x.state_activation == Event.ACTIVATION_ACTIVE 
+        ]
+
+        # Step 1: aumenta il punteggio se la strada di coraggio e' stata scelta
+        for event in events_selected:
+            if self.is_road_suitable(event.topic_id):
+                sat += 5
+
+        # Step 2: aumenta il punteggio se le strade di coraggio sono diverse
+
+        i = 0
+        while i < len(events_selected):
+
+            e_to_compare = events_selected[i]
+            for e in events_selected[i+1:]:
+
+                if e_to_compare.topic != e.topic:
+                    sat += 2
+            
+            i += 1
+
         return sat
 
     #def check_constraints(lab_num, turn_num):
@@ -273,10 +291,10 @@ class Rover(models.Model):
             
             i += 1
 
+        if not msgs['__all__']:
+            msgs.pop('__all__')
+
         return msgs
-
-            
-
 
     def save(self, *args, **kw):
         self.clean()
