@@ -95,7 +95,8 @@ class Rover(models.Model):
     
     turno1 = models.ForeignKey(Event, 
         to_field='code', related_name="turno1_rover_set", 
-        null=True, blank=True, db_column="turno1"
+        null=True, blank=True, db_column="turno1",
+        verbose_name="Venerdì 8 mattina"
     )
     priorita1 = models.IntegerField(blank=True, default=0, 
         help_text="Valore da 0 a 9. Se 0 -> assegnato manualmente, Se 1 vuol dire che l'evento soddisfa tutti i vincoli caricati. Man mano che si alza indica che alcuni vincoli sono stati tralasciati"
@@ -104,7 +105,8 @@ class Rover(models.Model):
     
     turno2 = models.ForeignKey(Event, 
         to_field='code', related_name="turno2_rover_set", 
-        null=True, blank=True, db_column="turno2"
+        null=True, blank=True, db_column="turno2",
+        verbose_name="Venerdì 8 pomeriggio"
     )
     priorita2 = models.IntegerField(blank=True, default=0,
         help_text="Valore da 0 a 9. Se 0 -> assegnato manualmente, Se 1 vuol dire che l'evento soddisfa tutti i vincoli caricati. Man mano che si alza indica che alcuni vincoli sono stati tralasciati"
@@ -113,7 +115,8 @@ class Rover(models.Model):
 
     turno3 = models.ForeignKey(Event, 
         to_field='code', related_name="turno3_rover_set", 
-        null=True, blank=True, db_column="turno3"
+        null=True, blank=True, db_column="turno3",
+        verbose_name="Sabato 9 mattina"
     )
     priorita3 = models.IntegerField(blank=True, default=0,
         help_text="Valore da 0 a 9. Se 0 -> assegnato manualmente, Se 1 vuol dire che l'evento soddisfa tutti i vincoli caricati. Man mano che si alza indica che alcuni vincoli sono stati tralasciati"
