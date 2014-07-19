@@ -135,7 +135,13 @@ class Rover(models.Model):
         if self.priorita1 is None: self.priorita1 = 0
         if self.priorita2 is None: self.priorita2 = 0
         if self.priorita3 is None: self.priorita3 = 0
+
+        if self.turno1 is None: self.valido1 = False
+        if self.turno2 is None: self.valido2 = False
+        if self.turno3 is None: self.valido3 = False
         
+        self.soddisfacimento = self.calculate_satisfaction()
+
     def as_dict(self):
         obj = {}
         for field in self.FIELDS_TO_SERIALIZE:
