@@ -33,9 +33,10 @@ class RoverAdmin(admin.ModelAdmin):
         'soddisfacimento'
     )
 
-    list_editable = (
-        'turno1', 'turno2', 'turno3'
-    )
+    #KO: meglio non dare questa funzionalita'. Non riusciremmo a fare il calcolo del soddisfacimento
+    #KO: list_editable = (
+    #KO:     'turno1', 'turno2', 'turno3'
+    #KO: )
 
     list_filter = ('vclan', 'soddisfacimento')
 
