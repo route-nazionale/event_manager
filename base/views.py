@@ -76,6 +76,7 @@ def storeEvent(request):
     data = json.loads(request.body)
 
     e = Event.objects.get(code=data['code'])
+    e.print_code = data['print_code']
     e.name = data['name']
     e.description = data['description']          
     e.kind = data['kind']                                                               
