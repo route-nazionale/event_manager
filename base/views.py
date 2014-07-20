@@ -64,13 +64,23 @@ def createEvent(request):
     del data['seats_n_boys']
     seats_n_chiefs = data['seats_n_chiefs']
     del data['seats_n_chiefs']
-    event = Event.objects.create(**data)
-    eh = EventHappening.objects.create(
-        timeslot=timeslot,
-        event=event,
-        seats_n_boys=seats_n_boys,
-        seats_n_chiefs=seats_n_chiefs
-    )
+
+    if data['kind'] == 'LAB':
+        for timeslot in EventTimeSlot.objects.all():
+            eh = EventHappening.objects.create(
+                timeslot=timeslot,
+                event=event,
+                seats_n_boys=seats_n_boys,
+                seats_n_chiefs=seats_n_chiefs
+            )
+    else:
+        eh = EventHappening.objects.create(
+            timeslot=timeslot,
+            event=event,
+            seats_n_boys=seats_n_boys,
+            seats_n_chiefs=seats_n_chiefs
+        )
+
     result = {}
     return HttpJSONResponse(result)
 
