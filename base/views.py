@@ -49,10 +49,15 @@ def createEvent(request):
     data['district'] = _getDistrict(data.get('district'))
     data['topic'] = _getTopic(data.get('topic'))
     data['num'] = _getNextNum()
+
+    district_code = data['district'].code
+    if district_code[0] == 'Q':
+        district_code = district_code[1:]
     code = "%s-%s-%s-%s" % (data['kind'],
-             data['district'].code,
-             data['topic'].code,
-             data['num'])
+        district_code,
+        data['topic'].code,
+        data['num']
+    )
     data['code'] = code
     seats_n_boys = data['seats_n_boys']
     data['seats_tot'] = data['max_boys_seats'] + data['max_chiefs_seats']
