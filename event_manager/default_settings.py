@@ -94,6 +94,34 @@ STATIC_URL = '/static/'
 # useful for strftime
 # locale.setlocale(locale.LC_ALL, 'it_IT.UTF8')
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': BASE_DIR + '/debug.log',
+        },
+        'stdout' : {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+        }
+    },
+    'loggers': {
+        'pippo': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'django.request': {
+            'handlers': ['stdout'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}
+
 SUIT_CONFIG = {
     'ADMIN_NAME' : 'RN2014 - Eventi',
     'LIST_PER_PAGE' : 100,

@@ -49,13 +49,12 @@ def createEvent(request):
     data['district'] = _getDistrict(data.get('district'))
     data['topic'] = _getTopic(data.get('topic'))
     data['num'] = _getNextNum()
-    # code = "%s-%s%s%s" % (data['kind'],
-    #         data['district'].code,
-    #         data['topic'].code,
-    #         data['num'])
-    # data['name'] = code + " - " + data['name']
+    code = "%s-%s-%s-%s" % (data['kind'],
+             data['district'].code,
+             data['topic'].code,
+             data['num'])
+    data['code'] = code
     seats_n_boys = data['seats_n_boys']
-    code = data['code']
     data['seats_tot'] = data['max_boys_seats'] + data['max_chiefs_seats']
     del data['seats_n_boys']
     seats_n_chiefs = data['seats_n_chiefs']
@@ -114,7 +113,7 @@ def events(request):
     if not request.session.get('valid'):
         raise PermissionDenied()
     events = []
-    eh_qs = EventHappening.objects.select_related().all()
+    eh_qs = EventHappening.objects.all()#.select_related()
     for eh in eh_qs:
         obj = eh.as_dict()
         if ' - ' not in obj['name']:
