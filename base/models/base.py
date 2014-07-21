@@ -154,9 +154,10 @@ class District(models.Model):
         db_table = "camp_districts"
         verbose_name = "sottocampo"
         verbose_name_plural = "sottocampi"
+        ordering = ('code',)
 
     def __unicode__(self):
-        return self.name
+        return self.code
 
     def n_events(self):
         return self.event_set.count()

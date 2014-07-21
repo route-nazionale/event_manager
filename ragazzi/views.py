@@ -7,6 +7,7 @@ from django.views.decorators.csrf import csrf_exempt
 from base.views_support import HttpJSONResponse
 
 from base.models import Rover, Event
+from base.models.event import EventTurno1, EventTurno2, EventTurno3
 
 import json
 
@@ -21,16 +22,9 @@ def boy_evaluate(request, pk):
     rover = get_object_or_404(Rover, pk=pk)
 
     # Step 1: simulation of new labs assignment
-
-    for turn_name in 'turno1', 'turno2', 'turno3':
-
-        if data.get(turn_name):
-            event = Event.objects.get(code=data[turn_name])
-        else:
-            event = None
-
-        # Setta turno1 turno2 turno3
-        setattr(rover, turn_name, event)
+    rover.turno1 = EventTurno1.objects.get(code=data['turno1'])
+    rover.turno2 = EventTurno2.objects.get(code=data['turno2'])
+    rover.turno3 = EventTurno3.objects.get(code=data['turno3'])
 
     # Step 2: check constraints
 
