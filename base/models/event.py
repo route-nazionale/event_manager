@@ -279,6 +279,43 @@ class Event(models.Model):
         #?TOASK     ('num_code', 'kind'),
         #?TOASK )
 
-    def __unicode__(self):
-        return u"%s - %s" % (self.code, self.name)
+    @property
+    def n_rover_seats(self):
+        return "?"
 
+    def __unicode__(self):
+        return u"[%s] (%s/%s) %s - %s" % (
+            self.district, self.n_rover_seats, self.max_boys_seats, self.code, self.name
+        )
+
+#--------------------------------------------------------------------------------
+
+class EventTurno1(Event):
+    """Mere KLUDGE to let the form know how many subscriptions an event has."""
+
+    @property
+    def n_rover_seats(self):
+        return self.turno1_rover_set.count()
+
+    class Meta:
+        proxy = True
+
+class EventTurno2(Event):
+    """Mere KLUDGE to let the form know how many subscriptions an event has."""
+
+    @property
+    def n_rover_seats(self):
+        return self.turno2_rover_set.count()
+
+    class Meta:
+        proxy = True
+
+class EventTurno3(Event):
+    """Mere KLUDGE to let the form know how many subscriptions an event has."""
+
+    @property
+    def n_rover_seats(self):
+        return self.turno3_rover_set.count()
+
+    class Meta:
+        proxy = True
