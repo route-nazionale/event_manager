@@ -22,9 +22,9 @@ def boy_evaluate(request, pk):
     rover = get_object_or_404(Rover, pk=pk)
 
     # Step 1: simulation of new labs assignment
-    rover.turno1 = EventTurno1.objects.get(code=data[turn_name])
-    rover.turno2 = EventTurno2.objects.get(code=data[turn_name])
-    rover.turno3 = EventTurno3.objects.get(code=data[turn_name])
+    rover.turno1 = EventTurno1.objects.get(code=data['turno1'])
+    rover.turno2 = EventTurno2.objects.get(code=data['turno2'])
+    rover.turno3 = EventTurno3.objects.get(code=data['turno3'])
 
     # Step 2: check constraints
 

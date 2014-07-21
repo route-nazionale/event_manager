@@ -1,0 +1,28 @@
+{% extends "admin/change_list.html" %}
+{% load admin_list admin_static %}
+
+{% comment %}
+{% block extrahead %}
+{{ block.super }}
+{% if action_form %}{% if actions_on_top or actions_on_bottom %}
+<script type="text/javascript">
+(function($) { 
+    $(document).ready(function($) {
+        $("select[name=action]").click(function (el) {
+            if ($(el).val() === "add_humen") {
+                window.location.href = "/admin/edda/humen/add/";
+                return false;
+            }
+        });
+    });
+})(django.jQuery);
+</script>
+{% endif %}{% endif %}
+{% endblock %}
+{% endcomment %}
+
+
+{% block result_list %}
+    {% pagination cl %}
+    {{ block.super }}
+{% endblock %}
