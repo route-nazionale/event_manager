@@ -209,7 +209,7 @@ class Event(models.Model):
     max_chiefs_seats = models.IntegerField(blank=True, default=5, null=True)
 
     min_age = models.IntegerField(verbose_name="età minima", blank=True)
-    max_age = models.IntegerField(verbose_name="età massima", blank=True)
+    max_age = models.IntegerField(verbose_name="età massima", blank=True,default=100)
 
     #--- states ---#
 

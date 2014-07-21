@@ -23,10 +23,10 @@ def _getDistrict(v):
         return result[0]
     else:
         raise Exception()
-
-def _getNextNum():
+i
+def _getNextNum(k):
     try:
-        return Event.objects.all().aggregate(Max('num'))['num__max'] + 1
+        return Event.objects.filter(kind=k).aggregate(Max('num'))['num__max'] + 1
     except:
         return 1
 
@@ -48,7 +48,7 @@ def createEvent(request):
     del data['timeslot']
     data['district'] = _getDistrict(data.get('district'))
     data['topic'] = _getTopic(data.get('topic'))
-    data['num'] = _getNextNum()
+    data['num'] = _getNextNum(data['kind'])
 
     district_code = data['district'].code
     if district_code[0] == 'Q':
@@ -64,7 +64,7 @@ def createEvent(request):
     del data['seats_n_boys']
     seats_n_chiefs = data['seats_n_chiefs']
     del data['seats_n_chiefs']
-
+    event = Event.objects.create(**data)
     if data['kind'] == 'LAB':
         for timeslot in EventTimeSlot.objects.all():
             eh = EventHappening.objects.create(
