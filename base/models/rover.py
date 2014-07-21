@@ -1,7 +1,7 @@
 #-*- coding: utf-8 -*-
 
-from django.db import models
-from event import Event, EventTurno1, EventTurno2, EventTurno3
+from django.db import models, transaction
+from event import Event, EventTurno1, EventTurno2, EventTurno3, EventHappening
 from base import District
 
 import datetime
@@ -290,7 +290,7 @@ class Rover(models.Model):
                     msg_turn.append("Assegnamento ragazzo disabile a laboratorio non per disabili")
 
                 if self.eta < e.min_age:
-                    msg_turn.append("Assegnamento ragazzo disabile a laboratorio non per disabili")
+                    msg_turn.append(u"Il ragazzo è troppo piccolo per questo evento")
 
                 if e.max_boys_seats == 0:
                     msg_turn.append("Assegnamento ragazzo a laboratorio per soli capi")
@@ -322,6 +322,41 @@ class Rover(models.Model):
 
         return msgs
 
+    @transaction.atomic
     def save(self, *args, **kw):
+        """
+        Update EventHappening `seats_n_boys`
+        """
+
         self.clean()
+
+        if self.pk:
+            # we are updating
+            created = False
+            old_me = Rover.objects.get(pk=self.pk)
+        else:
+            created = True
+
         super(Rover, self).save(*args, **kw)
+
+        if not created:
+            # Update eventhappenings seats
+
+            for i, turn_name in enumerate(('turno1', 'turno2', 'turno3')):
+
+                event_new = getattr(self, turn_name)
+                event_old = getattr(old_me, turn_name)
+
+                if event_new != event_old:
+
+                    for event in event_new, event_old:
+
+                        #DEBUG print("AAAAA %s, %s" % (i, event))
+                        if event:
+
+                            eh = EventHappening.objects.get(timeslot_id=i+1, event=event)
+                            c = event.n_rover_seats
+                            if eh.seats_n_boys != c:
+                                eh.seats_n_boys = c
+                                eh.save()
+        

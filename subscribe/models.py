@@ -5,6 +5,7 @@ from django.core.exceptions import ValidationError
 from django.conf import settings
 
 from base.models import ScoutChief, EventHappening
+from ragazzi.models import Rover
 
 import logging
 logger = logging.getLogger('pippo')
@@ -151,4 +152,7 @@ def my_log_queue_post_delete(sender, instance, using, **kwargs):
         RABBITMQ_connection.close()
 
         logger.debug("[DB WRITE %s] %s" % (routing_key, data))
+
+#----------------------------------------------------------------------------------
+
 

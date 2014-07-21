@@ -87,9 +87,9 @@ class RoverAdmin(admin.ModelAdmin):
         qs = event_model.objects.select_related('district').filter(timeslot_set__pk=turn_num) #Use pk = turn_num!!!
         if obj:
             qs = qs.filter(code__startswith='TAV') | \
-                (qs.filter(district__code__in=(obj.district.code, 'Q0')).exclude(code__startswith='TAV').order_by('district__code'))
+                (qs.filter(district__code__in=(obj.district.code, 'Q0')).exclude(code__startswith='TAV').order_by('district__code', 'name'))
         else:
-            qs = qs.order_by('district__code')
+            qs = qs.order_by('district__code', 'name')
 
         return qs
             
