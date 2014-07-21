@@ -1,7 +1,7 @@
 #-*- coding: utf-8 -*-
 
 from django.db import models
-from event import Event
+from event import Event, EventTurno1, EventTurno2, EventTurno3
 
 import datetime
 
@@ -93,7 +93,7 @@ class Rover(models.Model):
 
     codicecensimento = models.CharField(max_length=50)
     
-    turno1 = models.ForeignKey(Event, 
+    turno1 = models.ForeignKey(EventTurno1, 
         to_field='code', related_name="turno1_rover_set", 
         null=True, blank=True, db_column="turno1",
         verbose_name="Venerdì 8 mattina"
@@ -103,7 +103,7 @@ class Rover(models.Model):
     )
     valido1 = models.BooleanField(default=True, blank=True)
     
-    turno2 = models.ForeignKey(Event, 
+    turno2 = models.ForeignKey(EventTurno2, 
         to_field='code', related_name="turno2_rover_set", 
         null=True, blank=True, db_column="turno2",
         verbose_name="Venerdì 8 pomeriggio"
@@ -113,7 +113,7 @@ class Rover(models.Model):
     )
     valido2 = models.BooleanField(default=True, blank=True)
 
-    turno3 = models.ForeignKey(Event, 
+    turno3 = models.ForeignKey(EventTurno3, 
         to_field='code', related_name="turno3_rover_set", 
         null=True, blank=True, db_column="turno3",
         verbose_name="Sabato 9 mattina"
