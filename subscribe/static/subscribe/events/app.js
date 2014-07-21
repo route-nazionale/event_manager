@@ -116,6 +116,7 @@ EventSubscribeApp.controller('EventController', [
                 var notChiefonlyFilter = $scope.notChiefonlyFilter;
                 var kindFilter = $scope.kindFilter;
                 if( !districtFilter 
+                    && !printcodeFilter
                     && !heartbeatFilter 
                     && !handicapFitler 
                     && !chiefonlyFilter
