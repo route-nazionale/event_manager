@@ -285,7 +285,7 @@ class Event(models.Model):
 
     def __unicode__(self):
         return u"[%s] (%s/%s) %s - %s" % (
-            self.district, self.n_rover_seats, self.max_boys_seats, self.code, self.name
+            self.district, self.n_rover_seats, self.max_boys_seats, self.print_code, self.name
         )
 
 #--------------------------------------------------------------------------------
