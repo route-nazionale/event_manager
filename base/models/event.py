@@ -191,7 +191,7 @@ class Event(models.Model):
 
     num = models.IntegerField(verbose_name="codice numerico")
 
-    code = models.CharField(max_length=32, unique=True)
+    code = models.CharField(max_length=64, unique=True)
     #@property
     #def code(self):
     #    return "%s-%s%s%s" % (

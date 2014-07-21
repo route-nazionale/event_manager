@@ -5,10 +5,14 @@ from django.core.context_processors import csrf
 from django.core.exceptions import PermissionDenied
 from django.db.models import Max
 
+import logging
+
 from base.models import *
 from base.models.base import *
 from base.models.event import *
 from base.views_support import HttpJSONResponse
+
+logger = logging.getLogger('pippo')
 
 # Ok, this function is horrible - I know :-(
 def _getEventTimeslot(v):
@@ -23,7 +27,7 @@ def _getDistrict(v):
         return result[0]
     else:
         raise Exception()
-i
+
 def _getNextNum(k):
     try:
         return Event.objects.filter(kind=k).aggregate(Max('num'))['num__max'] + 1
@@ -53,12 +57,16 @@ def createEvent(request):
     district_code = data['district'].code
     if district_code[0] == 'Q':
         district_code = district_code[1:]
-    code = "%s-%s-%s-%s" % (data['kind'],
+    #logger.debug(data['district'].pk)
+    code = "%s-%s-%s-%s" % (
+        data['kind'],
         district_code,
         data['topic'].code,
         data['num']
     )
     data['code'] = code
+    # logger.debug("[code] >> %s" % data['code'])
+
     seats_n_boys = data['seats_n_boys']
     data['seats_tot'] = data['max_boys_seats'] + data['max_chiefs_seats']
     del data['seats_n_boys']
