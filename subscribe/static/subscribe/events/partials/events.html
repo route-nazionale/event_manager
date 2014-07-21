@@ -15,7 +15,7 @@
     Eventi
 </h4>
 <p>
-    <span data-toggle="modal" data-target="#event-details" ng-click="createNew();" class="btn btn-xs btn-default">Crea nuovo evento</span><br/>
+    <span data-toggle="modal" data-target="#event-details" ng-click="createNew();table.reload();" class="btn btn-xs btn-default">Crea nuovo evento</span><br/>
 </p>
 <p style="margin:25px 0px 55px 0px">
     Filtri:
@@ -35,8 +35,7 @@
 </p>
 <table id="events" ng-table="table" class="table table-bordered" cellspacing="0" width="100%">
     <tbody>
-        <h4 class="bg-warning" ng-show="!$data" >Attendi il caricamento degli eventi, nella tabella qui sotto..</h4>
-        <h4 class="bg-warning" ng-show="data.length == 0" >Loading...</h4>
+        <h4 class="bg-warning" ng-show="!events.length" >Attendi il caricamento degli eventi, nella tabella qui sotto..</h4>
         <tr class="event" ng-class="{lab: event.kind === 'LAB', tav: event.kind === 'TAV'}" ng-repeat="event in $data" data-eventid="{{event.num}}" x-lvl-draggable="true">
             <td data-title="'Cod. Unico'" sortable="'uniq_code'">{{event.code}}</td>
             <td data-title="'Cod. Stampa'" sortable="'print_code'">{{event.print_code}}</td>
