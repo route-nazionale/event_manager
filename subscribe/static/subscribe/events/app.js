@@ -142,22 +142,22 @@ EventSubscribeApp.controller('EventController', [
                         }
                     }
                     if( handicapFitler ){
-                        if(! data[d].state_handicap === 'ENABLED' ){
+                        if( data[d].state_handicap !== 'ENABLED' ){
                             continue;
                         }
                     }
                     if( chiefonlyFilter ){
-                        if( ! data[d].state_chief === 'RESERVED' ){
+                        if( data[d].state_chief !== 'RESERVED' ){
                             continue;
                         }
                     }
                     if( notChiefonlyFilter ){
-                        if( ! data[d].state_chief === 'DISABLED' ){
+                        if( data[d].state_chief !== 'DISABLED' ){
                             continue;
                         }
                     }
                     if(kindFilter ){
-                        if( ! data[d].kind.match(new RegExp(kindFilter,'i')) ){
+                        if( !data[d].kind.match(new RegExp(kindFilter,'i')) ){
                             continue;
                         }
                     }
