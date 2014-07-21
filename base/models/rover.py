@@ -2,6 +2,7 @@
 
 from django.db import models
 from event import Event, EventTurno1, EventTurno2, EventTurno3
+from base import District
 
 import datetime
 
@@ -124,6 +125,12 @@ class Rover(models.Model):
     valido3 = models.BooleanField(default=True, blank=True)
     
     soddisfacimento = models.IntegerField(blank=True)
+
+    district = models.ForeignKey(District, 
+        to_field='code',
+        null=True, db_column="district",
+        verbose_name="Quartiere"
+    )
 
     class Meta:
         db_table = "ragazzi_assegnati"

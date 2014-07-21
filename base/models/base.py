@@ -154,6 +154,7 @@ class District(models.Model):
         db_table = "camp_districts"
         verbose_name = "sottocampo"
         verbose_name_plural = "sottocampi"
+        ordering = ('code',)
 
     def __unicode__(self):
         return self.code
