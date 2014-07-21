@@ -81,10 +81,10 @@ class RoverAdmin(admin.ModelAdmin):
         """HYPER KLUDGE!! return Events included in a ordered timeslot"""
 
         event_model = globals()["EventTurno%s" % turn_num]
-        qs = event_model.objects.filter(timeslot_set__pk=turn_num) #Use pk = turn_num!!!
-        #qs = qs.annotate(is_tav=code__startswith='TAV'
-        qs = qs.filter(code__startswith='TAV') | \
-            qs.exclude(code__startswith='TAV').order_by('district__name')
+        qs = event_model.objects.select_related('district').filter(timeslot_set__pk=turn_num) #Use pk = turn_num!!!
+        #qs = qs.filter(code__startswith='TAV') | \
+        #    qs.exclude(code__startswith='TAV').order_by('district__code')
+        qs = qs.order_by('district__code')
 
         return qs
             

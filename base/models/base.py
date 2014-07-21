@@ -156,7 +156,7 @@ class District(models.Model):
         verbose_name_plural = "sottocampi"
 
     def __unicode__(self):
-        return self.name
+        return self.code
 
     def n_events(self):
         return self.event_set.count()
