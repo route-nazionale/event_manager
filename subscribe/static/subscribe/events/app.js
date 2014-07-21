@@ -125,20 +125,19 @@ EventSubscribeApp.controller('EventController', [
                     return data;
                 }
                 for( var d in data ){
-                    allFilters = true;
                     if( printcodeFilter ){
-                        if (! data[d].print_code.match(new RegExp(printcodeFilter))){
+                        if (! data[d].print_code.match(new RegExp(printcodeFilter,'i'))){
                             continue
                         }
                     }
 
                     if( districtFilter ){
-                        if(!data[d].district.match(new RegExp(districtFilter))){
+                        if(!data[d].district.match(new RegExp(districtFilter,'i'))){
                             continue;
                         }
                     }
                     if( heartbeatFilter ){
-                        if(!data[d].heartbeat && data[d].heartbeat.match(new RegExp(heartbeatFilter)) ){
+                        if(!data[d].heartbeat || !data[d].heartbeat.match(new RegExp(heartbeatFilter,'i')) ){
                             continue;
                         }
                     }
@@ -158,7 +157,7 @@ EventSubscribeApp.controller('EventController', [
                         }
                     }
                     if(kindFilter ){
-                        if( ! data[d].kind.match(new RegExp(kindFilter)) ){
+                        if( ! data[d].kind.match(new RegExp(kindFilter,'i')) ){
                             continue;
                         }
                     }
