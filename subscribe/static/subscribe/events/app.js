@@ -105,18 +105,21 @@ EventSubscribeApp.controller('EventController', [
         $scope.chiefonlyFilter = '';
         $scope.notChiefonlyFilter = '';
         $scope.kindFilter = '';
+        $scope.nameFilter = '';
 
         function customFilter(data){
                 var filtered = [];
                 var districtFilter = $scope.districtFilter;
-                var heartbeatFilter = $scope.heartbeatFilter;
                 var printcodeFilter = $scope.printcodeFilter;
+                var nameFilter = $scope.nameFilter;
+                var heartbeatFilter = $scope.heartbeatFilter;
                 var handicapFitler = $scope.handicapFilter;
                 var chiefonlyFilter = $scope.chiefonlyFilter;
                 var notChiefonlyFilter = $scope.notChiefonlyFilter;
                 var kindFilter = $scope.kindFilter;
                 if( !districtFilter 
                     && !printcodeFilter
+                    && !nameFilter
                     && !heartbeatFilter 
                     && !handicapFitler 
                     && !chiefonlyFilter
@@ -127,6 +130,12 @@ EventSubscribeApp.controller('EventController', [
                 for( var d in data ){
                     if( printcodeFilter ){
                         if (! data[d].print_code.match(new RegExp(printcodeFilter,'i'))){
+                            continue
+                        }
+                    }
+                    
+                    if( nameFilter ){
+                        if (! data[d].name.match(new RegExp(nameFilter,'i'))){
                             continue
                         }
                     }

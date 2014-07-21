@@ -20,6 +20,7 @@
 <p style="margin:25px 0px 55px 0px">
     Filtri:
     <input type="text" ng-keyup="table.reload()" style="width: 200px;" ng-model="printcodeFilter" placeholder="Ricerca per codice-stampa">
+    <input type="text" ng-keyup="table.reload()" style="width: 200px;" ng-model="nameFilter" placeholder="Ricerca per nome">
     <input type="text" ng-keyup="table.reload()" style="width: 200px;" ng-model="districtFilter" placeholder="Ricerca per sottocampo">
     <input type="text" ng-keyup="table.reload()" style="width: 240px;" ng-model="heartbeatFilter" placeholder="Ricerca per strada di coraggio">
     <br>
@@ -29,7 +30,7 @@
         <option value="TAV">TAVOLA ROTONDA</option>
         <option value="LAB">LABORATORIO</option>
     </select>
-    <label><input type="checkbox" ng-change="table.reload()" ng-model="handicapFilters">Per disabili</label>
+    <label><input type="checkbox" ng-change="table.reload()" ng-model="handicapFilter">Per disabili</label>
     <label><input type="checkbox" ng-change="table.reload()" ng-model="chiefonlyFilter">Per soli capi</label>
     <label><input type="checkbox" ng-change="table.reload()" ng-model="notChiefonlyFilter">Per soli ragazzi</label>
 </p>
