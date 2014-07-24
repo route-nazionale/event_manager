@@ -148,6 +148,7 @@ class District(models.Model):
 
     code = models.CharField(max_length=8, primary_key=True)
     name = models.CharField(max_length=128, unique=True)
+    letter = models.CharField(max_length=8)
 
     class Meta:
 

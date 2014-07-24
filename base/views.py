@@ -54,9 +54,7 @@ def createEvent(request):
     data['topic'] = _getTopic(data.get('topic'))
     data['num'] = _getNextNum(data['kind'])
 
-    district_code = data['district'].code
-    if district_code[0] == 'Q':
-        district_code = district_code[1:]
+    district_code = data['district'].letter
     #logger.debug(data['district'].pk)
     code = "%s-%s-%s-%s" % (
         data['kind'],
