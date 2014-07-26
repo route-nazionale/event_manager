@@ -82,7 +82,7 @@ class ScoutChiefSubscription(models.Model):
 #---------------------------------------------------------------------------------
 # RABBITMQ part
 
-if settings.get(RABBITMQ_ENABLE):
+if settings.RABBITMQ_ENABLE:
 
     from base.models import Event
 
