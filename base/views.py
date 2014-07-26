@@ -100,7 +100,7 @@ def storeEvent(request):
     e.name = data['name']
     e.description = data['description']          
     e.kind = data['kind']                                                               
-    e.district = get_object_or_404(District, name=data.get('district'))
+    e.district = get_object_or_404(District, code=data.get('district'))
     e.topic = get_object_or_404(HeartBeat, name=data.get('topic'))
     e.max_boys_seats = data['max_boys_seats']          
     e.max_chiefs_seats = data['max_chiefs_seats']
