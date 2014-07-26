@@ -113,16 +113,18 @@ def storeEvent(request):
     e.state_subscription = data['state_subscription']
     e.save()
 
-    boys_qs = e.turno1_rover_set.all()
+    #KO: perche' qui e = Event non EventTurno1
+    #KO: boys_qs = e.turno1_rover_set.all()
+    boys_qs = EventTurno1.objects.get(pk=e.pk).turno1_rover_set.all()
     boys_qs.update(valido1=data['state_activation'] == Event.ACTIVATION_ACTIVE)
 
     assigned_boys = boys_qs.count()
 
-    boys_qs = e.turno2_rover_set.all()
+    boys_qs = EventTurno2.objects.get(pk=e.pk).turno2_rover_set.all()
     boys_qs.update(valido2=data['state_activation'] == Event.ACTIVATION_ACTIVE)
     assigned_boys += boys_qs.count()
     
-    boys_qs = e.turno3_rover_set.all()
+    boys_qs = EventTurno3.objects.get(pk=e.pk).turno3_rover_set.all()
     boys_qs.update(valido3=data['state_activation'] == Event.ACTIVATION_ACTIVE)
     
     assigned_boys +=  boys_qs.count()
