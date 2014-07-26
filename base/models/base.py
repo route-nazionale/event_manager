@@ -42,7 +42,7 @@ class ScoutChief(models.Model):
     code = models.CharField(max_length=128, unique=True,
         verbose_name="codice censimento"
     )
-    scout_unit = models.ForeignKey(Unit)
+    scout_unit = models.CharField(max_length=512, db_column="scout_unit_id")
 
     name = models.CharField(max_length=32, verbose_name="nome")
     surname = models.CharField(max_length=32, verbose_name="cognome")
