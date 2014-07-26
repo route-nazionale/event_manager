@@ -138,8 +138,8 @@ if settings.get(RABBITMQ_ENABLE):
 
         if routing_key:
 
-        #HACK TO FIX DELETE routing_key... I am in a HURRY!!
-        routing_key = routing_key.replace('.insert','.delete')
+            #HACK TO FIX DELETE routing_key... I am in a HURRY!!
+            routing_key = routing_key.replace('.insert','.delete')
         
             #RABBITMQ_SETTINGS
 
