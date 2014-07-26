@@ -82,77 +82,79 @@ class ScoutChiefSubscription(models.Model):
 #---------------------------------------------------------------------------------
 # RABBITMQ part
 
-from base.models import Event
+if settings.get(RABBITMQ_ENABLE):
 
-MODEL_RABBITMQ_MAP = {
-       EventHappening : 'camp_eventhappenings',
-       Event : 'camp_events'
-}
+    from base.models import Event
 
-def get_rabbitmq_routing_key(sender, instance, created):
+    MODEL_RABBITMQ_MAP = {
+           EventHappening : 'camp_eventhappenings',
+           Event : 'camp_events'
+    }
 
-    basename = MODEL_RABBITMQ_MAP.get(sender)
-    if basename:
-        action = ['update','insert'][int(created)]
-        return u"%s.%s" % (basename, action)
-    else:
-        return None
+    def get_rabbitmq_routing_key(sender, instance, created):
 
-import pika
-from django.core import serializers
-from django.db.models.signals import post_save, pre_save, post_delete
-from django.dispatch import receiver
+        basename = MODEL_RABBITMQ_MAP.get(sender)
+        if basename:
+            action = ['update','insert'][int(created)]
+            return u"%s.%s" % (basename, action)
+        else:
+            return None
 
-@receiver(post_save)
-def my_log_queue(sender, instance, created, **kwargs):
+    import pika
+    from django.core import serializers
+    from django.db.models.signals import post_save, pre_save, post_delete
+    from django.dispatch import receiver
 
-    data = serializers.serialize("json", [instance], indent=2)
+    @receiver(post_save)
+    def my_log_queue(sender, instance, created, **kwargs):
 
-    # Publish changes to RabbitMQ server
-    routing_key = get_rabbitmq_routing_key(sender, instance, created)
+        data = serializers.serialize("json", [instance], indent=2)
 
-    if routing_key:
-        #RABBITMQ_SETTINGS
+        # Publish changes to RabbitMQ server
+        routing_key = get_rabbitmq_routing_key(sender, instance, created)
 
-        RABBITMQ_connection = pika.BlockingConnection(
-            pika.ConnectionParameters(**settings.RABBITMQ)
-        )
-        RABBITMQ_channel = RABBITMQ_connection.channel()
+        if routing_key:
+            #RABBITMQ_SETTINGS
 
-        RABBITMQ_channel.basic_publish(
-            exchange='application', routing_key=routing_key, body=data
-        )
-        RABBITMQ_connection.close()
+            RABBITMQ_connection = pika.BlockingConnection(
+                pika.ConnectionParameters(**settings.RABBITMQ)
+            )
+            RABBITMQ_channel = RABBITMQ_connection.channel()
 
-        logger.debug("[DB WRITE %s] %s" % (routing_key, data))
+            RABBITMQ_channel.basic_publish(
+                exchange='application', routing_key=routing_key, body=data
+            )
+            RABBITMQ_connection.close()
 
-@receiver(post_delete)
-def my_log_queue_post_delete(sender, instance, using, **kwargs):
+            logger.debug("[DB WRITE %s] %s" % (routing_key, data))
 
-    data = serializers.serialize("json", [instance], indent=2)
+    @receiver(post_delete)
+    def my_log_queue_post_delete(sender, instance, using, **kwargs):
 
-    # Publish changes to RabbitMQ server
-    routing_key = get_rabbitmq_routing_key(sender, instance, True)
+        data = serializers.serialize("json", [instance], indent=2)
 
-    if routing_key:
+        # Publish changes to RabbitMQ server
+        routing_key = get_rabbitmq_routing_key(sender, instance, True)
 
-	#HACK TO FIX DELETE routing_key... I am in a HURRY!!
-	routing_key = routing_key.replace('.insert','.delete')
-	
-        #RABBITMQ_SETTINGS
+        if routing_key:
 
-        RABBITMQ_connection = pika.BlockingConnection(
-            pika.ConnectionParameters(**settings.RABBITMQ)
-        )
-        RABBITMQ_channel = RABBITMQ_connection.channel()
+        #HACK TO FIX DELETE routing_key... I am in a HURRY!!
+        routing_key = routing_key.replace('.insert','.delete')
+        
+            #RABBITMQ_SETTINGS
 
-        RABBITMQ_channel.basic_publish(
-            exchange='application', routing_key=routing_key, body=data
-        )
-        RABBITMQ_connection.close()
+            RABBITMQ_connection = pika.BlockingConnection(
+                pika.ConnectionParameters(**settings.RABBITMQ)
+            )
+            RABBITMQ_channel = RABBITMQ_connection.channel()
 
-        logger.debug("[DB WRITE %s] %s" % (routing_key, data))
+            RABBITMQ_channel.basic_publish(
+                exchange='application', routing_key=routing_key, body=data
+            )
+            RABBITMQ_connection.close()
 
-#----------------------------------------------------------------------------------
+            logger.debug("[DB WRITE %s] %s" % (routing_key, data))
+
+    #----------------------------------------------------------------------------------
 
 

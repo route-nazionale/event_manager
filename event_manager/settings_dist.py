@@ -33,3 +33,13 @@ DATABASES = {
 # https://docs.djangoproject.com/en/dev/howto/static-files/
 
 STATIC_URL = '/static/'
+
+import pika
+
+RABBITMQ_CREDENTIAL_PASSWORD = pika.PlainCredentials('your_name', 'yourpassword')
+
+RABBITMQ_ENABLE = False
+RABBITMQ = {
+    'host' : 'locahost',
+    'credentials' : RABBITMQ_CREDENTIAL_PASSWORD,
+}

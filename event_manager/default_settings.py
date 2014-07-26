@@ -138,7 +138,8 @@ import pika
 
 RABBITMQ_CREDENTIAL_PASSWORD = pika.PlainCredentials('your_name', 'yourpassword')
 
+RABBITMQ_ENABLE = False
 RABBITMQ = {
-    'host' : '',
+    'host' : 'localhost',
     'credentials' : RABBITMQ_CREDENTIAL_PASSWORD,
 }
