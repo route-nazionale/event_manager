@@ -136,7 +136,7 @@ def events(request):
     if not request.session.get('valid'):
         raise PermissionDenied()
     events = []
-    eh_qs = EventHappening.objects.all()#.select_related()
+    eh_qs = EventHappening.objects.all().select_related()
     for eh in eh_qs:
         obj = eh.as_dict()
         if ' - ' not in obj['name']:

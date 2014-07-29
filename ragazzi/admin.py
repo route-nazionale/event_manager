@@ -41,7 +41,7 @@ class RoverAdmin(admin.ModelAdmin):
 
     list_filter = ('vclan', 'soddisfacimento', 'district')
 
-    search_fields = ('nome', 'cognome')
+    search_fields = ('nome', 'cognome', 'turno1__print_code', 'turno2__print_code', 'turno3__print_code')
 
     fields = (
         '__unicode__', 'codicecensimento', 'soddisfacimento',
