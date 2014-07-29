@@ -22,7 +22,7 @@ class ScoutChiefSubscriptionAdmin(admin.ModelAdmin):
     
     def posti(self, obj):
         a = obj.event_happening
-        return "%s/%s" % (a.n_seats, a.event.seats_tot)
+        return "%s/%s" % (a.seats_n_chiefs, a.event.max_chiefs_seats)
 
     def has_add_permission(self, request):
         return False
