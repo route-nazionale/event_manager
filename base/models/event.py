@@ -88,6 +88,13 @@ class EventHappening(models.Model):
     def __unicode__(self):
         return u"%s il turno %s" % (self.event, self.timeslot)
 
+    def __unicode__(self):
+        return u"[%s] (%s [= %s + %s]/%s) %s - %s il turno %s" % (
+            self.event.district, self.n_seats, self.seats_n_boys, self.seats_n_chiefs, 
+            self.event.max_boys_seats, self.event.print_code, self.name,
+            self.timeslot
+        )
+
     def __getattr__(self, attr_name):
 
         if attr_name in Event._meta.get_all_field_names() + ['code', 'heartbeat']:
