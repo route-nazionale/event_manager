@@ -198,7 +198,6 @@ def print_events(request, unit):
         }
 
         evento1 = chief.scoutchiefsubscription_set.filter(event_happening__timeslot=turno1)
-        print evento1[0].event_happening.event.name
         if evento1:
             evento1 = evento1[0].event_happening.event 
             el['turno1']['nome'] = evento1.name
