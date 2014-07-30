@@ -89,11 +89,16 @@ class EventHappening(models.Model):
         return u"%s il turno %s" % (self.event, self.timeslot)
 
     def __unicode__(self):
-        return u"[%s] (%s [= %s + %s]/%s) %s - %s il turno %s" % (
-            self.event.district, self.n_seats, self.seats_n_boys, self.seats_n_chiefs, 
-            self.event.max_boys_seats, self.event.print_code, self.name,
-            self.timeslot
-        )
+        return u"[%(quartiere)s] %(turno)s (%(posti_occupati)s [= %(rover)s + %(capi)s]/%(tot)s) %(stampa)s - %(nome)s " % {
+            'quartiere' : self.event.district, 
+            'turno' : self.timeslot,
+            'posti_occupati' : self.n_seats, 
+            'rover' : self.seats_n_boys, 
+            'capi' : self.seats_n_chiefs, 
+            'tot' : self.event.max_boys_seats, 
+            'stampa' : self.event.print_code, 
+            'nome' : self.event.name,
+        }
 
     def __getattr__(self, attr_name):
 

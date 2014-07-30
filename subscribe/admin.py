@@ -6,11 +6,14 @@ from base.models import EventHappening, ScoutChief
 class ScoutChiefSubscriptionAdmin(admin.ModelAdmin):
 
     list_display = ('scout_chief', 'turno', 'codice_evento', 'nome_evento', 'quartiere', 'posti', 'subscribed_on')
-    search_fields = ('scout_chief__scout_unit',)
-    #list_editable = ('scout_chief', 'event')
+    search_fields = ('scout_chief__scout_unit', 'scout_chief__name', 'scout_chief__surname')
+    #list_filter = ('event_happening',)
+    list_select_related = True
 
     fields = ('scout_chief', 'turno', 'quartiere', 'event_happening') #, 'is_locked')
     readonly_fields = ['quartiere', 'turno']
+
+    change_list_template = "admin/change_list_pagination_on_top.html"
 
     def turno(self, obj):
         return obj.event_happening.timeslot.name

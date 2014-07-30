@@ -22,6 +22,7 @@ class RoverAdmin(admin.ModelAdmin):
 
     form = RoverForm
 
+    list_select_related = ('vclan',)
     list_display = (
         '__unicode__', 
         'vclan',

@@ -66,6 +66,7 @@ class ScoutChief(models.Model):
         db_table = "scout_chiefs"
         verbose_name = "capo scout"
         verbose_name_plural = "capi scout"
+        ordering = ('scout_unit',)
 
     def __unicode__(self):
         return u"%s - %s %s" % (self.scout_unit, self.name, self.surname)

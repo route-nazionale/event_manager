@@ -26,6 +26,7 @@ class ScoutChiefSubscription(models.Model):
         db_table = "subscriptions"
         verbose_name = "iscrizione evento"
         verbose_name_plural = "iscrizioni eventi"
+        #ordering = ('scout_chief',)
 
     def __unicode__(self):
         return u"%s - %s" % (self.scout_chief, self.event_happening)
