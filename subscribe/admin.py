@@ -37,7 +37,8 @@ class ScoutChiefSubscriptionAdmin(admin.ModelAdmin):
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         # if we are changing a person and we are not a superuser
         if db_field.name == "event_happening":
-            eh_qs = EventHappening.objects.select_related()
+            eh_qs = EventHappening.objects.exclude(event__print_code="ELIMINATO")
+            eh_qs = eh_qs.exclude(event__print_code__startswith="X").select_related()
             if self._obj:
                 eh_qs = eh_qs.filter(timeslot=self._obj.event_happening.timeslot)
             kwargs["queryset"] = eh_qs.order_by("event__print_code")
