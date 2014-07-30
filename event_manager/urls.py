@@ -36,4 +36,6 @@ urlpatterns = patterns('',
 
     url(r'^admin/base/rover/(?P<pk>\d+)/do-compute-soddisfacimento/$', 'ragazzi.views.boy_evaluate', name='boy_evaluate'),
     url(r'^admin/', include(admin.site.urls)),
+    
+    url(r'^print-events/(?P<unit>.+)/$', 'subscribe.views.print_events', name='print_events'),
 )

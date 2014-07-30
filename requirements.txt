@@ -1,3 +1,4 @@
 http://www.djangoproject.com/download/1.7.b4/tarball/
 recaptcha-client
 django-suit
+xhtml2pdf

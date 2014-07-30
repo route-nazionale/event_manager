@@ -1,6 +1,7 @@
 #-*- coding: utf-8 -*-
 
 from django.db import models
+from django.utils.html import format_html
 
 import datetime
 
@@ -17,11 +18,17 @@ class Unit(models.Model):
     def __unicode__(self):
         return self.nome
 
-    def n_chiefs(self):
-        return self.scoutchief_set.count()
-    n_chiefs.short_description = "num. capi"
+    def print_events(self):
+        return format_html('<a target="_blank" href="/print-events/%s/">PDF</a>' % self.nome)
+    
+    print_events.short_description = 'Stampa eventi'        
+    print_events.allow_tags = True
 
-    n_objs = n_chiefs
+    #def n_chiefs(self):
+    #    return self.scoutchief_set.count()
+    #n_chiefs.short_description = "num. capi"
+
+    #n_objs = n_chiefs
 
 #--------------------------------------------------------------------------------
 
