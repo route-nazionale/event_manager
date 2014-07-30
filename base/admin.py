@@ -21,6 +21,7 @@ class UnitAdmin(admin.ModelAdmin):
 
     list_display = ('__unicode__', 'print_events')
     search_fields = ('nome',)
+    readonly_fields = ['nome']
 
 class EventAdmin(admin.ModelAdmin):
 
