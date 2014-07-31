@@ -1,0 +1,3 @@
+In questa cartella finiscono tutti i PDF generati dal comando
+
+./manage.py print_events
