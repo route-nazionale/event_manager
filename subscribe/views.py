@@ -281,7 +281,58 @@ def print_info(request, event_happening_id):
         response['Content-Disposition'] = 'inline; filename="'+filename+'"'
         response.write(result.getvalue())
     return response
-    return HttpResponse(json.dumps(con))
 
 def print_people(request, event_happening_id):
-    return HttpResponse(event_happening_id)
+    eh = EventHappening.objects.get(id=event_happening_id)
+
+    con = {}
+    con['nome'] = eh.event.name
+    con['descrizione'] = eh.event.description
+    con['turno'] = eh.timeslot.name
+    con['print_code'] = eh.event.print_code
+    con['capi'] = []
+    con['ragazzi'] = []
+
+    for capo in eh.scoutchiefsubscription_set.filter(scout_chief__is_spalla=False):
+        con['capi'].append({
+           'nome': capo.scout_chief.name,
+           'cognome': capo.scout_chief.surname,
+           'gruppo': capo.scout_chief.scout_unit
+        })
+
+    turno = eh.timeslot.id
+    print_code = eh.event.code
+
+    if turno == 1:
+        iscritti = Rover.objects.filter(turno1=print_code)
+    if turno == 2:
+        iscritti = Rover.objects.filter(turno2=print_code)
+    if turno == 3:
+        iscritti = Rover.objects.filter(turno3=print_code)
+
+    for r in iscritti:
+        con['ragazzi'].append({
+          'nome': r.nome,
+          'cognome': r.cognome,
+          'gruppo': r.vclan.nome
+        })
+    
+    print con['ragazzi']
+
+    context = Context(con)
+    template = get_template('iscritti_evento.html')
+    html = template.render(context)
+
+    result = StringIO.StringIO()
+
+    pdf = pisa.pisaDocument(StringIO.StringIO(html.encode("UTF-8")),
+                                        dest=result,
+                                        encoding='UTF-8')
+    if not pdf.err:
+
+        filename = 'info_evento_'+event_happening_id+'.pdf'
+
+        response = HttpResponse(content_type='application/pdf')
+        response['Content-Disposition'] = 'inline; filename="'+filename+'"'
+        response.write(result.getvalue())
+    return response
