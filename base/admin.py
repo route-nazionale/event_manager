@@ -35,10 +35,25 @@ class EventAdmin(admin.ModelAdmin):
 class EventHappeningAdmin(admin.ModelAdmin):
 
     list_display = (
-        'event', 'timeslot',
+        'nome', 'codice_stampa', 'quartiere', 'timeslot',
         'seats_n_boys', 'seats_n_chiefs',
         'print_info', 'print_people',
     )
+
+    readonly_fields = ['nome', 'codice_stampa', 'quartiere']
+
+    list_filter = ['timeslot', 'event__district']
+
+    search_fields = ['event__print_code']
+
+    def nome(self, obj):
+        return obj.event.name
+
+    def codice_stampa(self, obj):
+        return obj.event.print_code
+
+    def quartiere(self, obj):
+        return obj.event.district
 
 class HeartBeatAdmin(admin.ModelAdmin):
 
