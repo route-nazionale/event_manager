@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <meta charset="utf-8">
+  <head>
+  </head>
+  <body style="border:0px">
+    <img src="http://eventi.rn2014.it/static/subscribe/logoroute.png" 
+      style="float:left" />
+    <h1 style="font-size:20pt; float:left">RN2014 - Info evento</h1>
+    <pdf:nextpage/>
+    <h2 style="font-size: 13pt">Evento: {{ nome }}</h2>
+    <h2 style="font-size: 13pt">Descrizione: {{ descrizione }}</h2>
+    <h2 style="font-size: 13pt">Codice: {{ print_code }}</h2>
+    <h2 style="font-size: 13pt">Turno: {{ turno }}</h2>
+    <h1 style="font-size:20pt; margin: 5px;">Capi Iscritti</h1>
+    {% for capo in capi %}
+      <p style="font-size: 12pt; margin: 2px;">O  {{capo.nome}} {{capo.cognome}} - {{capo.gruppo}}</p>
+    {% endfor %}
+    <h1 style="font-size:20pt; margin: 5px;">Ragazzi Iscritti</h1>
+    {% for r in ragazzi %}
+      <p style="font-size: 12pt; margin: 2px;">O  {{r.nome}} {{r.cognome}} - {{r.gruppo}}</p>
+    {% endfor %}
+  </body>
+</html>

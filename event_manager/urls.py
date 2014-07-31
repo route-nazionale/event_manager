@@ -40,4 +40,6 @@ urlpatterns = patterns('',
     url(r'^print-events/(?P<unit>.+)/$', 'subscribe.views.print_events', name='print_events'),
     url(r'^print-info/(?P<event_happening_id>.+)/$', 'subscribe.views.print_info', name='print_info'),
     url(r'^print-people/(?P<event_happening_id>.+)/$', 'subscribe.views.print_people', name='print_people'),
+    url(r'^print-all-events-people/$', 'subscribe.views.print_all_events_people', name='print_all_events_people'),
+    url(r'^print-all-events-info/$', 'subscribe.views.print_all_events_info', name='print_all_events_info'),
 )
