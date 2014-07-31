@@ -275,7 +275,7 @@ def print_info(request, event_happening_id):
                                         encoding='UTF-8')
     if not pdf.err:
 
-        filename = 'info_evento_'+event_happening_id+'.pdf'
+        filename = 'info_evento_'+eh.event.print_code+'.pdf'
 
         response = HttpResponse(content_type='application/pdf')
         response['Content-Disposition'] = 'inline; filename="'+filename+'"'
@@ -328,7 +328,7 @@ def print_people(request, event_happening_id):
                                         encoding='UTF-8')
     if not pdf.err:
 
-        filename = 'info_evento_'+event_happening_id+'.pdf'
+        filename = 'info_evento_'+eh.event.print_code+'.pdf'
 
         response = HttpResponse(content_type='application/pdf')
         response['Content-Disposition'] = 'inline; filename="'+filename+'"'
