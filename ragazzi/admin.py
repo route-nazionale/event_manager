@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 from django.contrib import admin
 from django import forms
+from django.db.models import Q
 
 from base.models import Rover, Event
 
 #KLUDGE proxy klass
 from base.models.event import EventTurno1, EventTurno2, EventTurno3
+
 
 #--------------------------------------------------------------------------------
 
@@ -112,4 +114,41 @@ class RoverAdmin(admin.ModelAdmin):
     #    return u"<btn class=
     # turno1_carino.short_description = 'turno1'
 
+class MyRover(Rover):
+    class Meta:
+        proxy = True
+        verbose_name = 'ragazzo problematico'
+        verbose_name_plural = 'ragazzi problematici'
+
+class MyRoverAdmin(RoverAdmin):
+
+    list_display = (
+        '__unicode__',
+        'vclan',
+        'soddisfacimento',
+        'turno1',
+        'valido1',
+        'evento1_stato',
+        'turno2',
+        'valido2',
+        'evento2_stato',
+        'turno3',
+        'valido3',
+        'evento3_stato',
+    )
+
+    def evento1_stato(self, obj):
+        return obj.turno1.state_activation
+
+    def evento2_stato(self, obj):
+        return obj.turno2.state_activation
+
+    def evento3_stato(self, obj):
+        return obj.turno3.state_activation
+
+    def get_queryset(self, request):
+        return self.model.objects.filter( Q(turno1__state_activation='DISMISSED') | Q(turno2__state_activation='DISMISSED') | Q(turno3__state_activation='DISMISSED') )
+
+
 admin.site.register(Rover, RoverAdmin)
+admin.site.register(MyRover, MyRoverAdmin)
