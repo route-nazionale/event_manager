@@ -18,7 +18,7 @@ class Command(BaseCommand):
     help = 'print info PDF for all events'
 
     def handle(self, *args, **options):
-        events = EventHappening.objects.select_related('event').all()
+        events = EventHappening.objects.select_related('event').exclude(event__state_activation='DISMISSED')
         n_events = events.count()
 
         done = 0
