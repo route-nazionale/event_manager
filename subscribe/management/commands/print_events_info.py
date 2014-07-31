@@ -45,6 +45,8 @@ class Command(BaseCommand):
             sys.stdout.write("\r%s/%s %s-%s %s%%" % (done, n_events, eh.event.print_code, eh.timeslot.id, int(100 * float(done)/float(n_events))))
             sys.stdout.flush()
 
+        print 'fatto :)'
+
 def write_pdf(template_src, context_dict, filename):
     template = get_template(template_src)
     context = Context(context_dict)
