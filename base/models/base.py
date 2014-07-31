@@ -195,3 +195,29 @@ class HeartBeat(models.Model):
     def __unicode__(self):
         return self.name
 
+# --------------------------------------------------------------------
+
+class Animatori(models.Model):
+    code = models.ForeignKey('Event', to_field='code', db_column='code')
+    cu = models.CharField(max_length=14, primary_key=True)
+    cucode = models.IntegerField(blank=True, null=True)
+    nome = models.CharField(max_length=255, blank=True)
+    cognome = models.CharField(max_length=255, blank=True)
+    quartiere = models.IntegerField(blank=True, null=True)
+    contrada = models.IntegerField(blank=True, null=True)
+    codicecensimento = models.IntegerField(blank=True, null=True)
+    vclan = models.IntegerField(blank=True, null=True)
+    idgruppo = models.CharField(max_length=255, blank=True)
+    idunita = models.CharField(max_length=255, blank=True)
+    ruolo = models.IntegerField(blank=True, null=True)
+    disabilitato = models.IntegerField(blank=True, null=True)
+    contatto = models.CharField(max_length=255, blank=True)
+    email = models.CharField(max_length=255, blank=True)
+
+    class Meta:
+        managed = False
+        db_table = 'animatori'
+
+    def __unicode__(self):
+        return "%s %s - %s" % (self.nome, self.cognome, self.code)
+

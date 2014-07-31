@@ -31,6 +31,13 @@ class Command(BaseCommand):
             con['turno'] = eh.timeslot.name
             con['print_code'] = eh.event.print_code
             con['spalle'] = []
+            con['animatori'] = []
+
+            for animatore in eh.event.animatori_set.all():
+                con['animatori'].append({
+                    'nome': animatore.nome,
+                    'cognome': animatore.cognome,
+                })
 
             for spalla in eh.scoutchiefsubscription_set.filter(scout_chief__is_spalla=True):
                 con['spalle'].append({

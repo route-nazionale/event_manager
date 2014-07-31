@@ -14,6 +14,12 @@
     <h2 style="font-size: 13pt">Descrizione: {{ descrizione }}</h2>
     <h2 style="font-size: 13pt">Codice: {{ print_code }}</h2>
     <h2 style="font-size: 13pt">Turno: {{ turno }}</h2>
+    <h1 style="font-size:20pt">Animatori</h1>
+    <ul>
+    {% for animatore in animatori %}
+      <li style="font-size: 12pt">{{animatore.nome}} {{animatore.cognome}}</li>
+    {% endfor %}
+    </ul>
     <h1 style="font-size:20pt">Capi Spalla</h1>
     <ul>
     {% for capo in spalle %}
