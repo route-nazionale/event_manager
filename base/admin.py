@@ -36,10 +36,8 @@ class EventHappeningAdmin(admin.ModelAdmin):
 
     list_display = (
         'event', 'timeslot',
-        'seats_n_boys', 'seats_n_chiefs'
-    )
-    list_editable = (
-        'seats_n_boys',
+        'seats_n_boys', 'seats_n_chiefs',
+        'print_info', 'print_people',
     )
 
 class HeartBeatAdmin(admin.ModelAdmin):

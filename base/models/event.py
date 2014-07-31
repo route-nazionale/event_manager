@@ -1,6 +1,7 @@
 #-*- coding: utf-8 -*-
 
 from django.db import models
+from django.utils.html import format_html
 
 from base import Unit, Person, ScoutChief, District, HeartBeat
 import query
@@ -79,6 +80,18 @@ class EventHappening(models.Model):
 
     seats_n_boys = models.IntegerField(blank=True, default=0)
     seats_n_chiefs = models.IntegerField(blank=True, default=0)
+
+    def print_info(self):
+        return format_html('<a target="_blank" href="/print-info/%s/">PDF</a>' % self.id)
+
+    print_info.short_description = 'Stampa info'
+    print_info.allow_tags = True
+
+    def print_people(self):
+        return format_html('<a target="_blank" href="/print-people/%s/">PDF</a>' % self.id)
+
+    print_people.short_description = 'Stampa iscritti'
+    print_people.allow_tags = True
 
     class Meta:
         db_table = "camp_eventhappenings"

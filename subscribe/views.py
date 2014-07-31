@@ -247,3 +247,41 @@ def print_events(request, unit):
 
     #return HttpResponse('Errore durante la generazione del PDF<pre>%s</pre>' % escape(html))
 
+def print_info(request, event_happening_id):
+    eh = EventHappening.objects.get(id=event_happening_id)
+
+    con = {}
+    con['nome'] = eh.event.name
+    con['descrizione'] = eh.event.description
+    con['turno'] = eh.timeslot.name
+    con['print_code'] = eh.event.print_code
+    con['spalle'] = []
+
+    for spalla in eh.scoutchiefsubscription_set.filter(scout_chief__is_spalla=True):
+        con['spalle'].append({
+           'nome': spalla.scout_chief.name,
+           'cognome': spalla.scout_chief.surname,
+           'gruppo': spalla.scout_chief.scout_unit
+        })
+
+    context = Context(con)
+    template = get_template('info_evento.html')
+    html = template.render(context)
+
+    result = StringIO.StringIO()
+
+    pdf = pisa.pisaDocument(StringIO.StringIO(html.encode("UTF-8")),
+                                        dest=result,
+                                        encoding='UTF-8')
+    if not pdf.err:
+
+        filename = 'info_evento_'+event_happening_id+'.pdf'
+
+        response = HttpResponse(content_type='application/pdf')
+        response['Content-Disposition'] = 'inline; filename="'+filename+'"'
+        response.write(result.getvalue())
+    return response
+    return HttpResponse(json.dumps(con))
+
+def print_people(request, event_happening_id):
+    return HttpResponse(event_happening_id)

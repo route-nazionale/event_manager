@@ -38,4 +38,6 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     
     url(r'^print-events/(?P<unit>.+)/$', 'subscribe.views.print_events', name='print_events'),
+    url(r'^print-info/(?P<event_happening_id>.+)/$', 'subscribe.views.print_info', name='print_info'),
+    url(r'^print-people/(?P<event_happening_id>.+)/$', 'subscribe.views.print_people', name='print_people'),
 )
