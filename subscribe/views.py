@@ -317,8 +317,6 @@ def print_people(request, event_happening_id):
           'gruppo': r.vclan.nome
         })
     
-    print con['ragazzi']
-
     context = Context(con)
     template = get_template('iscritti_evento.html')
     html = template.render(context)
