@@ -44,11 +44,11 @@ class Command(BaseCommand):
             print_code = eh.event.code
 
             if turno == 1:
-                iscritti = Rover.objects.filter(turno1=print_code)
+                iscritti = Rover.objects.filter(turno1=print_code).order_by('cognome', 'nome')
             if turno == 2:
-                iscritti = Rover.objects.filter(turno2=print_code)
+                iscritti = Rover.objects.filter(turno2=print_code).order_by('cognome', 'nome')
             if turno == 3:
-                iscritti = Rover.objects.filter(turno3=print_code)
+                iscritti = Rover.objects.filter(turno3=print_code).order_by('cognome', 'nome')
 
             for r in iscritti:
                 con['ragazzi'].append({
