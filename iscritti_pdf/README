@@ -1,0 +1,4 @@
+In questa cartella verranno generati i file PDF che descrivono gli iscritti agli eventi
+attraverso il comando:
+
+./manage.py print_events_people

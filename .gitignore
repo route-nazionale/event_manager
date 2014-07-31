@@ -1,4 +1,5 @@
 info_pdf/*.pdf
+iscritti_pdf/*.pdf
 *.swp
 
 # Byte-compiled / optimized / DLL files
