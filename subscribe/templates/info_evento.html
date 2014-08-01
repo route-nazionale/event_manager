@@ -4,15 +4,25 @@
   <head>
     <style>
 
+      @page {
+        size: a5 portrait;
+        margin: 1cm;
+        border-color: white;
+        -pdf-frame-border: 0;
+/*
+        margin:2cm;
+        border:0px;
+        -pdf-frame-border: 0;
+*/
+      }
+
     </style>
   </head>
-  <body style="border:0px">
+  <body style="padding:2px">
     <img src="http://eventi.rn2014.it/static/subscribe/logoroute.png" 
       style="float:left" />
-    <h1 style="font-size:20pt; float:left">RN2014 - Info evento</h1>
+    <h1 style="font-size:20pt; float:left">RN2014 - Info evento - {{ print_code }}</h1>
     <h2 style="font-size: 13pt">Evento: {{ nome }}</h2>
-    <h2 style="font-size: 13pt">Descrizione: {{ descrizione }}</h2>
-    <h2 style="font-size: 13pt">Codice: {{ print_code }}</h2>
     <h2 style="font-size: 13pt">Turno: {{ turno }}</h2>
     <h1 style="font-size:20pt">Animatori</h1>
     <ul>
