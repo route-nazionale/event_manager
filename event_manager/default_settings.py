@@ -128,9 +128,11 @@ SUIT_CONFIG = {
     'SEARCH_URL' : '',
     'CONFIRM_UNSAVED_CHANGES' : False,
 
-    #'MENU' : (
-    #    {'app': 'ragazzi', 'label': 'Gestione', },
-    #),
+    'MENU' : (
+        {'app': 'base', 'label': 'Gestione', },
+        {'app': 'ragazzi', 'label': 'Problemi', },
+        {'app': 'subscribe', 'label': 'Iscrizioni capi', },
+    ),
     
 }
 
