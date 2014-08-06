@@ -36,7 +36,7 @@ class EventHappeningAdmin(admin.ModelAdmin):
 
     list_display = (
         'nome', 'codice_stampa', 'quartiere', 'timeslot',
-        'seats_n_boys', 'seats_n_chiefs',
+        'ragazzi_iscritti', 'capi_iscritti',
         'print_info', 'print_people',
     )
 
@@ -54,6 +54,12 @@ class EventHappeningAdmin(admin.ModelAdmin):
 
     def quartiere(self, obj):
         return obj.event.district
+
+    def ragazzi_iscritti(self, obj):
+        return obj.seats_n_boys
+
+    def capi_iscritti(self, obj):
+        return obj.seats_n_chiefs
 
 class HeartBeatAdmin(admin.ModelAdmin):
 
