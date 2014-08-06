@@ -1,5 +1,6 @@
 {% load i18n %}
 <div class="submit-row clearfix">
-  {% if show_save %}<button type="submit" class="btn btn-high btn-info" name="_save" data-toggle="modal" data-target="#rn2014_modal">{% trans 'Save' %}</button>{% endif %}
+  {#{% if show_save %}<button type="submit" class="btn btn-high btn-info" name="_save" data-toggle="modal" data-target="#rn2014_modal">{% trans 'Save' %}</button>{% endif %} #}
+  {% if show_save %}<button type="submit" class="btn btn-high btn-info" name="_save">{% trans 'Save' %}</button>{% endif %}
 </div>
 
