@@ -3,7 +3,8 @@ from django.contrib import admin
 from django import forms
 from django.db.models import Q
 
-from base.models import Rover, Event
+from base.models import Event
+from ragazzi.models import Rover, MyRover
 
 #KLUDGE proxy klass
 from base.models.event import EventTurno1, EventTurno2, EventTurno3
@@ -59,7 +60,7 @@ class RoverAdmin(admin.ModelAdmin):
         'priorita3',
         'valido3',
     )
-    readonly_fields = (
+    base_readonly_fields = [
         '__unicode__',
         'codicecensimento',
         'eta', 'soddisfacimento',
@@ -68,7 +69,7 @@ class RoverAdmin(admin.ModelAdmin):
         'stradadicoraggio1', 'stradadicoraggio2', 'stradadicoraggio3', 'stradadicoraggio4', 'stradadicoraggio5',
         'priorita1', 'priorita2', 'priorita3',
         'district'
-    )
+    ]
 
     change_list_template = "admin/change_list_pagination_on_top.html"
 
@@ -78,6 +79,20 @@ class RoverAdmin(admin.ModelAdmin):
     # Non occorre mostrare alcuna azione
     actions_on_top = False
     actions_on_bottom = False
+
+    def change_view(self, request, *args, **kw):
+        if request.user.is_readonly():
+            self.readonly_fields = self.base_readonly_fields + [
+                'turno1', 'turno2', 'turno3',
+            ]
+        else:
+            self.readonly_fields = self.base_readonly_fields
+
+        return super(RoverAdmin, self).change_view(request, *args, **kw)
+
+    def add_view(self, request, *args, **kw):
+        self.readonly_fields = self.base_readonly_fields
+        return super(RoverAdmin, self).add_view(request, *args, **kw)
 
     def get_actions(self, request):
         return []
@@ -113,12 +128,6 @@ class RoverAdmin(admin.ModelAdmin):
     # def turno1_carino(self, obj):
     #    return u"<btn class=
     # turno1_carino.short_description = 'turno1'
-
-class MyRover(Rover):
-    class Meta:
-        proxy = True
-        verbose_name = 'ragazzo problematico'
-        verbose_name_plural = 'ragazzi problematici'
 
 class MyRoverAdmin(RoverAdmin):
 

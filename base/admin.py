@@ -32,6 +32,21 @@ class EventAdmin(admin.ModelAdmin):
         'name', 'district', 'seats_tot'
     )
 
+    def has_add_permission(self, request):
+        if request.user.is_readonly():
+            return False
+        else:
+            return True
+
+    def change_view(self, request, *args, **kw):
+        if request.user.is_readonly():
+            self.readonly_fields = self.list_editable
+        return super(EventAdmin, self).change_view(request, *args, **kw)
+
+    def add_view(self, request, *args, **kw):
+        self.readonly_fields = []
+        return super(EventAdmin, self).add_view(request, *args, **kw)
+
 class EventHappeningAdmin(admin.ModelAdmin):
 
     list_display = (
@@ -40,7 +55,7 @@ class EventHappeningAdmin(admin.ModelAdmin):
         'print_info', 'print_people',
     )
 
-    readonly_fields = ['nome', 'codice_stampa', 'quartiere']
+    #readonly_fields = ['nome', 'codice_stampa', 'quartiere']
 
     list_filter = ['timeslot', 'event__district']
 
@@ -60,6 +75,28 @@ class EventHappeningAdmin(admin.ModelAdmin):
 
     def capi_iscritti(self, obj):
         return obj.seats_n_chiefs
+
+    def has_add_permission(self, request):
+        if request.user.is_readonly():
+            return False
+        else:
+            return True
+
+    def change_view(self, request, *args, **kw):
+        if request.user.is_readonly():
+            self.readonly_fields = [
+                'nome', 'codice_stampa', 'quartiere',
+                'timeslot', 'event', 'seats_n_boys', 'seats_n_chiefs',
+            ]
+        else:
+            self.readonly_fields = [
+                'nome', 'codice_stampa', 'quartiere',
+            ]
+        return super(EventHappeningAdmin, self).change_view(request, *args, **kw)
+
+    def add_view(self, request, *args, **kw):
+        self.readonly_fields = ['nome', 'codice_stampa', 'quartiere']
+        return super(EventHappeningAdmin, self).add_view(request, *args, **kw)
 
 class HeartBeatAdmin(admin.ModelAdmin):
 

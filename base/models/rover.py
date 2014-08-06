@@ -12,7 +12,7 @@ import datetime
 from django.contrib.auth.models import User
 
 def user_is_readonly(self):
-    return bool(self.groups.filter(name='readonly').count())
+    return self.username == 'eventi' or bool(self.groups.filter(name='readonly').count())
 
 User.add_to_class('is_readonly', user_is_readonly)
 
