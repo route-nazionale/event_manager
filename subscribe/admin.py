@@ -5,7 +5,7 @@ from base.models import EventHappening, ScoutChief
 
 class ScoutChiefSubscriptionAdmin(admin.ModelAdmin):
 
-    list_display = ('scout_chief', 'turno', 'codice_evento', 'nome_evento', 'quartiere', 'posti', 'subscribed_on')
+    list_display = ('scout_chief', 'turno', 'codice_stampa', 'nome_evento', 'quartiere', 'posti', 'subscribed_on')
     search_fields = ('scout_chief__scout_unit',)
     #list_editable = ('scout_chief', 'event')
 
@@ -15,8 +15,8 @@ class ScoutChiefSubscriptionAdmin(admin.ModelAdmin):
     def turno(self, obj):
         return obj.event_happening.timeslot.name
 
-    def codice_evento(self, obj):
-        return obj.event_happening.event.code
+    def codice_stampa(self, obj):
+        return obj.event_happening.event.print_code
 
     def nome_evento(self, obj):
         return obj.event_happening.event.name
