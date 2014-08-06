@@ -5,7 +5,7 @@
     <style>
 
       @page {
-        size: a5 portrait;
+        size: a6 landscape;
         margin: 1cm;
         border-color: white;
         -pdf-frame-border: 0;
@@ -19,18 +19,18 @@
     </style>
   </head>
   <body style="padding:2px">
-    <img src="http://eventi.rn2014.it/static/subscribe/logoroute.png" 
-      style="float:left" />
-    <h1 style="font-size:20pt; float:left">RN2014 - Info evento - {{ print_code }}</h1>
-    <h2 style="font-size: 13pt">Evento: {{ nome }}</h2>
-    <h2 style="font-size: 13pt">Turno: {{ turno }}</h2>
-    <h1 style="font-size:20pt">Animatori</h1>
+    <!--<img src="http://eventi.rn2014.it/static/subscribe/logoroute.png" 
+      style="float:left" /> -->
+    <h1 style="font-size:15pt; float:left; margin-bottom: 0px; padding-bottom: 0px;">Info evento - {{ print_code }}</h1>
+    <h2 style="font-size: 13pt; padding: 0px; margin: 0px;">{{ nome }}</h2>
+    <h2 style="font-size: 13pt; padding: 0px; margin: 0px;">Turno: {{ turno }}</h2>
+    <h1 style="font-size:15pt;  padding: 0px; margin: 0px;">Animatori</h1>
     <ul>
     {% for animatore in animatori %}
       <li style="font-size: 12pt">{{animatore.nome}} {{animatore.cognome}}</li>
     {% endfor %}
     </ul>
-    <h1 style="font-size:20pt">Capi Spalla</h1>
+    <h1 style="font-size:15pt;  padding: 0px; margin: 0px;">Capi Spalla</h1>
     <ul>
     {% for capo in spalle %}
       <li style="font-size: 12pt">{{capo.nome}} {{capo.cognome}} - {{capo.gruppo}}</li>
