@@ -59,7 +59,7 @@ class EventHappeningAdmin(admin.ModelAdmin):
 
     list_filter = ['timeslot', 'event__district']
 
-    search_fields = ['event__print_code']
+    search_fields = ['event__print_code', 'event__name']
 
     def nome(self, obj):
         return obj.event.name
