@@ -7,7 +7,7 @@ from base.models import Event
 class Assegnamenti(models.Model):
 
     cu = models.CharField(max_length=255, blank=True,
-        verbose_name='codice unico', help_text='', null=True, unique=True,
+        verbose_name='codice unico', help_text='', null=True,
         db_column="codiceUnivoco"
     )
 
