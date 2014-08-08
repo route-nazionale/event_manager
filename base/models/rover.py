@@ -344,8 +344,8 @@ class Rover(models.Model):
 
             for i, turn_name in enumerate(('turno1', 'turno2', 'turno3')):
 
-                event_new = getattr(self, turn_name)
-                event_old = getattr(old_me, turn_name)
+                event_new = getattr(self, turn_name, None)
+                event_old = getattr(old_me, turn_name, None)
 
                 if event_new != event_old:
 
