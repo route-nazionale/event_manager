@@ -33,7 +33,7 @@ class Assegnamenti(models.Model):
         db_table = "assegnamenti"
 
     def __unicode__(self):
-        return "%s --> %s" % (cu, event)
+        return "%s --> %s" % (self.cu, self.event)
 
 
 class HumenClone(models.Model):
@@ -267,4 +267,7 @@ class VclansClone(models.Model):
     class Meta:
         managed = False
         db_table = "vclans"
+
+    def __unicode__(self):
+        return u"%s (%s)" % (self.nome, self.idunitagruppo)
 

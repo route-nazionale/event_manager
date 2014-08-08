@@ -1,6 +1,7 @@
 
 from subscribe.models import ScoutChiefSubscription
 from varchi.models import Assegnamenti, HumenClone
+from base.models import Rover
 
 
 
@@ -23,7 +24,7 @@ def super_import_assegnamenti():
             surname=humen.cognome,
             unit = clan.nome,
             sub_unit = clan.idunitagruppo,
-            unit_and_subunit = "%s (%s)" % (clan.nome, clan.idunitagruppo),
+            unit_with_subunit = "%s (%s)" % (clan.nome, clan.idunitagruppo),
             event = event, 
             event_print_code=event.print_code, 
             event_code=event.code, 
@@ -35,5 +36,26 @@ def super_import_assegnamenti():
         print ("%s %s" % (scout_chief, clan))
 
     # Ragazzi
+    for r in Rover.objects.select_related():
 
-    
+        humen = humens.get(codice_censimento=r.codicecensimento)
+        clan = humen.vclan
+        for n_slot_from_0, slotname in enumerate(('turno1', 'turno2', 'turno3')):
+            event = getattr(r,slotname)
+            n_slot = n_slot_from_0+1
+            Assegnamenti.objects.create(
+                cu=humen.cu, name=humen.nome, 
+                surname=humen.cognome,
+                unit = clan.nome,
+                sub_unit = clan.idunitagruppo,
+                unit_with_subunit = "%s (%s)" % (clan.nome, clan.idunitagruppo),
+                event = event, 
+                event_print_code=event.print_code, 
+                event_code=event.code, 
+                event_name=event.name,
+                slot=n_slot,
+                staff_evento = False,
+                is_capo = False
+            )
+            print ("%s %s" % (r, clan))
+        
