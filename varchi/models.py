@@ -15,7 +15,7 @@ class Assegnamenti(models.Model):
     surname = models.CharField(max_length=32, verbose_name="cognome")
 
     event = models.ForeignKey(Event) #id dell'evento comodo per Andrea
-    event_code = models.CharField(db_column="idEvento") # codice programmatico interno, serve alla view di Nicola
+    event_code = models.CharField(db_column="idEvento", max_length=16) # codice programmatico interno, serve alla view di Nicola
     event_print_code = models.CharField(max_length=16) #codice stampabile serve a tutti e a Barbara per vedere
     event_name = models.CharField(max_length=256) #nome dell'evento serve a Riccardo per la stampona
 
