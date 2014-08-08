@@ -45,6 +45,7 @@ INSTALLED_APPS = (
     'ragazzi',
     'suit',
     'django.contrib.admin',
+    'varchi',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -69,6 +70,14 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
+    'varchi': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'varchi.sqlite3'),
+    },
+    'bureau_prod': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'bureau.sqlite3'),
     }
 }
 
