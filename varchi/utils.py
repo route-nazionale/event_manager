@@ -23,9 +23,11 @@ def super_import_assegnamenti():
             surname=humen.cognome,
             unit = clan.nome,
             sub_unit = clan.idunitagruppo,
+            unit_and_subunit = "%s (%s)" % (clan.nome, clan.idunitagruppo),
             event = event, 
             event_print_code=event.print_code, 
             event_code=event.code, 
+            event_name=event.name,
             slot=n_slot,
             staff_evento = scout_chief.is_spalla,
             is_capo = True
